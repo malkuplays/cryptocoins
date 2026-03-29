@@ -1,27 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-deep: #0a0a0c;
-  --bg-accent: rgba(255, 255, 255, 0.03);
-  --glass-bg: rgba(20, 20, 25, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --neon-blue: #00d2ff;
-  --neon-violet: #9d50bb;
-  --neon-gold: #ff9f43;
-  --neon-green: #4cd964;
-  --fomo-red: #ff4757;
-  --fomo-gradient: linear-gradient(135deg, #ff4757, #ff6b81);
-  --text-primary: #ffffff;
+  --bg-deep: #050505;
+  --bg-accent: rgba(0, 255, 136, 0.03);
+  --glass-bg: rgba(10, 10, 10, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --neon-green: #00FF88;
+  --neon-green-glow: rgba(0, 255, 136, 0.5);
+  --neon-green-dim: rgba(0, 255, 136, 0.1);
+  --fomo-red: #FF3B30;
+  --fomo-gradient: linear-gradient(135deg, #FF3B30, #FF6B81);
+  --text-primary: #FFFFFF;
   --text-secondary: rgba(255, 255, 255, 0.6);
-  --gradient-main: linear-gradient(135deg, var(--neon-blue), var(--neon-violet));
-  --gradient-gold: linear-gradient(135deg, #ff9f43, #ff6b6b);
+  --gradient-main: linear-gradient(135deg, #00FF88, #00CCBB);
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-main);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -75,8 +74,8 @@ body {
   animation: aura-flow 20s infinite linear;
 }
 
-.aura-1 { top: -100px; left: -100px; background: var(--neon-blue); }
-.aura-2 { bottom: -100px; right: -100px; background: var(--neon-violet); }
+.aura-1 { top: -100px; left: -100px; background: #00d2ff; }
+.aura-2 { bottom: -100px; right: -100px; background: #9d50bb; }
 
 /* Typography */
 h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
@@ -93,13 +92,13 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .btn-primary:active {
   transform: scale(0.95);
-  box-shadow: 0 2px 8px rgba(0, 210, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 255, 136, 0.2);
 }
 
 .btn-secondary {
@@ -135,7 +134,7 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 
 /* Mining specific */
 .mining-glow {
-  filter: drop-shadow(0 0 15px var(--neon-blue));
+  filter: drop-shadow(0 0 15px #00d2ff);
 }
 
 .balance-ticker {
@@ -159,9 +158,9 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 }
 
 @keyframes pulse-glow {
-  0% { box-shadow: 0 0 5px rgba(0, 210, 255, 0.2); }
-  50% { box-shadow: 0 0 20px rgba(0, 210, 255, 0.5); }
-  100% { box-shadow: 0 0 5px rgba(0, 210, 255, 0.2); }
+  0% { box-shadow: 0 0 5px rgba(0, 255, 136, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+  100% { box-shadow: 0 0 5px rgba(0, 255, 136, 0.2); }
 }
 
 .pulse-primary {
@@ -181,38 +180,123 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-/* FOMO Components */
-.fomo-badge {
-  background: rgba(255, 71, 87, 0.1);
-  border: 1px solid rgba(255, 71, 87, 0.3);
-  padding: 6px 12px;
+
+/* Premium UI Utilities */
+.circuit-bg {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 2px 2px, rgba(0, 255, 136, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.glow-header {
+  text-shadow: 0 0 20px var(--neon-green-glow);
+  letter-spacing: -1px;
+}
+
+.price-ticker {
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  padding: 4px 12px;
   border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  color: var(--neon-green);
+}
+
+.premium-card {
+  background: linear-gradient(165deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.9));
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--neon-green-glow), transparent);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-value {
+  font-size: 24px;
   font-weight: 700;
+  color: var(--neon-green);
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--fomo-red);
+  color: var(--text-secondary);
+}
+
+.step-indicator {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.step-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.step-dot.active {
+  background: var(--neon-green);
+  box-shadow: 0 0 10px var(--neon-green-glow);
+  width: 18px;
+  border-radius: 100px;
+}
+
+.countdown-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  min-width: 60px;
+}
+
+.countdown-val {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--neon-green);
+}
+
+.countdown-unit {
+  font-size: 9px;
+  color: var(--text-secondary);
   text-transform: uppercase;
 }
 
-.fomo-banner {
-  position: relative;
-  overflow: hidden;
-  border-bottom: 1px solid rgba(255, 71, 87, 0.2);
-  background: linear-gradient(to bottom, rgba(255, 71, 87, 0.05), transparent);
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }
 
-.top-red-glow {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 150px;
-  height: 40px;
-  background: var(--fomo-red);
-  filter: blur(30px);
-  opacity: 0.3;
-  pointer-events: none;
+.float-anim {
+  animation: float 4s ease-in-out infinite;
 }

@@ -11,167 +11,85 @@ import {
 } from 'lucide-react';
 
 const LandingPage = ({ onNext }) => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0 }
-  };
-
   return (
-    <motion.div 
-      className="container glass-page flex-center"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      style={{ overflow: 'hidden', justifyContent: 'flex-start', paddingTop: '20px' }}
-    >
-      {/* FOMO Banner Component */}
-      <motion.div 
-        className="glass" 
-        style={{ 
-          width: '100%', 
-          padding: '24px 20px', 
-          marginBottom: '32px',
-          background: 'linear-gradient(180deg, rgba(255, 59, 48, 0.1) 0%, rgba(20, 20, 25, 0.7) 100%)',
-          border: '1px solid rgba(255, 59, 48, 0.3)',
-          textAlign: 'center',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-        variants={itemVariants}
-      >
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '4px', background: 'linear-gradient(90deg, #ff3b30, #ff9f43)' }} />
-        
-        <div className="flex-center" style={{ marginBottom: '16px' }}>
-          <div style={{ 
-            background: 'rgba(255, 59, 48, 0.15)', 
-            border: '1px solid rgba(255, 59, 48, 0.3)',
-            color: '#ff3b30',
-            padding: '6px 16px',
-            borderRadius: '100px',
-            fontSize: '12px',
-            fontWeight: '700',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            letterSpacing: '1px',
-            textTransform: 'uppercase'
-          }}>
-            <AlertTriangle size={14} /> CRITICAL DEADLINE
-          </div>
-        </div>
+    <div className="container" style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+      <div className="circuit-bg" />
+      
+      {/* Dynamic Aura */}
+      <div className="aura-blob" style={{ background: 'var(--neon-green)', top: '-50px', right: '-50px', opacity: 0.1 }} />
+      <div className="aura-blob" style={{ background: 'var(--neon-green)', bottom: '-50px', left: '-50px', opacity: 0.1 }} />
 
-        <h2 style={{ fontSize: '28px', fontWeight: '800', lineHeight: '1.2', marginBottom: '8px' }}>
-          The <span style={{ color: '#ff3b30' }}>Largest Airdrop</span> Ends Soon
-        </h2>
-        
-        <p style={{ fontSize: '14px', opacity: 0.8, color: '#ffffff' }}>
-          The official $YETC allocation snapshot is closing.
-        </p>
-      </motion.div>
-      {/* Visual Hook */}
-      <motion.div 
-        className="flex-center" 
-        style={{ marginBottom: '20px' }} 
-        variants={itemVariants}
-      >
-        <div style={{ position: 'relative' }}>
-          <div className="mining-glow" style={{ 
-            width: '120px', 
-            height: '120px', 
-            background: 'radial-gradient(circle, rgba(0, 210, 255, 0.4) 0%, transparent 70%)',
-            position: 'absolute',
-            top: '-20px',
-            left: '-20px',
-            zIndex: -1
-          }} />
-          <Coins size={100} color="#00d2ff" style={{ filter: 'drop-shadow(0 0 10px rgba(0,210,255,0.5))' }} />
-        </div>
-      </motion.div>
-
-      {/* Main Copy */}
-      <motion.div style={{ textAlign: 'center', marginBottom: '40px' }} variants={itemVariants}>
+      <div className="flex-center" style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', padding: '40px 20px 32px' }}>
         <motion.div 
-          style={{ 
-            background: 'rgba(255, 159, 67, 0.15)', 
-            color: '#ff9f43', 
-            padding: '4px 12px', 
-            borderRadius: '20px', 
-            fontSize: '11px', 
-            fontWeight: 'bold',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '4px',
-            marginBottom: '16px'
-          }}
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ repeat: Infinity, duration: 2 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{ width: '100%', textAlign: 'center' }}
         >
-          <Zap size={12} fill="#ff9f43" /> EARLY ACCESS: 92% GENESIS FULL
-        </motion.div>
-        
-        <h1 style={{ fontSize: '36px', lineHeight: '1.1' }}>
-          The Next Big Thing <br/> 
-          <span className="text-gradient">is finally here.</span>
-        </h1>
-        
-        <p style={{ marginTop: '16px', fontSize: '17px', opacity: 0.8, padding: '0 20px' }}>
-          Stop tapping, start earning. Join 1.2M+ miners building the future of <strong>$YETC</strong>.
-        </p>
-      </motion.div>
-
-      {/* Social Trust Proofs */}
-      <motion.div 
-        className="glass" 
-        style={{ 
-          width: '100%', 
-          padding: '20px', 
-          marginBottom: '40px',
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.05)' 
-        }}
-        variants={itemVariants}
-      >
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-          <div style={{ textAlign: 'center' }}>
-            <h3 style={{ fontSize: '20px', margin: 0 }}>₹8.42</h3>
-            <span style={{ fontSize: '10px', opacity: 0.6 }}>Est. Listing Price</span>
+          <div className="price-ticker mb-8" style={{ marginBottom: '32px', display: 'inline-flex' }}>
+            <TrendingUp size={14} />
+            $YETC Price: $0.124 <span style={{ color: '#00FF88' }}>+12.4%</span>
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <h3 style={{ fontSize: '20px', margin: 0 }}>1.2M+</h3>
-            <span style={{ fontSize: '10px', opacity: 0.6 }}>Active Miners</span>
+          
+          <motion.img 
+            src="/src/assets/logo.svg" 
+            alt="Yetcoins" 
+            style={{ width: '140px', marginBottom: '32px', display: 'block', margin: '0 auto 32px' }}
+            animate={{ filter: ['drop-shadow(0 0 10px var(--neon-green-glow))', 'drop-shadow(0 0 25px var(--neon-green-glow))', 'drop-shadow(0 0 10px var(--neon-green-glow))'] }}
+            transition={{ repeat: Infinity, duration: 3 }}
+          />
+          
+          <h1 className="glow-header" style={{ fontSize: '38px', marginBottom: '16px', lineHeight: '1.1' }}>
+            Earn <span style={{ color: 'var(--neon-green)' }}>Real Crypto</span><br/>While You Sleep
+          </h1>
+          
+          <p style={{ maxWidth: '300px', margin: '0 auto 48px', fontSize: '16px', color: 'var(--text-secondary)' }}>
+            The premier Telegram mining ecosystem. Launching on Tier-1 exchanges Q2 2024.
+          </p>
+
+          <div className="premium-card flex-center" style={{ gap: '20px', padding: '20px 32px' }}>
+            <div className="stat-item">
+              <span className="stat-label">Miners Active</span>
+              <span className="stat-value">1.24M+</span>
+            </div>
+            <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,0.1)' }} />
+            <div className="stat-item">
+              <span className="stat-label">Trust Score</span>
+              <span className="stat-value">98.4%</span>
+            </div>
+          </div>
+        </motion.div>
+
+        <div style={{ width: '100%' }}>
+          <button 
+            className="btn-primary pulse-primary" 
+            style={{ 
+              width: '100%', 
+              padding: '20px',
+              background: 'var(--neon-green)',
+              color: '#000',
+              fontWeight: '900',
+              fontSize: '18px',
+              textTransform: 'uppercase',
+              letterSpacing: '1.5px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '12px',
+              boxShadow: '0 12px 32px var(--neon-green-glow)'
+            }} 
+            onClick={onNext}
+          >
+            Get Started Now
+            <ArrowRight size={24} />
+          </button>
+          
+          <div className="flex-center" style={{ marginTop: '20px', gap: '8px', opacity: 0.6 }}>
+            <ShieldCheck size={14} color="var(--neon-green)" />
+            <span style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.5px' }}>AUDITED BY CERTIK • GENESIS PHASE 1</span>
           </div>
         </div>
-      </motion.div>
-
-      {/* CTA Section */}
-      <motion.div style={{ width: '100%', marginTop: 'auto', paddingBottom: '20px' }} variants={itemVariants}>
-        <button className="btn-primary" style={{ width: '100%', padding: '18px', fontSize: '18px' }} onClick={onNext}>
-          🚀 Claim Your Spot Now
-        </button>
-        <p style={{ textAlign: 'center', fontSize: '12px', opacity: 0.5, marginTop: '12px' }}>
-          Limited invitations available today.
-        </p>
-      </motion.div>
-
-      {/* Background decoration */}
-      <div style={{ 
-        position: 'absolute', 
-        bottom: '-100px', 
-        left: '-100px', 
-        width: '300px', 
-        height: '300px', 
-        background: 'radial-gradient(circle, rgba(157, 80, 187, 0.1) 0%, transparent 70%)',
-        zIndex: -1
-      }} />
-    </motion.div>
+      </div>
+    </div>
   );
 };
 

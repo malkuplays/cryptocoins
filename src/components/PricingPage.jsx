@@ -41,30 +41,25 @@ const PricingPage = ({ user, onSuccess, onBack }) => {
   const handlePayment = async (plan) => {
     setLoading(true);
     
-    // In a real app, you would call your backend to create an order
-    // Here we simulate the Razorpay checkout for the test environment
     const options = {
-      key: 'rzp_test_placeholder', // User should replace this
-      amount: plan.price * 100, // paise
+      key: 'rzp_test_placeholder',
+      amount: plan.price * 100,
       currency: 'INR',
       name: 'Yetcoins',
       description: `Purchase ${plan.name} Plan`,
-      image: 'https://glglxmpxbqeyytxryzxj.supabase.co/storage/v1/object/public/assets/logo.png', // Example
+      image: '/src/assets/logo.svg',
       handler: async (response) => {
-        // Handle successful payment
         await finalizePurchase(plan, response.razorpay_payment_id);
       },
       prefill: {
-        name: user.full_name || user.username,
-        email: user.email || '',
-        contact: user.whatsapp || ''
+        name: user?.full_name || user?.username || 'Miner',
+        email: user?.email || '',
       },
-      theme: { color: '#00d2ff' }
+      theme: { color: '#00FF88' }
     };
 
-    // Simulate script loading if not already there
     if (!window.Razorpay) {
-      alert("Please ensure Razorpay SDK is loaded. Check index.html");
+      alert("Razorpay SDK not found.");
       setLoading(false);
       return;
     }
@@ -79,7 +74,6 @@ const PricingPage = ({ user, onSuccess, onBack }) => {
       const now = new Date();
       const end = new Date();
       
-      // Calculate staking end based on period
       if (plan.id === 'starter') end.setDate(now.getDate() + 30);
       else if (plan.id === 'pro') end.setDate(now.getDate() + 90);
       else if (plan.id === 'legendary') end.setFullYear(now.getFullYear() + 1);
@@ -102,54 +96,78 @@ const PricingPage = ({ user, onSuccess, onBack }) => {
       onSuccess(data);
     } catch (err) {
       console.error('Finalize error:', err);
-      alert('Failed to activate plan. Please contact support.');
+      alert('Failed to activate plan.');
     }
   };
 
   return (
-    <div className="container" style={{ paddingBottom: '40px' }}>
-      <header className="space-between" style={{ marginBottom: '32px' }}>
-        <h1>Select Your Plan</h1>
-        <Zap color="#00d2ff" size={24} />
+    <div className="container" style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+      <div className="circuit-bg" />
+      
+      <header className="space-between" style={{ padding: '20px', marginBottom: '12px' }}>
+        <button onClick={onBack} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)' }}>
+          <ArrowLeft size={24} />
+        </button>
+        <h2 className="glow-header" style={{ fontSize: '20px' }}>Upgrade Center</h2>
+        <div style={{ width: '24px' }} />
       </header>
 
-      {plans.map((plan, idx) => (
-        <motion.div 
-          key={idx}
-          className="glass glass-card"
-          style={{ marginBottom: '20px' }}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: idx * 0.1 }}
-        >
-          <div className="space-between" style={{ marginBottom: '12px' }}>
-            <h2 style={{ color: plan.id === 'legendary' ? '#ff9f43' : 'white' }}>{plan.name}</h2>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '24px', fontWeight: '700' }}>₹{plan.price}</div>
-              <div style={{ fontSize: '12px', opacity: 0.6 }}>{plan.period}</div>
-            </div>
-          </div>
-          
-          <div style={{ marginBottom: '20px' }}>
-            {plan.features.map((f, i) => (
-              <div key={i} className="space-between" style={{ marginBottom: '6px', justifyContent: 'flex-start' }}>
-                <Check size={14} color="#00d2ff" style={{ marginRight: '8px' }} />
-                <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)' }}>{f}</span>
-              </div>
-            ))}
-          </div>
+      <div style={{ padding: '0 20px 40px' }}>
+        <p style={{ textAlign: 'center', marginBottom: '32px', color: 'var(--text-secondary)' }}>
+          Select a Genesis plan to boost your airdrop multiplier.
+        </p>
 
-          <button 
-            className="btn-primary" 
-            style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '8px' }}
-            onClick={() => handlePayment(plan)}
-            disabled={loading}
+        {plans.map((plan, idx) => (
+          <motion.div 
+            key={idx}
+            className="premium-card"
+            style={{ 
+              marginBottom: '16px',
+              border: plan.id === 'pro' ? '1px solid var(--neon-green)' : '1px solid var(--glass-border)',
+              background: plan.id === 'pro' ? 'rgba(0,255,136,0.05)' : 'rgba(255,255,255,0.02)'
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1 }}
           >
-            <CreditCard size={18} />
-            {loading ? 'Processing...' : 'Secure Pay'}
-          </button>
-        </motion.div>
-      ))}
+            <div className="space-between" style={{ alignItems: 'flex-start', marginBottom: '16px' }}>
+              <div>
+                <h3 style={{ fontSize: '18px', fontWeight: '800', color: plan.id === 'pro' ? 'var(--neon-green)' : 'white' }}>{plan.name}</h3>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px' }}>{plan.period} Duration</span>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '22px', fontWeight: '900', color: plan.id === 'pro' ? 'var(--neon-green)' : 'white' }}>₹{plan.price}</div>
+                <div style={{ fontSize: '10px', color: '#00FF88', fontWeight: '700' }}>{plan.power}x BOOST</div>
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px' }}>
+              {plan.features.map((f, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Check size={14} color="var(--neon-green)" />
+                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>{f}</span>
+                </div>
+              ))}
+            </div>
+
+            <button 
+              className="btn-primary" 
+              style={{ 
+                width: '100%', 
+                background: plan.id === 'pro' ? 'var(--neon-green)' : 'rgba(255,255,255,0.05)',
+                color: plan.id === 'pro' ? '#000' : 'white',
+                padding: '16px',
+                fontSize: '15px',
+                fontWeight: '800'
+              }}
+              onClick={() => handlePayment(plan)}
+              disabled={loading}
+            >
+              {loading ? 'Processing...' : plan.price === 0 ? 'Activate Free' : 'Upgrade Now'}
+            </button>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 };
