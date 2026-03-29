@@ -8,7 +8,8 @@ import {
   Gift, 
   ArrowRight,
   Globe,
-  BarChart3
+  BarChart3,
+  AlertTriangle
 } from 'lucide-react';
 
 const Onboarding = ({ onComplete }) => {
@@ -40,6 +41,40 @@ const Onboarding = ({ onComplete }) => {
       fomo: "🎁 500 $YETC Bonus waiting for you"
     }
   ];
+  
+  const FomoBanner = () => (
+    <motion.div 
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="fomo-banner flex-center"
+      style={{ 
+        flexDirection: 'column', 
+        padding: '24px 20px', 
+        width: '100%',
+        marginBottom: '20px'
+      }}
+    >
+      <div className="top-red-glow" />
+      
+      <motion.div 
+        className="fomo-badge"
+        animate={{ scale: [1, 1.05, 1] }}
+        transition={{ repeat: Infinity, duration: 2 }}
+        style={{ marginBottom: '16px' }}
+      >
+        <AlertTriangle size={14} />
+        Critical Deadline
+      </motion.div>
+
+      <h1 style={{ fontSize: '24px', textAlign: 'center', lineHeight: '1.2', marginBottom: '8px' }}>
+        The <span style={{ color: '#ff4757' }}>Largest</span> Airdrop Ends <span style={{ color: '#ff9f43' }}>Soon</span>
+      </h1>
+      
+      <p style={{ textAlign: 'center', fontSize: '14px', opacity: 0.8 }}>
+        The official $YETC allocation snapshot is closing.
+      </p>
+    </motion.div>
+  );
 
   const nextStep = () => {
     if (step < steps.length - 1) {
@@ -50,7 +85,10 @@ const Onboarding = ({ onComplete }) => {
   };
 
   return (
-    <div className="container flex-center" style={{ minHeight: '90vh', justifyContent: 'space-between' }}>
+    <div className="container" style={{ minHeight: '100vh', padding: 0 }}>
+      <FomoBanner />
+      
+      <div className="flex-center" style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', padding: '0 20px 20px' }}>
       <AnimatePresence mode="wait">
         <motion.div 
           key={step}
@@ -116,6 +154,7 @@ const Onboarding = ({ onComplete }) => {
           {step === steps.length - 1 ? 'Claim 500 $YETC Now' : 'Continue'}
           <ArrowRight size={20} />
         </button>
+      </div>
       </div>
     </div>
   );

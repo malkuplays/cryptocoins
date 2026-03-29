@@ -9,6 +9,8 @@
   --neon-violet: #9d50bb;
   --neon-gold: #ff9f43;
   --neon-green: #4cd964;
+  --fomo-red: #ff4757;
+  --fomo-gradient: linear-gradient(135deg, #ff4757, #ff6b81);
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.6);
   --gradient-main: linear-gradient(135deg, var(--neon-blue), var(--neon-violet));
@@ -178,4 +180,39 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 * {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+/* FOMO Components */
+.fomo-badge {
+  background: rgba(255, 71, 87, 0.1);
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  padding: 6px 12px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--fomo-red);
+  text-transform: uppercase;
+}
+
+.fomo-banner {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 71, 87, 0.2);
+  background: linear-gradient(to bottom, rgba(255, 71, 87, 0.05), transparent);
+}
+
+.top-red-glow {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 40px;
+  background: var(--fomo-red);
+  filter: blur(30px);
+  opacity: 0.3;
+  pointer-events: none;
 }

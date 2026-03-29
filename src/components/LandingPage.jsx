@@ -6,7 +6,8 @@ import {
   TrendingUp, 
   Zap, 
   Coins,
-  Play
+  Play,
+  AlertTriangle
 } from 'lucide-react';
 
 const LandingPage = ({ onNext }) => {
@@ -29,8 +30,52 @@ const LandingPage = ({ onNext }) => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      style={{ overflow: 'hidden', justifyContent: 'flex-start', paddingTop: '60px' }}
+      style={{ overflow: 'hidden', justifyContent: 'flex-start', paddingTop: '20px' }}
     >
+      {/* FOMO Banner Component */}
+      <motion.div 
+        className="glass" 
+        style={{ 
+          width: '100%', 
+          padding: '24px 20px', 
+          marginBottom: '32px',
+          background: 'linear-gradient(180deg, rgba(255, 59, 48, 0.1) 0%, rgba(20, 20, 25, 0.7) 100%)',
+          border: '1px solid rgba(255, 59, 48, 0.3)',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+        variants={itemVariants}
+      >
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '4px', background: 'linear-gradient(90deg, #ff3b30, #ff9f43)' }} />
+        
+        <div className="flex-center" style={{ marginBottom: '16px' }}>
+          <div style={{ 
+            background: 'rgba(255, 59, 48, 0.15)', 
+            border: '1px solid rgba(255, 59, 48, 0.3)',
+            color: '#ff3b30',
+            padding: '6px 16px',
+            borderRadius: '100px',
+            fontSize: '12px',
+            fontWeight: '700',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            letterSpacing: '1px',
+            textTransform: 'uppercase'
+          }}>
+            <AlertTriangle size={14} /> CRITICAL DEADLINE
+          </div>
+        </div>
+
+        <h2 style={{ fontSize: '28px', fontWeight: '800', lineHeight: '1.2', marginBottom: '8px' }}>
+          The <span style={{ color: '#ff3b30' }}>Largest Airdrop</span> Ends Soon
+        </h2>
+        
+        <p style={{ fontSize: '14px', opacity: 0.8, color: '#ffffff' }}>
+          The official $YETC allocation snapshot is closing.
+        </p>
+      </motion.div>
       {/* Visual Hook */}
       <motion.div 
         className="flex-center" 
