@@ -17,10 +17,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import LandingPage from './components/LandingPage';
 import PricingPage from './components/PricingPage';
 import Dashboard from './components/Dashboard';
+import Onboarding from './components/Onboarding';
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [view, setView] = useState('loading'); // loading, landing, pricing, dashboard
+  const [view, setView] = useState('loading'); // loading, landing, onboarding, pricing, dashboard
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -59,10 +60,12 @@ const App = () => {
       setUser(data);
       
       // Determine initial view
-      if (data.plan_tier && data.plan_tier !== 'free') {
+      if (!data.is_onboarded) {
+        setView('landing');
+      } else if (data.plan_tier && data.plan_tier !== 'free') {
         setView('dashboard');
       } else {
-        setView('landing');
+        setView('dashboard'); // Default to dashboard if already onboarded
       }
     } catch (err) {
       console.error('Auth error:', err);
@@ -125,7 +128,32 @@ const App = () => {
           </motion.div>
         )}
         {view === 'landing' && (
-          <LandingPage onNext={() => setView('pricing')} />
+          <LandingPage onNext={() => setView('onboarding')} />
+        )}
+        {view === 'onboarding' && (
+          <Onboarding 
+            onComplete={async () => {
+              // Mark as onboarded and give bonus
+              try {
+                const { data: updatedUser, error: updateError } = await supabase
+                  .from('players')
+                  .update({ 
+                    is_onboarded: true,
+                    mining_balance: (user?.mining_balance || 0) + 500
+                  })
+                  .eq('id', user.id)
+                  .select()
+                  .single();
+                
+                if (updateError) throw updateError;
+                setUser(updatedUser);
+                setView('dashboard');
+              } catch (err) {
+                console.error("Onboarding completion error:", err);
+                setView('dashboard'); // Fallback
+              }
+            }} 
+          />
         )}
         {view === 'pricing' && (
           <PricingPage 

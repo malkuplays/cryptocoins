@@ -113,11 +113,11 @@ const Dashboard = ({ user, setUser }) => {
           <span style={{ fontSize: '14px', opacity: 0.6 }}>Current Balance</span>
         </div>
         <div style={{ fontSize: '42px', fontWeight: '800', margin: '12px 0' }} className="balance-ticker">
-           {balance.toFixed(6)} <span style={{ fontSize: '20px', color: '#00d2ff' }}>YET</span>
+           {balance.toFixed(6)} <span style={{ fontSize: '20px', color: '#00d2ff' }}>$YETC</span>
         </div>
         <div className="flex-center" style={{ gap: '8px' }}>
           <TrendingUp size={16} color="#4cd964" />
-          <span style={{ color: '#4cd964', fontWeight: '600' }}>+{miningPower} YET / HR</span>
+          <span style={{ color: '#4cd964', fontWeight: '600' }}>+{miningPower} $YETC / HR</span>
         </div>
       </motion.div>
 
@@ -160,7 +160,7 @@ const Dashboard = ({ user, setUser }) => {
       <div style={{ marginTop: '32px', textAlign: 'center' }}>
         <p style={{ fontSize: '12px' }}>
           <Info size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
-          Estimated Listing Price: 1 YET = ₹8.42
+          Estimated Listing Price: 1 $YETC = ₹8.42
         </p>
       </div>
     </div>

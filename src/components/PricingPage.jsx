@@ -15,7 +15,7 @@ const plans = [
     price: 1000, 
     power: 0.5, 
     period: '30 Days',
-    features: ['0.5 YET / Hour', 'Basic Dashboard', 'Email Support']
+    features: ['0.5 $YETC / Hour', 'Basic Dashboard', 'Email Support']
   },
   { 
     id: 'pro',
@@ -23,7 +23,7 @@ const plans = [
     price: 2999, 
     power: 2.0, 
     period: '90 Days',
-    features: ['2.0 YET / Hour', 'Advanced Analytics', 'Priority Support', 'Early Listing Access']
+    features: ['2.0 $YETC / Hour', 'Advanced Analytics', 'Priority Support', 'Early Listing Access']
   },
   { 
     id: 'legendary',
@@ -31,7 +31,7 @@ const plans = [
     price: 6999, 
     power: 6.0, 
     period: '365 Days',
-    features: ['6.0 YET / Hour', 'VIP Community', '24/7 Personal Support', 'Max Staking Period']
+    features: ['6.0 $YETC / Hour', 'VIP Community', '24/7 Personal Support', 'Max Staking Period']
   }
 ];
 
