@@ -143,7 +143,7 @@ const Onboarding = ({ onComplete }) => {
               ].map((stat, i) => (
                 <div key={i} className="premium-card" style={{ padding: '20px 10px' }}>
                   <span style={{ fontSize: '20px', fontWeight: '800', color: 'var(--neon-green)', display: 'block' }}>{stat.val}</span>
-                  <span style={{ fontSize: '10px', color: var(--text-secondary), textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</span>
+                  <span style={{ fontSize: '10px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</span>
                   <span style={{ fontSize: '10px', color: '#00FF88', fontWeight: '600', marginTop: '4px', display: 'block' }}>{stat.sub}</span>
                 </div>
               ))}
