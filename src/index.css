@@ -294,10 +294,7 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 .step-card::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
   pointer-events: none;
 }
@@ -591,4 +588,129 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   max-width: 240px;
+}
+
+/* Bento Grid */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto auto;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.bento-item {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.bento-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.05), transparent);
+  pointer-events: none;
+}
+
+.bento-large {
+  grid-column: span 2;
+  padding: 24px;
+}
+
+.bento-item:active {
+  transform: scale(0.98);
+}
+
+/* Membership Passes */
+.pass-card {
+  width: 100%;
+  border-radius: 18px;
+  padding: 20px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, rgba(28, 28, 35, 0.9) 0%, rgba(18, 18, 23, 1) 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.pass-card.active {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 20px var(--neon-green-dim);
+}
+
+.pass-card.whale {
+  background: linear-gradient(135deg, #2A1F0C 0%, #121217 100%);
+  border-color: rgba(255, 184, 0, 0.3);
+}
+
+.pass-card.whale.active {
+  border-color: #FFB800;
+  box-shadow: 0 0 30px rgba(255, 184, 0, 0.2);
+}
+
+.pass-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.active .pass-check {
+  background: var(--neon-green);
+  border-color: var(--neon-green);
+  color: #000;
+}
+
+.whale.active .pass-check {
+  background: #FFB800;
+  border-color: #FFB800;
+  color: #000;
+}
+
+.metallic-shine {
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  transform: skewX(-25deg);
+}
+
+.pass-card:hover .metallic-shine {
+  animation: shine 0.8s ease forwards;
+}
+
+@keyframes shine {
+  100% { left: 200%; }
+}
+
+.mesh-background {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(at 0% 0%, rgba(0, 255, 157, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(0, 209, 255, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(157, 80, 187, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(255, 77, 77, 0.05) 0px, transparent 50%);
+  z-index: -1;
+  opacity: 0.8;
+}
+
+.conversion-timer {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-weight: 800;
+  letter-spacing: -1px;
 }

@@ -9,14 +9,18 @@ import {
   Flame,
   ShieldCheck,
   Activity,
-  ChevronRight,
-  Check
+  Check,
+  Star,
+  Trophy,
+  Crown
 } from 'lucide-react';
 import { triggerHaptic } from '../telegram';
 
 const Onboarding = ({ onComplete }) => {
   const [step, setStep] = useState(0);
-  const [countdown, setCountdown] = useState({ days: 2, hours: 14, mins: 42, secs: 18 });
+  const [countdown, setCountdown] = useState({ days: 0, hours: 2, mins: 14, secs: 42 });
+  const [spotsLeft, setSpotsLeft] = useState(142);
+  const [selectedTier, setSelectedTier] = useState(1); // 0: Starter, 1: Founder, 2: Whale
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -24,13 +28,17 @@ const Onboarding = ({ onComplete }) => {
         if (prev.secs > 0) return { ...prev, secs: prev.secs - 1 };
         if (prev.mins > 0) return { ...prev, mins: prev.mins - 1, secs: 59 };
         if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, mins: 59, secs: 59 };
-        if (prev.days > 0) return { ...prev, days: prev.days - 1, hours: 23, mins: 59, secs: 59 };
         return prev;
       });
     }, 1000);
 
+    const spotsTimer = setInterval(() => {
+      setSpotsLeft(prev => prev > 12 ? prev - Math.floor(Math.random() * 2) : prev);
+    }, 8000);
+
     return () => {
       clearInterval(timer);
+      clearInterval(spotsTimer);
     };
   }, []);
 
@@ -44,17 +52,17 @@ const Onboarding = ({ onComplete }) => {
   };
 
   const containerVariants = {
-    hidden: { opacity: 0, x: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: { 
       opacity: 1, 
-      x: 0,
+      y: 0,
       transition: { 
-        duration: 0.5, 
-        staggerChildren: 0.1,
-        delayChildren: 0.2
+        duration: 0.6, 
+        staggerChildren: 0.08,
+        ease: [0.16, 1, 0.3, 1]
       }
     },
-    exit: { opacity: 0, x: -20, transition: { duration: 0.3 } }
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
   };
 
   const itemVariants = {
@@ -64,7 +72,7 @@ const Onboarding = ({ onComplete }) => {
 
   const renderStep = () => {
     switch(step) {
-      case 0: // Step 1: Network Effect
+      case 0: // THE MOMENTUM (Bento Stats)
         return (
           <motion.div 
             key="step0"
@@ -74,37 +82,48 @@ const Onboarding = ({ onComplete }) => {
             exit="exit"
             style={{ width: '100%' }}
           >
-            <motion.h2 variants={itemVariants} style={{ fontSize: '13px', fontWeight: '900', color: 'var(--text-muted)', textAlign: 'center', letterSpacing: '2px', marginBottom: '32px' }}>
-              THE NETWORK EFFECT IS UNSTOPPABLE
-            </motion.h2>
+            <motion.div variants={itemVariants} className="badge-outline" style={{ display: 'flex', margin: '0 auto 12px' }}>
+              PROTOCOL STATUS: OPERATIONAL
+            </motion.div>
+            <motion.h1 variants={itemVariants} style={{ fontSize: '32px', textAlign: 'center', marginBottom: '8px', fontWeight: '900' }}>
+              The momentum is <span className="text-gradient">Unstoppable</span>
+            </motion.h1>
+            <motion.p variants={itemVariants} style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '32px' }}>
+              Join 1.4M+ visionaries securing the future of Yetcoins.
+            </motion.p>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {[
-                { icon: <ShieldCheck size={20} />, label: "TOTAL PROTOCOL VALUE", val: "$142", unit: "M+", sub: "Secure Tier 1 Infrastructure", color: 'var(--premium-blue)' },
-                { icon: <Users size={20} />, label: "VERIFIED HOLDERS", val: "1.4", unit: "M", sub: "Viral adoption in 140+ countries", color: 'var(--neon-green)' },
-                { icon: <Activity size={20} />, label: "PROJECTED MARKET CAP", val: "$1.2", unit: "B", sub: "High-conviction institutional backing", color: 'var(--premium-orange)' }
-              ].map((stat, i) => (
-                <motion.div key={i} variants={itemVariants} className="step-card" whileTap={{ scale: 0.98 }}>
-                  <div className="step-icon-box" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)' }}>
-                    {stat.icon}
+            <div className="bento-grid">
+              <motion.div variants={itemVariants} className="bento-item bento-large">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div>
+                    <div className="stat-label">TOTAL PROTOCOL VALUE</div>
+                    <div className="stat-value" style={{ fontSize: '42px', marginTop: '8px' }}>$142<span style={{ fontSize: '24px' }}>M+</span></div>
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '12px', fontWeight: '800', color: '#fff', letterSpacing: '0.5px' }}>{stat.label}</div>
-                    <div style={{ fontSize: '11px', color: stat.color, fontWeight: '700', marginTop: '2px' }}>
-                      <span style={{ fontSize: '14px', marginRight: '2px' }}>•</span> {stat.sub}
-                    </div>
+                  <div className="live-badge">
+                    <div className="live-dot" /> LIVE
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '32px', fontWeight: '900' }}>{stat.val}</span>
-                    <span style={{ fontSize: '20px', fontWeight: '900', color: stat.color }}>{stat.unit}</span>
-                  </div>
-                </motion.div>
-              ))}
+                </div>
+                <div style={{ marginTop: '16px', fontSize: '12px', color: 'var(--neon-green)', fontWeight: '700' }}>
+                  ↑ 12.4% last 24h
+                </div>
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="bento-item">
+                <Users size={18} color="var(--premium-blue)" style={{ marginBottom: '12px' }} />
+                <div className="stat-label">HOLDERS</div>
+                <div className="stat-value" style={{ fontSize: '24px' }}>1.4M</div>
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="bento-item">
+                <TrendingUp size={18} color="var(--premium-orange)" style={{ marginBottom: '12px' }} />
+                <div className="stat-label">MKT CAP</div>
+                <div className="stat-value" style={{ fontSize: '24px' }}>$1.2B</div>
+              </motion.div>
             </div>
           </motion.div>
         );
 
-      case 1: // Step 2: Why Upgrade
+      case 1: // THE ADVANTAGE (Elite Privileges)
         return (
           <motion.div 
             key="step1"
@@ -114,30 +133,29 @@ const Onboarding = ({ onComplete }) => {
             exit="exit"
             style={{ width: '100%' }}
           >
-            <motion.div variants={itemVariants} className="badge-outline" style={{ display: 'flex', margin: '0 auto 16px', color: 'var(--premium-orange)', borderColor: 'rgba(255,138,0,0.2)' }}>
-              THE RETIREMENT STRATEGY
+            <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+              <Star size={32} color="var(--premium-blue)" fill="var(--premium-blue)" style={{ opacity: 0.5 }} />
             </motion.div>
-            <motion.h1 variants={itemVariants} style={{ fontSize: '34px', fontWeight: '900', textAlign: 'center', marginBottom: '12px' }}>
-              Wealth <span className="glow-text-orange">Exclusivity</span>
+            <motion.h1 variants={itemVariants} style={{ fontSize: '34px', textAlign: 'center', marginBottom: '12px', fontWeight: '900' }}>
+              Elite <span style={{ color: 'var(--premium-blue)' }}>Privileges</span>
             </motion.h1>
-            <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '32px', padding: '0 20px', color: 'var(--text-secondary)', fontSize: '15px' }}>
-              While others play for pennies, our Whale members secure <span style={{ color: '#fff', fontWeight: '700' }}>generational wealth</span>. Stop working, start dominating.
+            <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '32px', color: 'var(--text-secondary)' }}>
+              Why do 92% of early members upgrade to Founder?
             </motion.p>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {[
-                { icon: <Zap size={18} fill="currentColor" />, title: "Unlock Whale Tier APR", desc: "Access the highest possible mining yields. Reserved for the early 1%.", color: 'var(--premium-orange)' },
-                { icon: <TrendingUp size={18} />, title: "Avoid Token Dilution", desc: "Whale members receive priority snapshots and anti-dilution protection.", color: 'var(--neon-green)' },
-                { icon: <Clock size={18} />, title: "Instant Withdrawal Access", desc: "Get priority listed for liquidity events before the general public.", color: 'var(--premium-blue)' },
-                { icon: <Users size={18} />, title: "The Founder's Network", desc: "Direct access to Tier 1 VC allocations and private alpha channels.", color: 'var(--premium-purple)' },
+                { icon: <Zap size={20} />, title: "300% Yield Boost", desc: "Triple your daily $YETC mining output instantly.", color: '#00FF9D' },
+                { icon: <ShieldCheck size={20} />, title: "Exit Protection", desc: "Guaranteed buy-back at pre-launch floor price.", color: '#00D1FF' },
+                { icon: <Trophy size={20} />, title: "VC Alfa Access", desc: "Direct allocations in Tier 1 Solana & TON projects.", color: '#FFB800' }
               ].map((item, i) => (
-                <motion.div key={i} variants={itemVariants} className="step-card" style={{ padding: '16px', gap: '16px' }} whileTap={{ scale: 0.98 }}>
-                  <div className="step-icon-box" style={{ width: '40px', height: '40px', background: item.color, color: '#000', borderRadius: '10px' }}>
+                <motion.div key={i} variants={itemVariants} className="step-card" style={{ padding: '18px', gap: '16px' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: `${item.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.color }}>
                     {item.icon}
                   </div>
-                  <div className="step-content">
-                    <h3 style={{ fontSize: '15px' }}>{item.title}</h3>
-                    <p style={{ fontSize: '13px', marginTop: '2px' }}>{item.desc}</p>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: '800', fontSize: '16px', color: '#fff' }}>{item.title}</div>
+                    <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '2px' }}>{item.desc}</div>
                   </div>
                 </motion.div>
               ))}
@@ -145,7 +163,7 @@ const Onboarding = ({ onComplete }) => {
           </motion.div>
         );
 
-      case 2: // Step 3: Critical Deadline
+      case 2: // THE URGENCY (Live Scarcity)
         return (
           <motion.div 
             key="step2"
@@ -155,77 +173,39 @@ const Onboarding = ({ onComplete }) => {
             exit="exit"
             style={{ width: '100%', textAlign: 'center' }}
           >
-            <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
-              <div style={{ background: 'rgba(255,77,77,0.1)', border: '1px solid rgba(255,77,77,0.2)', padding: '8px 20px', borderRadius: '100px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Flame size={16} color="var(--fomo-red)" />
-                <span style={{ color: 'var(--fomo-red)', fontSize: '12px', fontWeight: '900', letterSpacing: '1px' }}>CRITICAL DEADLINE</span>
-              </div>
+            <motion.div variants={itemVariants} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: 'rgba(255,77,77,0.1)', border: '1px solid rgba(255,77,77,0.2)', borderRadius: '100px', marginBottom: '24px' }}>
+              <Flame size={16} color="var(--fomo-red)" />
+              <span style={{ color: 'var(--fomo-red)', fontSize: '11px', fontWeight: '900', letterSpacing: '1px' }}>DEMAND: AT CAPACITY</span>
             </motion.div>
 
-            <motion.h1 variants={itemVariants} style={{ fontSize: '38px', fontWeight: '900', marginBottom: '12px' }}>
-              Pool is <span className="glow-text-red">98.4% Full</span>
+            <motion.h1 variants={itemVariants} style={{ fontSize: '38px', fontWeight: '900', marginBottom: '12px', lineHeight: 1.1 }}>
+              Only <span className="glow-text-red">{spotsLeft} Slots</span> Remaining
             </motion.h1>
-            <motion.p variants={itemVariants} style={{ color: 'var(--text-secondary)', marginBottom: '24px', padding: '0 20px' }}>
-              The official $YETC allocation snapshot for the 1.4M users is concluding. Secure your slice before the burn.
+            <motion.p variants={itemVariants} style={{ color: 'var(--text-secondary)', marginBottom: '32px' }}>
+              The pre-launch snapshot is approaching. Once global slots are filled, public access closes.
             </motion.p>
 
-            <motion.div variants={itemVariants} className="scarcity-container" style={{ margin: '0 24px 32px' }}>
-              <motion.div 
-                className="scarcity-fill" 
-                initial={{ width: '60%' }}
-                animate={{ width: '98.4%' }}
-                transition={{ duration: 3, delay: 0.5 }}
-              >
-                <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '10px', fontWeight: '900', color: '#fff' }}>
-                  98.4% CLAIMED
-                </div>
-              </motion.div>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="countdown-grid" style={{ marginBottom: '40px' }}>
+            <motion.div variants={itemVariants} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '40px' }}>
               {[
-                { val: countdown.days, label: "DAYS" },
-                { val: countdown.hours, label: "HOURS" },
+                { val: countdown.hours, label: "HRS" },
                 { val: countdown.mins, label: "MINS" },
                 { val: countdown.secs, label: "SECS" }
               ].map((t, i) => (
-                <div key={i} className="timer-box">
-                  <span className="timer-val">{String(t.val).padStart(2, '0')}</span>
-                  <span className="timer-label">{t.label}</span>
+                <div key={i} className="timer-box" style={{ padding: '12px 8px' }}>
+                  <span className="timer-val conversion-timer" style={{ fontSize: '32px' }}>{String(t.val).padStart(2, '0')}</span>
+                  <span className="timer-label" style={{ fontSize: '9px' }}>{t.label}</span>
                 </div>
               ))}
             </motion.div>
 
-            <motion.div variants={itemVariants} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
-              <div className="timer-box" style={{ textAlign: 'left', padding: '16px' }}>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: 'var(--neon-green)' }}>
-                  <Users size={16} />
-                  <span style={{ fontSize: '18px', fontWeight: '900' }}>148.5K+</span>
-                </div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '800', marginTop: '4px' }}>CLAIMED SPOTS</div>
-              </div>
-              <div className="timer-box" style={{ textAlign: 'left', padding: '16px' }}>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: 'var(--premium-orange)' }}>
-                  <TrendingUp size={16} />
-                  <span style={{ fontSize: '18px', fontWeight: '900' }}>89%</span>
-                </div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '800', marginTop: '4px' }}>CAPACITY FULL</div>
-              </div>
+            <motion.div variants={itemVariants} className="glass" style={{ padding: '20px', textAlign: 'left', borderLeft: '4px solid var(--fomo-red)' }}>
+              <div style={{ fontSize: '12px', color: 'var(--fomo-red)', fontWeight: '900', marginBottom: '4px' }}>SYSTEM ALERT</div>
+              <div style={{ fontSize: '14px', color: '#fff', fontWeight: '600' }}>High traffic detected. 42 users currently viewing this slot.</div>
             </motion.div>
-
-            <motion.button 
-              variants={itemVariants}
-              whileTap={{ scale: 0.96 }}
-              className="btn-primary" 
-              style={{ padding: '24px', background: 'linear-gradient(90deg, #FF0000, #FF5C00)', boxShadow: '0 0 20px rgba(255,0,0,0.4)', fontSize: '18px' }} 
-              onClick={nextStep}
-            >
-              CLAIM YOUR SPOT NOW
-            </motion.button>
           </motion.div>
         );
 
-      case 3: // Step 4: Tier Selection
+      case 3: // THE SELECTION (Membership Passes)
         return (
           <motion.div 
             key="step3"
@@ -234,69 +214,60 @@ const Onboarding = ({ onComplete }) => {
             animate="visible"
             style={{ width: '100%' }}
           >
-            <motion.h1 variants={itemVariants} style={{ fontSize: '36px', fontWeight: '900', textAlign: 'center', marginBottom: '8px' }}>
-              Upgrade Tier
+            <motion.h1 variants={itemVariants} style={{ fontSize: '32px', textAlign: 'center', marginBottom: '8px', fontWeight: '900' }}>
+              Select Your <span className="text-gradient">Access Pass</span>
             </motion.h1>
-            <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '40px', color: 'var(--text-secondary)' }}>
-              Unlock your maximum earning potential.
+            <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '32px', color: 'var(--text-secondary)' }}>
+              One-time payment. Lifetime elite protocol access.
             </motion.p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
               {[
-                { name: "Starter", price: "₹1,000" },
-                { name: "Founder", price: "₹2,999", badge: "LIMITED SPOTS", active: true },
-                { name: "Whale", price: "₹6,999", badge: "MAX YIELD" }
+                { name: "Starter Pass", price: "₹1,000", badge: "BASIC", icon: <Star size={18} /> },
+                { name: "Founder Pass", price: "₹2,999", badge: "BEST VALUE", icon: <Trophy size={18} />, active: true, color: 'var(--neon-green)' },
+                { name: "Whale Pass", price: "₹6,999", badge: "MAX YIELD", icon: <Crown size={18} />, color: '#FFB800', isWhale: true }
               ].map((tier, i) => (
                 <motion.div 
                   key={i} 
                   variants={itemVariants} 
-                  className={`pricing-item ${tier.active ? 'active' : ''} ${tier.name === 'Whale' ? 'whale-glow' : ''}`}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => triggerHaptic('selection')}
+                  className={`pass-card ${tier.isWhale ? 'whale' : ''} ${selectedTier === i ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedTier(i);
+                    triggerHaptic('selection');
+                  }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span style={{ fontSize: '18px', fontWeight: '800' }}>{tier.name}</span>
-                    {tier.badge && <span className="benefit-pill">{tier.badge}</span>}
+                  <div className="metallic-shine" />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <div style={{ color: tier.color || 'var(--text-secondary)' }}>{tier.icon}</div>
+                    <div>
+                      <div style={{ fontSize: '17px', fontWeight: '900', color: '#fff' }}>{tier.name}</div>
+                      <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginTop: '4px' }}>
+                        <span style={{ fontSize: '12px', color: tier.color || 'var(--text-muted)', fontWeight: '800' }}>{tier.badge}</span>
+                        {tier.active && <span style={{ fontSize: '9px', background: 'rgba(255,255,255,0.05)', padding: '2px 4px', borderRadius: '4px' }}>RECOMMENDED</span>}
+                      </div>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '20px', fontWeight: '900' }}>{tier.price}</span>
-                    <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: '2px solid' + (tier.active ? ' var(--premium-blue)' : ' var(--glass-border)'), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                       {tier.active && <div style={{ width: '12px', height: '12px', background: 'var(--premium-blue)', borderRadius: '50%' }} />}
+                  <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ fontSize: '20px', fontWeight: '900' }}>{tier.price}</div>
+                    <div className="pass-check">
+                      {selectedTier === i && <Check size={14} strokeWidth={4} />}
                     </div>
                   </div>
                 </motion.div>
               ))}
             </div>
 
-            <motion.div variants={itemVariants} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-               <ShieldCheck size={20} color="var(--neon-green)" />
-               <span style={{ fontWeight: '800', fontSize: '17px' }}>Starter Benefits</span>
+            <motion.div variants={itemVariants} className="glass" style={{ padding: '16px', background: 'rgba(255,255,255,0.02)' }}>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(0,255,157,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                   <Zap size={20} color="var(--neon-green)" />
+                 </div>
+                 <div style={{ flex: 1 }}>
+                   <div style={{ fontSize: '14px', fontWeight: '800' }}>Instant Mining Unlock</div>
+                   <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>You will receive an immediate bonus of 5,000 $YETC upon activation.</div>
+                 </div>
+              </div>
             </motion.div>
-
-            <motion.div variants={itemVariants} style={{ display: 'flex', flexDirection: 'column', gap: '14px', padding: '0 8px', marginBottom: '40px' }}>
-              {[
-                "Access to basic features",
-                "Standard referral bonuses",
-                "Community group access",
-                "Email support"
-              ].map((b, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '15px' }}>
-                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(0,255,157,0.1)', border: '1px solid var(--neon-green)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Check size={12} color="var(--neon-green)" strokeWidth={3} />
-                  </div>
-                  {b}
-                </div>
-              ))}
-            </motion.div>
-            
-            <motion.button 
-              variants={itemVariants}
-              whileTap={{ scale: 0.96 }}
-              className="btn-primary" 
-              onClick={onComplete}
-            >
-              CLAIM YOUR MULTIPLIERS <ArrowRight size={20} />
-            </motion.button>
           </motion.div>
         );
 
@@ -306,35 +277,37 @@ const Onboarding = ({ onComplete }) => {
 
   return (
     <div className="app-container" style={{ padding: 'calc(env(safe-area-inset-top) + 125px) 20px env(safe-area-inset-bottom)' }}>
+      <div className="mesh-background" />
+      
+      {/* Progress Line */}
+      <div style={{ position: 'fixed', top: 'calc(env(safe-area-inset-top) + 145px)', left: '20px', right: '20px', zIndex: 100 }}>
+        <div style={{ height: '2px', background: 'rgba(255,255,255,0.05)', width: '100%', borderRadius: '4px' }}>
+          <motion.div 
+            initial={{ width: '25%' }}
+            animate={{ width: `${(step + 1) * 25}%` }}
+            style={{ height: '100%', background: 'var(--neon-green)', borderRadius: '4px', boxShadow: '0 0 10px var(--neon-green-glow)' }}
+          />
+        </div>
+      </div>
+
       <AnimatePresence mode="wait">
         {renderStep()}
       </AnimatePresence>
 
-
-      {/* Persistence Controls */}
       <div style={{ margin: 'auto 0 40px', width: '100%' }}>
-        <div className="step-indicator" style={{ marginBottom: '40px' }}>
-          {[0, 1, 2, 3].map(i => (
-            <div key={i} className={`step-dot ${i === step ? 'active' : ''}`} />
-          ))}
-        </div>
+        <motion.button 
+          whileTap={{ scale: 0.96 }}
+          className="btn-primary" 
+          onClick={nextStep}
+          style={{ height: '64px' }}
+        >
+          {step === 3 ? 'ACTIVATE MY ACCOUNT' : 'CONTINUE'}
+          <ArrowRight size={20} />
+        </motion.button>
         
-        {step < 2 && (
-          <motion.button 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="btn-primary" 
-            style={{ 
-              background: 'var(--neon-green)',
-              color: '#000',
-              fontWeight: '900',
-              padding: '20px'
-            }} 
-            onClick={nextStep}
-          >
-            Continue
-          </motion.button>
-        )}
+        <p style={{ textAlign: 'center', fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px', fontWeight: '600', letterSpacing: '0.5px' }}>
+          SECURE ENCRYPTED PROTOCOL ENTRY • VER 2.4.0
+        </p>
       </div>
     </div>
   );
