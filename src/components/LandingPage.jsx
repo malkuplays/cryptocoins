@@ -4,7 +4,10 @@ import {
   ArrowRight, 
   TrendingUp, 
   Zap, 
-  Map
+  Map,
+  Shield,
+  Layers,
+  Activity
 } from 'lucide-react';
 import { triggerHaptic } from '../telegram';
 
@@ -24,120 +27,133 @@ const LandingPage = ({ onNext, onRoadmap }) => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.1,
         delayChildren: 0.2
       }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: { y: 20, opacity: 0 },
     visible: { 
       y: 0, 
       opacity: 1,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+      transition: { duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }
     }
   };
 
   return (
-    <div className="app-container">
+    <div className="app-container" style={{ background: 'radial-gradient(circle at 50% -20%, var(--neon-green-dim), transparent)' }}>
       {/* Header */}
       <header className="app-header">
         <div className="header-logo-group">
-          <img src="/logo.svg" alt="Yetcoin" className="header-logo" />
+          <div className="icon-box-v2" style={{ width: '40px', height: '40px' }}>
+            <img src="/logo.svg" alt="Y" style={{ width: '24px' }} />
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontWeight: '900', fontSize: '15px', letterSpacing: '0.5px' }}>YETCOIN</span>
-              <div className="live-badge">
-                <div className="live-dot" /> LIVE
-              </div>
-            </div>
-            <div style={{ fontSize: '11px', fontWeight: '800', color: 'var(--neon-green)' }}>
-              $YETC <span style={{ color: '#fff' }}>$46.00</span>
+            <span style={{ fontWeight: '900', fontSize: '16px', letterSpacing: '1px' }}>YETCOIN</span>
+            <div style={{ fontSize: '10px', fontWeight: '800', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <div className="live-dot" style={{ width: '4px', height: '4px' }} /> PROTOCOL v1.0
             </div>
           </div>
         </div>
         
-        <button className="claim-btn-header" onClick={handleStart}>
-          CLAIM <ArrowRight size={14} />
-        </button>
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ fontSize: '14px', fontWeight: '900' }}>$46.00</div>
+          <div style={{ fontSize: '10px', color: 'var(--neon-green)', fontWeight: '800' }}>+12.4%</div>
+        </div>
       </header>
 
       {/* Main Content */}
       <motion.div 
         className="container" 
-        style={{ paddingTop: 'calc(env(safe-area-inset-top) + 195px)', paddingBottom: '60px' }}
+        style={{ paddingTop: 'calc(env(safe-area-inset-top) + 160px)', paddingBottom: '100px' }}
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className="flex-center" style={{ flexDirection: 'column', textAlign: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center', alignItems: 'center' }}>
           
-          <motion.div variants={itemVariants} className="badge-outline" style={{ marginBottom: '12px' }}>
-            <div className="live-dot" style={{ background: 'var(--neon-green)', boxShadow: '0 0 10px var(--neon-green-glow)' }} />
-            PRE-LAUNCH EVENT
+          <motion.div variants={itemVariants} className="badge-outline" style={{ marginBottom: '24px', background: 'rgba(255,255,255,0.03)', borderColor: 'var(--glass-border)' }}>
+             <Shield size={12} style={{ marginRight: '6px' }} /> INSTITUTIONAL GRADE
           </motion.div>
 
           <motion.div
             variants={itemVariants}
             animate={{ 
-              y: [0, -10, 0],
-              filter: [
-                'drop-shadow(0 0 20px var(--neon-green-glow))',
-                'drop-shadow(0 0 40px var(--neon-green-glow))',
-                'drop-shadow(0 0 20px var(--neon-green-glow))'
-              ]
+              y: [0, -15, 0],
             }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            style={{ marginBottom: '32px' }}
           >
-            <img src="/logo.svg" alt="Logo" className="hero-logo-large" />
+            <div style={{ position: 'relative' }}>
+              <img src="/logo.svg" alt="Logo" style={{ width: '120px', height: '120px', filter: 'drop-shadow(0 0 40px var(--neon-green-glow))' }} />
+              <motion.div 
+                animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }} 
+                transition={{ duration: 4, repeat: Infinity }}
+                style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '160px', height: '160px', borderRadius: '50%', background: 'var(--neon-green-glow)', z-index: -1 }}
+              />
+            </div>
           </motion.div>
 
-          <motion.h1 variants={itemVariants} className="hero-title">
-            The Biggest<br />
-            <span className="glow-text-green">AIRDROP</span><br />
-            on Telegram
+          <motion.h1 variants={itemVariants} style={{ fontSize: '42px', lineHeight: '1', fontWeight: '900', letterSpacing: '-1px', marginBottom: '16px' }}>
+            The Future of<br />
+            <span style={{ color: 'var(--neon-green)' }}>Digital Wealth</span>
           </motion.h1>
 
-          <motion.p variants={itemVariants} className="hero-subtitle">
-            Yetcoin is launching soon! Secure your early allocation and earn massive rewards before we go live.
+          <motion.p variants={itemVariants} style={{ color: 'var(--text-secondary)', fontSize: '16px', maxWidth: '300px', marginBottom: '48px', lineHeight: '1.5' }}>
+            Secure your spot in the next generation of yield-generating assets. Professional-grade mining, simplified.
           </motion.p>
 
-          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px', marginTop: 'auto' }}>
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px', marginTop: 'auto' }}>
             <motion.button 
               variants={itemVariants}
               whileTap={{ scale: 0.96 }}
               className="btn-primary" 
               onClick={handleStart}
             >
-              Join the Airdrop
+              Start Earning Now <ArrowRight size={20} />
             </motion.button>
             <motion.button 
               variants={itemVariants}
               whileTap={{ scale: 0.96 }}
               className="btn-secondary" 
               onClick={handleRoadmap}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}
+              style={{ padding: '18px', background: 'transparent' }}
             >
-              <Map size={20} /> View Roadmap
+              System Roadmap
             </motion.button>
           </div>
         </div>
+
+        {/* Stats Grid */}
+        <motion.div 
+          variants={itemVariants}
+          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '48px' }}
+        >
+          <div className="step-card-v2" style={{ background: 'rgba(255,255,255,0.02)' }}>
+            <Layers size={18} color="var(--text-muted)" />
+            <div style={{ fontSize: '12px', fontWeight: '800' }}>1.4M+ USERS</div>
+          </div>
+          <div className="step-card-v2" style={{ background: 'rgba(255,255,255,0.02)' }}>
+            <Activity size={18} color="var(--text-muted)" />
+            <div style={{ fontSize: '12px', fontWeight: '800' }}>98% UPTIME</div>
+          </div>
+        </motion.div>
       </motion.div>
 
       {/* Ticker Bar */}
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '48px', background: 'rgba(11, 11, 15, 0.8)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', overflow: 'hidden', borderTop: '1px solid var(--glass-border)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '48px', background: 'rgba(11, 11, 15, 0.9)', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', overflow: 'hidden', borderTop: '1px solid var(--glass-border)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <motion.div 
           animate={{ x: [0, -500] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          style={{ display: 'flex', gap: '40px', whiteSpace: 'nowrap', padding: '0 24px', fontSize: '13px', fontWeight: '800' }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          style={{ display: 'flex', gap: '48px', whiteSpace: 'nowrap', padding: '0 24px', fontSize: '12px', fontWeight: '700', letterSpacing: '1px', color: 'var(--text-muted)' }}
         >
-          <span>$YETC <span style={{ color: '#fff' }}>$46.00</span> <span className="glow-text-green">+12.4%</span></span>
-          <span>BTC <span style={{ color: '#fff' }}>$68,432</span> <span className="glow-text-green">+2.1%</span></span>
-          <span>ETH <span style={{ color: '#fff' }}>$3,542</span> <span className="glow-text-red">-0.8%</span></span>
-          <span>SOL <span style={{ color: '#fff' }}>$142.50</span> <span className="glow-text-green">+5.4%</span></span>
-          <span>$YETC <span style={{ color: '#fff' }}>$46.00</span> <span className="glow-text-green">+12.4%</span></span>
-          <span>BTC <span style={{ color: '#fff' }}>$68,432</span> <span className="glow-text-green">+2.1%</span></span>
+          <span>$YETC <span style={{ color: '#fff' }}>$46.00</span> <span style={{ color: 'var(--neon-green)' }}>+12.4%</span></span>
+          <span>BTC <span style={{ color: '#fff' }}>$68,432</span> <span style={{ color: 'var(--neon-green)' }}>+2.1%</span></span>
+          <span>ETH <span style={{ color: '#fff' }}>$3,542</span> <span style={{ color: 'var(--fomo-red)' }}>-0.8%</span></span>
+          <span>SOL <span style={{ color: '#fff' }}>$142.50</span> <span style={{ color: 'var(--neon-green)' }}>+5.4%</span></span>
+          <span>TON <span style={{ color: '#fff' }}>$5.12</span> <span style={{ color: 'var(--neon-green)' }}>+1.2%</span></span>
         </motion.div>
       </div>
     </div>
@@ -145,3 +161,4 @@ const LandingPage = ({ onNext, onRoadmap }) => {
 };
 
 export default LandingPage;
+

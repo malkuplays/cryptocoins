@@ -1,23 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-deep: #0B0B0F;
-  --bg-card: #121217;
-  --bg-card-hover: #1A1A22;
-  --glass-bg: rgba(18, 18, 23, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.05);
+  --bg-deep: #050508;
+  --bg-card: #0E0E14;
+  --bg-card-hover: #16161F;
+  --glass-bg: rgba(14, 14, 20, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.04);
+  --glass-border-bright: rgba(255, 255, 255, 0.1);
   --neon-green: #00FF9D;
-  --neon-green-glow: rgba(0, 255, 157, 0.4);
-  --neon-green-dim: rgba(0, 255, 157, 0.1);
-  --fomo-red: #FF4D4D;
-  --fomo-glow: rgba(255, 77, 77, 0.4);
-  --text-primary: #FFFFFF;
-  --text-secondary: #94949E;
-  --text-muted: #62626C;
+  --neon-green-glow: rgba(0, 255, 157, 0.3);
+  --neon-green-dim: rgba(0, 255, 157, 0.08);
   --premium-blue: #00D1FF;
   --premium-purple: #9D50BB;
   --premium-orange: #FF8A00;
-  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --fomo-red: #FF4D4D;
+  --text-primary: #FFFFFF;
+  --text-secondary: #9BA1B0;
+  --text-muted: #626C7A;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --inner-glow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
 }
 
 * {
@@ -78,8 +80,9 @@ body {
   animation: aura-flow 20s infinite linear;
 }
 
-.aura-1 { top: -100px; left: -100px; background: #00d2ff; }
-.aura-2 { bottom: -100px; right: -100px; background: #9d50bb; }
+.aura-1 { top: -100px; left: -100px; background: var(--premium-blue); opacity: 0.1; }
+.aura-2 { bottom: -100px; right: -100px; background: var(--premium-purple); opacity: 0.1; }
+.aura-3 { top: 40%; left: 50%; background: var(--neon-green-glow); opacity: 0.05; width: 400px; height: 400px; }
 
 /* Typography */
 h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
@@ -88,16 +91,20 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 
 /* Buttons */
 .btn-primary {
-  background: var(--gradient-main);
+  background: linear-gradient(135deg, var(--neon-green) 0%, #00E48B 100%);
   border: none;
-  padding: 16px 32px;
-  border-radius: 16px;
-  color: white;
-  font-weight: 600;
+  padding: 18px 32px;
+  border-radius: 18px;
+  color: #050508;
+  font-weight: 700;
   font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 12px 24px -8px var(--neon-green-glow);
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
 .btn-primary:active {
@@ -201,14 +208,14 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   top: 0;
   left: 0;
   right: 0;
-  height: calc(env(safe-area-inset-top) + 155px); /* Final aggressive buffer + 15px */
+  height: calc(env(safe-area-inset-top) + 140px);
   display: flex;
   justify-content: space-between;
-  align-items: flex-end; /* Keep content at bottom of large header */
-  padding: env(safe-area-inset-top) 24px 33px; /* More bottom padding to space items from notch */
-  background: rgba(11, 11, 15, 0.98); /* Almost opaque to hide background overlap */
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+  align-items: flex-end;
+  padding: env(safe-area-inset-top) 24px 28px;
+  background: rgba(5, 5, 8, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--glass-border);
   z-index: 1000;
 }
@@ -538,55 +545,83 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   gap: 12px;
 }
 
-/* Viral FOMO Extensions */
-@keyframes fomo-pulse {
-  0% { transform: scale(1); filter: brightness(1); }
-  50% { transform: scale(1.05); filter: brightness(1.3); }
-  100% { transform: scale(1); filter: brightness(1); }
-}
 
-.fomo-pulse {
-  animation: fomo-pulse 1.5s infinite ease-in-out;
-}
-
-.scarcity-container {
-  background: rgba(255, 255, 255, 0.03);
-  height: 24px;
-  border-radius: 12px;
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
+  border-radius: 28px;
+  box-shadow: var(--card-shadow);
+  position: relative;
   overflow: hidden;
-  position: relative;
-  margin: 16px 0;
 }
 
-.scarcity-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #FF4D4D, #FF8A00);
-  box-shadow: 0 0 20px rgba(255, 77, 77, 0.5);
-  border-radius: 12px;
-  position: relative;
-  transition: width 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-border-bright), transparent);
 }
 
-.whale-glow {
-  border-color: #FFD700 !important;
-  background: rgba(255, 215, 0, 0.05) !important;
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.2) !important;
-}
-
-.live-activity-chip {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(18, 18, 23, 0.95);
+.step-card-v2 {
+  background: var(--bg-card);
   border: 1px solid var(--glass-border);
-  padding: 8px 16px;
-  border-radius: 100px;
+  border-radius: 20px;
+  padding: 16px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  z-index: 2000;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  gap: 16px;
+  transition: all 0.3s ease;
+  box-shadow: var(--inner-glow);
 }
+
+.step-card-v2:active {
+  transform: scale(0.98);
+  background: var(--bg-card-hover);
+}
+
+.icon-box-v2 {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-deep);
+  border: 1px solid var(--glass-border);
+  color: var(--neon-green);
+}
+
+.price-card {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 24px;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.price-card.active {
+  border-color: var(--neon-green);
+  background: var(--neon-green-dim);
+  box-shadow: 0 0 30px var(--neon-green-glow);
+}
+
+.price-badge {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: var(--neon-green);
+  color: #000;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px var(--neon-green-glow);
+}
+
