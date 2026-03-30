@@ -86,14 +86,28 @@ const App = () => {
       <div className="aura-blob aura-2"></div>
     </>
   );
-
   if (loading) return (
     <div className="container flex-center">
       <motion.div 
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+        animate={{ 
+          rotateY: [0, 360],
+          scale: [1, 1.1, 1]
+        }}
+        transition={{ 
+          repeat: Infinity, 
+          duration: 3, 
+          ease: "easeInOut" 
+        }}
       >
-        <Zap size={48} color="#00d2ff" />
+        <img 
+          src="/logo.svg" 
+          alt="Loading..." 
+          style={{ 
+            width: '80px', 
+            height: '80px', 
+            filter: 'drop-shadow(0 0 20px var(--neon-green-glow))' 
+          }} 
+        />
       </motion.div>
     </div>
   );

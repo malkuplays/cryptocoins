@@ -11,7 +11,7 @@ export const expandTelegramApp = () => {
   if (tg) {
     tg.ready();
     tg.expand();
-    tg.enableClosingConfirmation();
+    // Removed closing confirmation on user request
     // Force full-screen by calling expand again after a short delay
     setTimeout(() => {
       tg.expand();
