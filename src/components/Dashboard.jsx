@@ -1,170 +1,417 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  History, 
   TrendingUp, 
   Coins, 
   Zap, 
   Timer, 
-  Info,
   ShieldCheck,
-  RefreshCw
+  RefreshCw,
+  ArrowUpRight,
+  Lock,
+  Gem,
+  BarChart3,
+  Sparkles,
+  Clock,
+  Activity,
+  Wallet
 } from 'lucide-react';
 import { supabase } from '../supabase';
 
+const COIN_PRICE_USD = 10.00; // 1 YETC = $10
+
+const TIER_MINING_RATES = {
+  whale:   { min: 60, max: 80, label: 'Whale', color: '#FFD700', icon: '🐋' },
+  pro:     { min: 40, max: 60, label: 'Pro',   color: '#00D1FF', icon: '⚡' },
+  starter: { min: 30, max: 50, label: 'Starter', color: '#00FF9D', icon: '🚀' },
+  free:    { min: 5,  max: 10, label: 'Free',  color: '#626C7A', icon: '🏁' },
+};
+
 const Dashboard = ({ user, setUser }) => {
-  const [balance, setBalance] = useState(user.mining_balance || 0);
-  const [lastSync, setLastSync] = useState(new Date(user.last_sync || Date.now()));
+  const [balance, setBalance] = useState(user?.mining_balance || 0);
   const [syncing, setSyncing] = useState(false);
+  const [miningRate, setMiningRate] = useState(0);
+  const [sessionEarned, setSessionEarned] = useState(0);
+  const [initialized, setInitialized] = useState(false);
 
-  // Constants
-  const miningPower = user.mining_power || 0; // YET per hour
-  const powerPerSecond = miningPower / 3600;
+  const tier = user?.plan_tier || 'free';
+  const tierConfig = TIER_MINING_RATES[tier] || TIER_MINING_RATES.free;
+  const stakingYears = user?.staking_years || 0;
 
-  // Real-time increment
+  // Generate random mining rate for current hour
+  const generateMiningRate = useCallback(() => {
+    const { min, max } = tierConfig;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }, [tierConfig]);
+
+  // Calculate offline earnings and sync on mount
   useEffect(() => {
-    const timer = setInterval(() => {
-      setBalance(prev => prev + powerPerSecond);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [powerPerSecond]);
-
-  // Sync with database periodically
-  const syncBalance = useCallback(async () => {
-    if (syncing) return;
-    setSyncing(true);
-    
-    try {
+    const calculateOfflineEarnings = async () => {
+      if (!user?.id || initialized) return;
+      
+      const lastUpdate = user.last_mining_update ? new Date(user.last_mining_update) : new Date();
       const now = new Date();
+      const elapsedMs = now.getTime() - lastUpdate.getTime();
+      const elapsedHours = elapsedMs / (1000 * 60 * 60);
+      
+      if (elapsedHours > 0.01) { // At least ~36 seconds
+        let offlineEarnings = 0;
+        const fullHours = Math.floor(elapsedHours);
+        const partialHour = elapsedHours - fullHours;
+        
+        // Generate random coins for each full hour
+        for (let i = 0; i < Math.min(fullHours, 168); i++) { // Cap at 7 days (168 hours)
+          const { min, max } = tierConfig;
+          offlineEarnings += Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        // Partial hour
+        if (partialHour > 0) {
+          const { min, max } = tierConfig;
+          const hourlyRate = Math.floor(Math.random() * (max - min + 1)) + min;
+          offlineEarnings += Math.floor(hourlyRate * partialHour);
+        }
+
+        if (offlineEarnings > 0) {
+          const newBalance = (user.mining_balance || 0) + offlineEarnings;
+          setBalance(newBalance);
+          
+          // Sync to Supabase
+          try {
+            const { data } = await supabase
+              .from('players')
+              .update({ 
+                mining_balance: newBalance,
+                last_mining_update: now.toISOString(),
+                last_sync: now.toISOString()
+              })
+              .eq('id', user.id)
+              .select()
+              .single();
+            
+            if (data) setUser(data);
+          } catch (err) {
+            console.error('Offline sync error:', err);
+          }
+        }
+      }
+      
+      setMiningRate(generateMiningRate());
+      setInitialized(true);
+    };
+
+    calculateOfflineEarnings();
+  }, [user?.id]);
+
+  // Live mining tick - add coins every minute
+  useEffect(() => {
+    if (!initialized) return;
+    
+    const rate = miningRate || generateMiningRate();
+    const coinsPerMinute = rate / 60;
+    
+    const miningTimer = setInterval(() => {
+      setBalance(prev => prev + coinsPerMinute);
+      setSessionEarned(prev => prev + coinsPerMinute);
+    }, 1000); // Update display every second for smooth animation
+
+    return () => clearInterval(miningTimer);
+  }, [initialized, miningRate]);
+
+  // Regenerate mining rate every hour
+  useEffect(() => {
+    const hourlyTimer = setInterval(() => {
+      setMiningRate(generateMiningRate());
+    }, 60 * 60 * 1000);
+    return () => clearInterval(hourlyTimer);
+  }, [generateMiningRate]);
+
+  // Auto-sync every 5 minutes
+  const syncBalance = useCallback(async () => {
+    if (syncing || !user?.id) return;
+    setSyncing(true);
+    try {
       const { data, error } = await supabase
         .from('players')
         .update({ 
           mining_balance: balance,
-          last_sync: now.toISOString()
+          last_mining_update: new Date().toISOString(),
+          last_sync: new Date().toISOString()
         })
         .eq('id', user.id)
         .select()
         .single();
-
-      if (error) throw error;
-      setLastSync(now);
-      setUser(data);
+      if (!error && data) setUser(data);
     } catch (err) {
       console.error('Sync error:', err);
     } finally {
       setSyncing(false);
     }
-  }, [balance, user.id, syncing, setUser]);
+  }, [balance, user?.id, syncing, setUser]);
 
-  // Auto-sync every 60 seconds
   useEffect(() => {
-    const syncTimer = setInterval(syncBalance, 60000);
+    const syncTimer = setInterval(syncBalance, 300000); // 5 min
     return () => clearInterval(syncTimer);
   }, [syncBalance]);
 
-  // Staking progress calculation
+  // Staking calculations
   const getStakingProgress = () => {
-    if (!user.staking_start || !user.staking_end) return 0;
+    if (!user?.staking_start || !user?.staking_end) return 0;
     const start = new Date(user.staking_start).getTime();
     const end = new Date(user.staking_end).getTime();
     const current = Date.now();
-    
-    const total = end - start;
-    const elapsed = current - start;
-    return Math.min(100, Math.max(0, (elapsed / total) * 100));
+    return Math.min(100, Math.max(0, ((current - start) / (end - start)) * 100));
   };
 
   const getDaysRemaining = () => {
-    if (!user.staking_end) return 0;
+    if (!user?.staking_end) return stakingYears * 365;
     const diff = new Date(user.staking_end).getTime() - Date.now();
     return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   };
 
+  const usdValue = balance * COIN_PRICE_USD;
+  const stakingProgress = getStakingProgress();
+  const daysRemaining = getDaysRemaining();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 }
+    }
+  };
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: 'easeOut' } }
+  };
+
   return (
-    <div className="container" style={{ paddingBottom: '30px' }}>
-      <header className="space-between" style={{ marginBottom: '32px' }}>
+    <motion.div 
+      className="container" 
+      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 20px)', paddingBottom: '100px' }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* Header */}
+      <motion.header variants={itemVariants} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', padding: '0 4px' }}>
         <div>
-          <h1 style={{ fontSize: '18px', opacity: 0.7 }}>Miner: @{user.username}</h1>
-          <div className="flex-center" style={{ justifyContent: 'flex-start', gap: '8px' }}>
-            <div className="glass flex-center" style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4cd964' }} />
-            <span style={{ fontSize: '12px' }}>Live Mining</span>
-          </div>
+          <div style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '600', marginBottom: '2px' }}>Welcome back</div>
+          <h1 style={{ fontSize: '22px', fontWeight: '900' }}>@{user?.username || 'user'}</h1>
         </div>
-        <button 
-          onClick={syncBalance} 
-          disabled={syncing}
-          style={{ background: 'none', border: 'none', color: 'white' }}
-        >
-          <motion.div animate={{ rotate: syncing ? 360 : 0 }} transition={{ repeat: syncing ? Infinity : 0, duration: 1 }}>
-            <RefreshCw size={20} opacity={0.6} />
-          </motion.div>
-        </button>
-      </header>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ 
+            padding: '6px 14px', borderRadius: '100px', 
+            background: `${tierConfig.color}15`, 
+            border: `1px solid ${tierConfig.color}40`,
+            fontSize: '12px', fontWeight: '800', color: tierConfig.color,
+            display: 'flex', alignItems: 'center', gap: '6px'
+          }}>
+            <span>{tierConfig.icon}</span> {tierConfig.label}
+          </div>
+          <button 
+            onClick={syncBalance} 
+            disabled={syncing}
+            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '4px' }}
+          >
+            <motion.div animate={{ rotate: syncing ? 360 : 0 }} transition={{ repeat: syncing ? Infinity : 0, duration: 1, ease: 'linear' }}>
+              <RefreshCw size={18} opacity={0.5} />
+            </motion.div>
+          </button>
+        </div>
+      </motion.header>
 
       {/* Main Balance Card */}
       <motion.div 
-        className="glass-panel-heavy animate-stagger-1" 
-        style={{ marginBottom: '24px', textAlign: 'center', padding: '32px 20px', position: 'relative', overflow: 'hidden' }}
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
+        variants={itemVariants}
+        style={{ 
+          marginBottom: '20px', textAlign: 'center', padding: '32px 20px 28px', 
+          position: 'relative', overflow: 'hidden',
+          background: 'linear-gradient(145deg, rgba(14, 14, 20, 0.9), rgba(14, 14, 20, 0.6))',
+          border: '1px solid rgba(255,255,255,0.06)',
+          borderRadius: '28px',
+          backdropFilter: 'blur(20px)'
+        }}
       >
-        <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '200px', height: '100px', background: 'var(--neon-green-glow)', filter: 'blur(50px)', zIndex: 0 }} />
-        <div style={{ position: 'relative', zIndex: 1, marginBottom: '12px' }}>
-          <span style={{ fontSize: '14px', opacity: 0.6 }}>Current Balance</span>
-        </div>
-        <div style={{ position: 'relative', zIndex: 1, fontSize: '46px', fontWeight: '900', margin: '16px 0', textShadow: '0 4px 20px rgba(0, 255, 157, 0.4)' }} className="balance-ticker">
-           {balance.toFixed(6)} <span style={{ fontSize: '20px', color: 'var(--premium-blue)', fontWeight: '800' }}>$YETC</span>
-        </div>
-        <div className="flex-center" style={{ position: 'relative', zIndex: 1, gap: '8px', background: 'rgba(0,255,157,0.1)', display: 'inline-flex', padding: '6px 12px', borderRadius: '100px', border: '1px solid rgba(0,255,157,0.2)' }}>
-          <TrendingUp size={16} color="var(--neon-green)" />
-          <span style={{ color: 'var(--neon-green)', fontWeight: '700', fontSize: '13px' }}>+{miningPower} YETC / HR</span>
+        {/* Glow effect */}
+        <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', width: '200px', height: '120px', background: 'var(--neon-green-glow)', filter: 'blur(60px)', opacity: 0.4, zIndex: 0 }} />
+        
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '16px' }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--neon-green)', boxShadow: '0 0 10px var(--neon-green)' }} />
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: '700', letterSpacing: '1.5px' }}>LIVE MINING</span>
+          </div>
+
+          <div style={{ fontSize: '42px', fontWeight: '900', lineHeight: '1', marginBottom: '6px', letterSpacing: '-1px' }}>
+            {balance.toFixed(2)}
+          </div>
+          <div style={{ fontSize: '16px', color: 'var(--premium-blue)', fontWeight: '800', marginBottom: '16px' }}>
+            $YETC
+          </div>
+
+          <div style={{ 
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            background: 'rgba(0,255,157,0.08)', padding: '8px 18px', 
+            borderRadius: '100px', border: '1px solid rgba(0,255,157,0.15)'
+          }}>
+            <Wallet size={14} color="var(--neon-green)" />
+            <span style={{ fontSize: '14px', fontWeight: '800', color: 'var(--neon-green)' }}>
+              ≈ ${usdValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
         </div>
       </motion.div>
 
-      {/* Stats Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
-        <div className="glass-panel-heavy animate-stagger-2 hover-glow" style={{ padding: '20px', borderRadius: '24px' }}>
-          <Timer size={24} color="var(--premium-orange)" style={{ marginBottom: '12px' }} />
-          <div style={{ fontSize: '12px', opacity: 0.6, marginBottom: '4px' }}>Time Active</div>
-          <div style={{ fontSize: '20px', fontWeight: '800' }}>3h 12m</div>
+      {/* Mining Stats Strip */}
+      <motion.div variants={itemVariants} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '20px' }}>
+        <div style={{ 
+          background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.05)', 
+          borderRadius: '20px', padding: '16px 12px', textAlign: 'center' 
+        }}>
+          <Activity size={18} color="var(--neon-green)" style={{ marginBottom: '8px' }} />
+          <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: '700' }}>RATE</div>
+          <div style={{ fontSize: '16px', fontWeight: '900' }}>{miningRate || '—'}/hr</div>
         </div>
-        <div className="glass-panel-heavy animate-stagger-3 hover-glow" style={{ padding: '20px', borderRadius: '24px' }}>
-          <ShieldCheck size={24} color="var(--premium-blue)" style={{ marginBottom: '12px' }} />
-          <div style={{ fontSize: '12px', opacity: 0.6, marginBottom: '4px' }}>Security Tier</div>
-          <div style={{ fontSize: '20px', fontWeight: '800', textTransform: 'capitalize' }}>{user.plan_tier || 'Starter'}</div>
+        <div style={{ 
+          background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.05)', 
+          borderRadius: '20px', padding: '16px 12px', textAlign: 'center' 
+        }}>
+          <Sparkles size={18} color="var(--premium-orange)" style={{ marginBottom: '8px' }} />
+          <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: '700' }}>SESSION</div>
+          <div style={{ fontSize: '16px', fontWeight: '900' }}>+{sessionEarned.toFixed(1)}</div>
         </div>
-      </div>
+        <div style={{ 
+          background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.05)', 
+          borderRadius: '20px', padding: '16px 12px', textAlign: 'center' 
+        }}>
+          <TrendingUp size={18} color="var(--premium-blue)" style={{ marginBottom: '8px' }} />
+          <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: '700' }}>PRICE</div>
+          <div style={{ fontSize: '16px', fontWeight: '900' }}>${COIN_PRICE_USD}</div>
+        </div>
+      </motion.div>
 
-      {/* Staking Progress */}
-      <div className="glass-panel-heavy animate-stagger-4" style={{ padding: '24px', borderRadius: '24px' }}>
-        <div className="space-between" style={{ marginBottom: '16px' }}>
-          <div className="flex-center" style={{ gap: '8px' }}>
-            <Zap size={18} color="#9d50bb" />
-            <h2 style={{ fontSize: '16px' }}>Staking Period</h2>
+      {/* Staking Card */}
+      <motion.div 
+        variants={itemVariants}
+        style={{ 
+          marginBottom: '20px', padding: '24px',
+          background: 'linear-gradient(145deg, rgba(157, 80, 187, 0.08), rgba(0, 209, 255, 0.05))',
+          border: '1px solid rgba(157, 80, 187, 0.15)',
+          borderRadius: '24px'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ 
+              width: '40px', height: '40px', borderRadius: '14px', 
+              background: 'rgba(157, 80, 187, 0.15)', border: '1px solid rgba(157, 80, 187, 0.3)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              <Lock size={20} color="var(--premium-purple)" />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '16px', fontWeight: '800' }}>Staking Period</h3>
+              <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{stakingYears}-Year Lock</span>
+            </div>
           </div>
-          <span style={{ fontSize: '14px', color: '#9d50bb' }}>{getDaysRemaining()} Days left</span>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '22px', fontWeight: '900', color: 'var(--premium-purple)' }}>{daysRemaining}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600' }}>Days Left</div>
+          </div>
         </div>
-        
-        <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden', marginBottom: '8px' }}>
+
+        <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '100px', overflow: 'hidden', marginBottom: '12px' }}>
           <motion.div 
             initial={{ width: 0 }}
-            animate={{ width: `${getStakingProgress()}%` }}
-            transition={{ duration: 1 }}
-            style={{ height: '100%', background: 'linear-gradient(90deg, #00d2ff, #9d50bb)', borderRadius: '4px' }}
+            animate={{ width: `${stakingProgress}%` }}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
+            style={{ 
+              height: '100%', 
+              background: 'linear-gradient(90deg, #00d2ff, #9d50bb)', 
+              borderRadius: '100px',
+              boxShadow: '0 0 10px rgba(157, 80, 187, 0.4)'
+            }}
           />
         </div>
-        <p style={{ fontSize: '12px' }}>Progress of your current mining plan's lock-up period.</p>
-      </div>
 
-      {/* Info Notice */}
-      <div style={{ marginTop: '32px', textAlign: 'center' }}>
-        <p style={{ fontSize: '12px' }}>
-          <Info size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
-          Estimated Listing Price: 1 $YETC = ₹940.00
-        </p>
-      </div>
-    </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-muted)' }}>
+          <span>{stakingProgress.toFixed(1)}% Complete</span>
+          <span>{stakingYears > 0 ? `${stakingYears * 365 - daysRemaining} / ${stakingYears * 365} Days` : 'Not started'}</span>
+        </div>
+      </motion.div>
+
+      {/* Portfolio Stats */}
+      <motion.div variants={itemVariants} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
+        <div style={{ 
+          background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.05)', 
+          borderRadius: '20px', padding: '20px' 
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <Gem size={16} color="var(--premium-purple)" />
+            <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700' }}>TIER</span>
+          </div>
+          <div style={{ fontSize: '20px', fontWeight: '900', textTransform: 'capitalize' }}>{tier}</div>
+          <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>{tierConfig.min}-{tierConfig.max} YETC/hr</div>
+        </div>
+        <div style={{ 
+          background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.05)', 
+          borderRadius: '20px', padding: '20px' 
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <BarChart3 size={16} color="var(--neon-green)" />
+            <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700' }}>MULTIPLIER</span>
+          </div>
+          <div style={{ fontSize: '20px', fontWeight: '900' }}>{stakingYears === 7 ? '7.0x' : stakingYears === 5 ? '3.5x' : '1.0x'}</div>
+          <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>{stakingYears > 0 ? `${stakingYears}-yr stake bonus` : 'No stake'}</div>
+        </div>
+      </motion.div>
+
+      {/* Market Info */}
+      <motion.div 
+        variants={itemVariants}
+        style={{ 
+          padding: '20px', borderRadius: '20px',
+          background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.05)'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <span style={{ fontSize: '13px', fontWeight: '800', color: 'var(--text-secondary)' }}>YETCOIN Market</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 10px', borderRadius: '100px', background: 'rgba(0,255,157,0.08)' }}>
+            <ArrowUpRight size={12} color="var(--neon-green)" />
+            <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--neon-green)' }}>+12.4%</span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+          <div>
+            <div style={{ fontSize: '24px', fontWeight: '900' }}>${COIN_PRICE_USD.toFixed(2)}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>1 $YETC = ₹{(COIN_PRICE_USD * 84).toFixed(0)}</div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Market Cap</div>
+            <div style={{ fontSize: '14px', fontWeight: '800' }}>$250M+</div>
+          </div>
+        </div>
+
+        {/* Mini chart visual */}
+        <div style={{ 
+          marginTop: '16px', height: '48px', display: 'flex', alignItems: 'flex-end', gap: '3px',
+          opacity: 0.4
+        }}>
+          {[35, 42, 38, 55, 48, 62, 58, 70, 65, 78, 72, 85, 80, 88, 82, 92, 88, 95].map((h, i) => (
+            <motion.div 
+              key={i}
+              initial={{ height: 0 }}
+              animate={{ height: `${h}%` }}
+              transition={{ delay: i * 0.05, duration: 0.5 }}
+              style={{ 
+                flex: 1, borderRadius: '2px',
+                background: `linear-gradient(to top, var(--neon-green), rgba(0, 255, 157, 0.3))`
+              }}
+            />
+          ))}
+        </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

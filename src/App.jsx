@@ -9,7 +9,8 @@ import {
   Coins, 
   Timer, 
   LayoutDashboard,
-  CreditCard
+  CreditCard,
+  User
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -21,12 +22,14 @@ import Onboarding from './components/Onboarding';
 import Roadmap from './components/Roadmap';
 import PaymentPending from './components/PaymentPending';
 import ProfileSetup from './components/ProfileSetup';
+import Profile from './components/Profile';
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [view, setView] = useState('loading'); // loading, landing, onboarding, pricing, dashboard
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('dashboard'); // dashboard, profile
 
   useEffect(() => {
     try {
@@ -220,7 +223,28 @@ const App = () => {
           />
         )}
         {view === 'dashboard' && (
-          <Dashboard user={user} setUser={setUser} />
+          <>
+            {activeTab === 'dashboard' && <Dashboard user={user} setUser={setUser} />}
+            {activeTab === 'profile' && <Profile user={user} />}
+
+            {/* Bottom Navigation */}
+            <div className="bottom-nav">
+              <button 
+                className={`bottom-nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
+                onClick={() => setActiveTab('dashboard')}
+              >
+                <LayoutDashboard size={22} />
+                <span>Dashboard</span>
+              </button>
+              <button 
+                className={`bottom-nav-item ${activeTab === 'profile' ? 'active' : ''}`}
+                onClick={() => setActiveTab('profile')}
+              >
+                <User size={22} />
+                <span>Profile</span>
+              </button>
+            </div>
+          </>
         )}
       </AnimatePresence>
     </div>
