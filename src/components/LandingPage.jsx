@@ -91,7 +91,7 @@ const LandingPage = ({ onNext, onRoadmap }) => {
               <motion.div 
                 animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }} 
                 transition={{ duration: 4, repeat: Infinity }}
-                style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '160px', height: '160px', borderRadius: '50%', background: 'var(--neon-green-glow)', z-index: -1 }}
+                style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '160px', height: '160px', borderRadius: '50%', background: 'var(--neon-green-glow)', zIndex: -1 }}
               />
             </div>
           </motion.div>
