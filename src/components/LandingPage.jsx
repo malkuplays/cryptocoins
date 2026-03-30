@@ -61,7 +61,7 @@ const LandingPage = ({ onNext }) => {
       {/* Main Content */}
       <motion.div 
         className="container" 
-        style={{ paddingTop: 'calc(env(safe-area-inset-top) + 120px)', paddingBottom: '60px' }}
+        style={{ paddingTop: 'calc(env(safe-area-inset-top) + 140px)', paddingBottom: '60px' }}
         variants={containerVariants}
         initial="hidden"
         animate="visible"
