@@ -21,11 +21,11 @@ import { useSettings } from '../SettingsContext';
 
 
 
-const TIER_MINING_RATES = {
-  whale:   { min: 60, max: 80, label: 'Whale', color: '#FFD700', icon: '🐋' },
-  pro:     { min: 40, max: 60, label: 'Pro',   color: '#00D1FF', icon: '⚡' },
-  starter: { min: 30, max: 50, label: 'Starter', color: '#00FF9D', icon: '🚀' },
-  free:    { min: 5,  max: 10, label: 'Free',  color: '#626C7A', icon: '🏁' },
+const TIER_DISPLAY = {
+  whale:   { label: 'Whale', color: '#FFD700', icon: '🐋' },
+  pro:     { label: 'Pro',   color: '#00D1FF', icon: '⚡' },
+  starter: { label: 'Starter', color: '#00FF9D', icon: '🚀' },
+  free:    { label: 'Free',  color: '#626C7A', icon: '🏁' },
 };
 
 const Dashboard = ({ user, setUser }) => {
@@ -35,17 +35,19 @@ const Dashboard = ({ user, setUser }) => {
   const [sessionEarned, setSessionEarned] = useState(0);
   const [initialized, setInitialized] = useState(false);
   const balanceRef = useRef(user?.mining_balance || 0);
-  const { yetcPriceUsd } = useSettings();
+  const { yetcPriceUsd, miningRates } = useSettings();
 
   const tier = user?.plan_tier || 'free';
-  const tierConfig = TIER_MINING_RATES[tier] || TIER_MINING_RATES.free;
+  const tierDisplay = TIER_DISPLAY[tier] || TIER_DISPLAY.free;
+  const tierRates = miningRates[tier] || { min: 5, max: 10 };
+  const tierConfig = { ...tierDisplay, ...tierRates };
   const stakingYears = user?.staking_years || 0;
 
   // Generate random mining rate for current hour
   const generateMiningRate = useCallback(() => {
-    const { min, max } = tierConfig;
+    const { min, max } = tierRates;
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  }, [tierConfig]);
+  }, [tierRates.min, tierRates.max]);
 
   // Calculate offline earnings and sync on mount
   useEffect(() => {
@@ -64,13 +66,13 @@ const Dashboard = ({ user, setUser }) => {
         
         // Generate random coins for each full hour
         for (let i = 0; i < Math.min(fullHours, 168); i++) { // Cap at 7 days (168 hours)
-          const { min, max } = tierConfig;
+          const { min, max } = tierRates;
           offlineEarnings += Math.floor(Math.random() * (max - min + 1)) + min;
         }
         
         // Partial hour
         if (partialHour > 0) {
-          const { min, max } = tierConfig;
+          const { min, max } = tierRates;
           const hourlyRate = Math.floor(Math.random() * (max - min + 1)) + min;
           offlineEarnings += Math.floor(hourlyRate * partialHour);
         }
