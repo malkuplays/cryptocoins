@@ -12,10 +12,23 @@ export const expandTelegramApp = () => {
     tg.ready();
     tg.expand();
     tg.enableClosingConfirmation();
-    // Set theme parameters if available
-    if (tg.setHeaderColor) {
-      tg.setHeaderColor('#000000');
-    }
+    // Force full-screen by calling expand again after a short delay
+    setTimeout(() => {
+      tg.expand();
+    }, 500);
+    // Set theme parameters
+    if (tg.setHeaderColor) tg.setHeaderColor('#0B0B0F');
+    if (tg.setBackgroundColor) tg.setBackgroundColor('#0B0B0F');
+  }
+};
+
+export const triggerHaptic = (style = 'light') => {
+  const tg = window.Telegram?.WebApp;
+  if (tg?.HapticFeedback) {
+    if (style === 'impact') tg.HapticFeedback.impactOccurred('medium');
+    else if (style === 'notification_success') tg.HapticFeedback.notificationOccurred('success');
+    else if (style === 'selection') tg.HapticFeedback.selectionChanged();
+    else tg.HapticFeedback.impactOccurred('light');
   }
 };
 

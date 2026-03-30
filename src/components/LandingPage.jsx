@@ -6,8 +6,34 @@ import {
   Zap, 
   Map
 } from 'lucide-react';
+import { triggerHaptic } from '../telegram';
 
 const LandingPage = ({ onNext }) => {
+  const handleStart = () => {
+    triggerHaptic('impact');
+    onNext();
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+    }
+  };
+
   return (
     <div className="app-container">
       {/* Header */}
@@ -16,75 +42,98 @@ const LandingPage = ({ onNext }) => {
           <img src="/logo.svg" alt="Yetcoin" className="header-logo" />
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontWeight: '900', fontSize: '14px', letterSpacing: '0.5px' }}>YETCOIN</span>
+              <span style={{ fontWeight: '900', fontSize: '15px', letterSpacing: '0.5px' }}>YETCOIN</span>
               <div className="live-badge">
                 <div className="live-dot" /> LIVE
               </div>
             </div>
-            <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--neon-green)' }}>
+            <div style={{ fontSize: '11px', fontWeight: '800', color: 'var(--neon-green)' }}>
               $YETC <span style={{ color: '#fff' }}>$46.00</span>
             </div>
           </div>
         </div>
         
-        <button className="claim-btn-header" onClick={onNext}>
+        <button className="claim-btn-header" onClick={handleStart}>
           CLAIM <ArrowRight size={14} />
         </button>
       </header>
 
       {/* Main Content */}
-      <div className="container" style={{ paddingTop: '100px', paddingBottom: '40px' }}>
+      <motion.div 
+        className="container" 
+        style={{ paddingTop: '120px', paddingBottom: '60px' }}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         <div className="flex-center" style={{ flexDirection: 'column', textAlign: 'center' }}>
           
-          <div className="badge-outline" style={{ marginBottom: '24px' }}>
-            <div className="live-dot" style={{ background: 'var(--neon-green)', boxShadow: '0 0 8px var(--neon-green-glow)' }} />
+          <motion.div variants={itemVariants} className="badge-outline" style={{ marginBottom: '32px' }}>
+            <div className="live-dot" style={{ background: 'var(--neon-green)', boxShadow: '0 0 10px var(--neon-green-glow)' }} />
             PRE-LAUNCH EVENT
-          </div>
+          </motion.div>
 
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            variants={itemVariants}
+            animate={{ 
+              y: [0, -10, 0],
+              filter: [
+                'drop-shadow(0 0 20px var(--neon-green-glow))',
+                'drop-shadow(0 0 40px var(--neon-green-glow))',
+                'drop-shadow(0 0 20px var(--neon-green-glow))'
+              ]
+            }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
             <img src="/logo.svg" alt="Logo" className="hero-logo-large" />
           </motion.div>
 
-          <h1 className="hero-title">
+          <motion.h1 variants={itemVariants} className="hero-title">
             The Biggest<br />
             <span className="glow-text-green">AIRDROP</span><br />
             on Telegram
-          </h1>
+          </motion.h1>
 
-          <p className="hero-subtitle">
+          <motion.p variants={itemVariants} className="hero-subtitle">
             Yetcoin is launching soon! Secure your early allocation and earn massive rewards before we go live.
-          </p>
+          </motion.p>
 
-          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px', marginTop: 'auto' }}>
-            <button 
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px', marginTop: 'auto' }}>
+            <motion.button 
+              variants={itemVariants}
+              whileTap={{ scale: 0.96 }}
               className="btn-primary" 
-              style={{ padding: '20px', borderRadius: '100px', textTransform: 'none', fontWeight: '700' }}
-              onClick={onNext}
+              onClick={handleStart}
             >
               Join the Airdrop
-            </button>
-            <button 
+            </motion.button>
+            <motion.button 
+              variants={itemVariants}
+              whileTap={{ scale: 0.96 }}
               className="btn-secondary" 
-              style={{ padding: '20px', borderRadius: '1000px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', border: '1px solid rgba(255,255,255,0.1)' }}
+              onClick={() => triggerHaptic('selection')}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}
             >
-              View Roadmap
-            </button>
+              <Map size={20} /> View Roadmap
+            </motion.button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Ticker Bar (Optional, seen in screenshot) */}
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '40px', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', overflow: 'hidden', borderTop: '1px solid var(--glass-border)' }}>
-        <div style={{ display: 'flex', gap: '32px', whiteSpace: 'nowrap', padding: '0 20px', fontSize: '12px', fontWeight: '600' }}>
-          <span>$6.42 <span style={{ color: 'var(--fomo-red)' }}>-0.8%</span></span>
-          <span>BNB <span style={{ color: '#fff' }}>$612.30</span> <span style={{ color: 'var(--neon-green)' }}>+0.5%</span></span>
-          <span>XRP <span style={{ color: '#fff' }}>$0.62</span> <span style={{ color: 'var(--neon-green)' }}>+1.1%</span></span>
-          <span>$YETC <span style={{ color: '#fff' }}>$46.00</span> <span style={{ color: 'var(--neon-green)' }}>+12.4%</span></span>
-        </div>
+      {/* Ticker Bar */}
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '48px', background: 'rgba(11, 11, 15, 0.8)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', overflow: 'hidden', borderTop: '1px solid var(--glass-border)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        <motion.div 
+          animate={{ x: [0, -500] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          style={{ display: 'flex', gap: '40px', whiteSpace: 'nowrap', padding: '0 24px', fontSize: '13px', fontWeight: '800' }}
+        >
+          <span>$YETC <span style={{ color: '#fff' }}>$46.00</span> <span className="glow-text-green">+12.4%</span></span>
+          <span>BTC <span style={{ color: '#fff' }}>$68,432</span> <span className="glow-text-green">+2.1%</span></span>
+          <span>ETH <span style={{ color: '#fff' }}>$3,542</span> <span className="glow-text-red">-0.8%</span></span>
+          <span>SOL <span style={{ color: '#fff' }}>$142.50</span> <span className="glow-text-green">+5.4%</span></span>
+          <span>$YETC <span style={{ color: '#fff' }}>$46.00</span> <span className="glow-text-green">+12.4%</span></span>
+          <span>BTC <span style={{ color: '#fff' }}>$68,432</span> <span className="glow-text-green">+2.1%</span></span>
+        </motion.div>
       </div>
     </div>
   );
