@@ -17,7 +17,6 @@ import { triggerHaptic } from '../telegram';
 const Onboarding = ({ onComplete }) => {
   const [step, setStep] = useState(0);
   const [countdown, setCountdown] = useState({ days: 2, hours: 14, mins: 42, secs: 18 });
-  const [activity, setActivity] = useState({ user: 'cryptoknight', action: 'just upgraded to WHALE' });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -30,18 +29,8 @@ const Onboarding = ({ onComplete }) => {
       });
     }, 1000);
 
-    const activityTimer = setInterval(() => {
-      const users = ['alpha_king', 'ton_whale', 'dex_master', 'elon_fan', 'yet_lord', 'sol_ninja'];
-      const actions = ['just claimed 5,000 $YETC', 'upgraded to FOUNDER', 'secured early slot', 'unlocked 10x multiplier'];
-      setActivity({
-        user: users[Math.floor(Math.random() * users.length)],
-        action: actions[Math.floor(Math.random() * actions.length)]
-      });
-    }, 4000);
-
     return () => {
       clearInterval(timer);
-      clearInterval(activityTimer);
     };
   }, []);
 
@@ -321,19 +310,6 @@ const Onboarding = ({ onComplete }) => {
         {renderStep()}
       </AnimatePresence>
 
-      <AnimatePresence>
-        <motion.div 
-          key={activity.user}
-          initial={{ opacity: 0, y: 20, x: '-50%' }}
-          animate={{ opacity: 1, y: 0, x: '-50%' }}
-          exit={{ opacity: 0, y: -20, x: '-50%' }}
-          className="live-activity-chip"
-        >
-          <div className="live-dot" style={{ background: 'var(--neon-green)', width: '8px', height: '8px' }} />
-          <span style={{ color: 'var(--text-secondary)' }}>@{activity.user}</span>
-          <span style={{ fontWeight: '700' }}>{activity.action}</span>
-        </motion.div>
-      </AnimatePresence>
 
       {/* Persistence Controls */}
       <div style={{ margin: 'auto 0 40px', width: '100%' }}>

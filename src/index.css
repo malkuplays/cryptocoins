@@ -576,17 +576,19 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 
 .live-activity-chip {
   position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(18, 18, 23, 0.95);
+  top: calc(env(safe-area-inset-top) + 165px);
+  right: 16px;
+  background: rgba(18, 18, 23, 0.9);
   border: 1px solid var(--glass-border);
-  padding: 8px 16px;
-  border-radius: 100px;
+  padding: 6px 14px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 12px;
+  gap: 8px;
+  font-size: 11px;
   z-index: 2000;
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  max-width: 240px;
 }
