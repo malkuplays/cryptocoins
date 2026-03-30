@@ -39,12 +39,24 @@ const Onboarding = ({ onComplete }) => {
 
   const handlePaymentSubmit = (e) => {
     e.preventDefault();
-    if (!utrCode.trim()) return;
+    const trimmedUtr = utrCode.trim();
+    
+    // SECURITY: Validate UTR format - must be at least 10 alphanumeric characters
+    if (!trimmedUtr) return;
+    if (trimmedUtr.length < 10) {
+      alert('UTR/Transaction ID must be at least 10 characters long.');
+      return;
+    }
+    if (!/^[a-zA-Z0-9]+$/.test(trimmedUtr)) {
+      alert('UTR/Transaction ID must contain only letters and numbers.');
+      return;
+    }
+
     triggerHaptic('notification_success');
     const tiers = ['Starter', 'Pro', 'Whale'];
     onComplete({ 
       payment_status: 'pending', 
-      utr_id: utrCode, 
+      utr_id: trimmedUtr, 
       plan_tier: tiers[selectedTier].toLowerCase() 
     });
   };
@@ -98,7 +110,7 @@ const Onboarding = ({ onComplete }) => {
               {[
                 { icon: <Trophy size={20} />, label: "TOTAL POOL", val: "500M YETC", sub: "Community distribution", color: 'var(--premium-orange)' },
                 { icon: <Users size={20} />, label: "REGISTERED", val: "1.4M+", sub: "Users already claiming", color: 'var(--neon-green)' },
-                { icon: <TrendingUp size={20} />, label: "LISTING PRICE", val: "$0.15", sub: "Estimated TGE value", color: 'var(--premium-blue)' }
+                { icon: <TrendingUp size={20} />, label: "LISTING PRICE", val: "$10.00", sub: "Estimated TGE value", color: 'var(--premium-blue)' }
               ].map((stat, i) => (
                 <motion.div key={i} variants={itemVariants} className="step-card-v2" whileTap={{ scale: 0.98 }}>
                   <div className="icon-box-v2" style={{ color: stat.color }}>

@@ -161,7 +161,7 @@ const Dashboard = ({ user, setUser }) => {
       <div style={{ marginTop: '32px', textAlign: 'center' }}>
         <p style={{ fontSize: '12px' }}>
           <Info size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
-          Estimated Listing Price: 1 $YETC = ₹8.42
+          Estimated Listing Price: 1 $YETC = ₹940.00
         </p>
       </div>
     </div>

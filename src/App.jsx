@@ -63,17 +63,16 @@ const App = () => {
       
       setUser(data);
       
-      // Determine initial view based on manual payment status
+      // Determine initial view based on payment + onboarding status
+      // SECURITY: Strict checks — dashboard ONLY if payment approved + profile done + is_onboarded
       if (data.payment_status === 'pending') {
         setView('payment_pending');
       } else if (data.payment_status === 'approved' && !data.profile_completed) {
         setView('profile_setup');
-      } else if (!data.is_onboarded) {
-        setView('landing');
-      } else if (data.plan_tier && data.plan_tier !== 'free') {
+      } else if (data.is_onboarded && data.payment_status === 'approved' && data.profile_completed) {
         setView('dashboard');
       } else {
-        setView('dashboard'); // Default to dashboard if already onboarded
+        setView('landing');
       }
     } catch (err) {
       console.error('Auth error:', err);
@@ -168,15 +167,12 @@ const App = () => {
           <Onboarding 
             user={user}
             onComplete={async (updates = {}) => {
-              // Merge default onboarded state with passed updates (like utr_id, payment_status)
+              // SECURITY: Only store payment_status, utr_id, and plan_tier.
+              // Do NOT set is_onboarded=true here. That only happens after admin approval + profile setup.
               try {
                 const { data: updatedUser, error: updateError } = await supabase
                   .from('players')
-                  .update({ 
-                    is_onboarded: true,
-                    mining_balance: (user?.mining_balance || 0) + 500,
-                    ...updates
-                  })
+                  .update(updates)
                   .eq('id', user.id)
                   .select()
                   .single();
@@ -187,11 +183,11 @@ const App = () => {
                 if (updatedUser.payment_status === 'pending') {
                    setView('payment_pending');
                 } else {
-                   setView('dashboard');
+                   setView('landing'); // Fallback to landing, not dashboard
                 }
               } catch (err) {
                 console.error("Onboarding completion error:", err);
-                setView('dashboard'); // Fallback
+                setError('Payment submission failed. Please try again.');
               }
             }} 
           />

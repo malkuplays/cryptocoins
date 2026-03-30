@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  ArrowRight, 
-  TrendingUp, 
-  Zap, 
+import {
+  ArrowRight,
+  TrendingUp,
+  Zap,
   Map,
   Shield,
   Layers,
@@ -35,8 +35,8 @@ const LandingPage = ({ onNext, onRoadmap }) => {
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
-    visible: { 
-      y: 0, 
+    visible: {
+      y: 0,
       opacity: 1,
       transition: { duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }
     }
@@ -57,30 +57,30 @@ const LandingPage = ({ onNext, onRoadmap }) => {
             </div>
           </div>
         </div>
-        
+
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: '14px', fontWeight: '900' }}>$46.00</div>
+          <div style={{ fontSize: '14px', fontWeight: '900' }}>$10.00</div>
           <div style={{ fontSize: '10px', color: 'var(--neon-green)', fontWeight: '800' }}>+12.4%</div>
         </div>
       </header>
 
       {/* Main Content */}
-      <motion.div 
-        className="container" 
+      <motion.div
+        className="container"
         style={{ paddingTop: 'calc(env(safe-area-inset-top) + 160px)', paddingBottom: '100px' }}
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center', alignItems: 'center' }}>
-          
+
           <motion.div variants={itemVariants} className="badge-outline" style={{ marginBottom: '24px', background: 'rgba(255,255,255,0.03)', borderColor: 'var(--glass-border)' }}>
-             <Shield size={12} style={{ marginRight: '6px' }} /> INSTITUTIONAL GRADE
+            <Shield size={12} style={{ marginRight: '6px' }} /> INSTITUTIONAL GRADE
           </motion.div>
 
           <motion.div
             variants={itemVariants}
-            animate={{ 
+            animate={{
               y: [0, -15, 0],
             }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -88,8 +88,8 @@ const LandingPage = ({ onNext, onRoadmap }) => {
           >
             <div style={{ position: 'relative' }}>
               <img src="/logo.svg" alt="Logo" style={{ width: '120px', height: '120px', filter: 'drop-shadow(0 0 40px var(--neon-green-glow))' }} />
-              <motion.div 
-                animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }} 
+              <motion.div
+                animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
                 transition={{ duration: 4, repeat: Infinity }}
                 style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '160px', height: '160px', borderRadius: '50%', background: 'var(--neon-green-glow)', zIndex: -1 }}
               />
@@ -106,18 +106,18 @@ const LandingPage = ({ onNext, onRoadmap }) => {
           </motion.p>
 
           <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px', marginTop: 'auto' }}>
-            <motion.button 
+            <motion.button
               variants={itemVariants}
               whileTap={{ scale: 0.96 }}
-              className="btn-primary pulse-primary hover-glow" 
+              className="btn-primary pulse-primary hover-glow"
               onClick={handleStart}
             >
               Start Earning Now <ArrowRight size={20} />
             </motion.button>
-            <motion.button 
+            <motion.button
               variants={itemVariants}
               whileTap={{ scale: 0.96 }}
-              className="btn-secondary hover-glow" 
+              className="btn-secondary hover-glow"
               onClick={handleRoadmap}
               style={{ padding: '18px', background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}
             >
@@ -127,7 +127,7 @@ const LandingPage = ({ onNext, onRoadmap }) => {
         </div>
 
         {/* Stats Grid */}
-        <motion.div 
+        <motion.div
           variants={itemVariants}
           style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '48px' }}
         >
