@@ -118,7 +118,7 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 .container {
   max-width: 480px;
   margin: 0 auto;
-  padding: 20px;
+  padding: calc(env(safe-area-inset-top) + 20px) 20px 20px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -201,14 +201,14 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   top: 0;
   left: 0;
   right: 0;
-  height: 72px;
+  height: calc(env(safe-area-inset-top) + 68px); /* Height enough for logo below notch */
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: env(safe-area-inset-top) 20px 0;
-  background: rgba(11, 11, 15, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  align-items: flex-end; /* Align to bottom of header */
+  padding: env(safe-area-inset-top) 20px 16px; /* Content sits below notch */
+  background: rgba(11, 11, 15, 0.85);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   border-bottom: 1px solid var(--glass-border);
   z-index: 1000;
 }
