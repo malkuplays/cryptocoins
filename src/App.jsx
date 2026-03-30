@@ -27,7 +27,6 @@ const App = () => {
   const [view, setView] = useState('loading'); // loading, landing, onboarding, pricing, dashboard
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activity, setActivity] = useState({ user: 'cryptoknight', action: 'just upgraded to WHALE' });
 
   useEffect(() => {
     try {
@@ -39,18 +38,6 @@ const App = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const activityTimer = setInterval(() => {
-      const users = ['alpha_king', 'ton_whale', 'dex_master', 'elon_fan', 'yet_lord', 'sol_ninja', 'bt_boss', 'crypto_queen', 'moon_walker', 'satoshix'];
-      const actions = ['just claimed 5,000 $YETC', 'upgraded to FOUNDER', 'secured early slot', 'unlocked 10x multiplier', 'joined the revolution', 'mined 1,000 $YETC'];
-      setActivity({
-        user: users[Math.floor(Math.random() * users.length)],
-        action: actions[Math.floor(Math.random() * actions.length)]
-      });
-    }, 5000);
-
-    return () => clearInterval(activityTimer);
-  }, []);
 
   const handleAuth = async () => {
     try {
@@ -137,22 +124,6 @@ const App = () => {
     <div className="app_container">
       <AuraBackground />
       
-      <AnimatePresence>
-        {!loading && activity && (
-          <motion.div 
-            key={activity.user}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20, scale: 0.9 }}
-            className="live-activity-chip"
-            style={{ pointerEvents: 'none' }}
-          >
-            <div className="live-dot" style={{ background: 'var(--neon-green)', width: '6px', height: '6px', borderRadius: '50%', boxShadow: '0 0 10px var(--neon-green)' }} />
-            <span style={{ color: 'rgba(255,255,255,0.5)', fontWeight: '400' }}>@{activity.user}</span>
-            <span style={{ color: 'white', fontWeight: '600' }}>{activity.action}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <AnimatePresence mode="wait">
         {error && (
