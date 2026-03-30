@@ -16,7 +16,12 @@ import {
   BarChart3,
   Trophy,
   Crown,
-  Star
+  Star,
+  Timer,
+  Gift,
+  Gem,
+  Sparkles,
+  BadgePercent
 } from 'lucide-react';
 import { triggerHaptic } from '../telegram';
 
@@ -24,6 +29,7 @@ const Onboarding = ({ onComplete }) => {
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [selectedTier, setSelectedTier] = useState(1); // 0: Starter, 1: Founder, 2: Whale
+  const [stakingPeriod, setStakingPeriod] = useState(1); // 0: 5 years, 1: 7 years
   const [utrCode, setUtrCode] = useState('');
 
   useEffect(() => {
@@ -34,7 +40,7 @@ const Onboarding = ({ onComplete }) => {
 
   const nextStep = () => {
     triggerHaptic('impact');
-    if (step < 4) setStep(s => s + 1);
+    if (step < 5) setStep(s => s + 1);
   };
 
   const handlePaymentSubmit = (e) => {
@@ -54,10 +60,12 @@ const Onboarding = ({ onComplete }) => {
 
     triggerHaptic('notification_success');
     const tiers = ['Starter', 'Pro', 'Whale'];
+    const stakingYears = stakingPeriod === 0 ? 5 : 7;
     onComplete({ 
       payment_status: 'pending', 
       utr_id: trimmedUtr, 
-      plan_tier: tiers[selectedTier].toLowerCase() 
+      plan_tier: tiers[selectedTier].toLowerCase(),
+      staking_years: stakingYears
     });
   };
 
@@ -291,15 +299,13 @@ const Onboarding = ({ onComplete }) => {
               onClick={nextStep}
               style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
             >
-              Start Earning <ChevronRight size={20} />
+              Choose Staking Period <ChevronRight size={20} />
             </motion.button>
           </motion.div>
         );
 
 
-      case 4: // Manual Payment QR Code
-        const tierNames = ['Starter', 'Pro', 'Whale'];
-        const prices = ['₹1,000', '₹2,999', '₹6,999'];
+      case 4: // Staking Period Selection
         return (
           <motion.div 
             key="step4"
@@ -308,12 +314,183 @@ const Onboarding = ({ onComplete }) => {
             animate="visible"
             style={{ width: '100%' }}
           >
+            <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+              <div style={{ width: '64px', height: '64px', borderRadius: '20px', background: 'rgba(157, 80, 187, 0.15)', border: '1px solid rgba(157, 80, 187, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Timer size={32} color="var(--premium-purple)" />
+              </div>
+            </motion.div>
+
+            <motion.h1 variants={itemVariants} style={{ fontSize: '30px', fontWeight: '900', textAlign: 'center', marginBottom: '8px', lineHeight: '1.1' }}>
+              Lock & <span style={{ color: 'var(--premium-purple)' }}>Earn More</span>
+            </motion.h1>
+            <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '24px', color: 'var(--text-secondary)', fontSize: '14px' }}>
+              Stake longer, earn significantly more. Your tokens work harder the longer you commit.
+            </motion.p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
+              {[
+                { 
+                  years: 5, 
+                  title: '5-Year Stake', 
+                  multiplier: '3.5x', 
+                  apy: '~70% APY',
+                  totalReturn: '350%',
+                  features: ['Steady long-term growth', 'Early unlock after 3 years', 'Priority withdrawal queue'],
+                  color: 'var(--premium-blue)',
+                  bgColor: 'rgba(0, 209, 255, 0.08)',
+                  borderColor: 'rgba(0, 209, 255, 0.25)'
+                },
+                { 
+                  years: 7, 
+                  title: '7-Year Stake', 
+                  badge: 'MAX RETURNS',
+                  multiplier: '7.0x', 
+                  apy: '~100% APY',
+                  totalReturn: '700%',
+                  features: ['Maximum compounding returns', 'ICO bonus tokens every year', 'VIP whale privileges', 'Exclusive governance rights'],
+                  color: 'var(--premium-purple)',
+                  bgColor: 'rgba(157, 80, 187, 0.08)',
+                  borderColor: 'rgba(157, 80, 187, 0.3)'
+                }
+              ].map((plan, i) => (
+                <motion.div 
+                  key={i} 
+                  variants={itemVariants} 
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    setStakingPeriod(i);
+                    triggerHaptic('selection');
+                  }}
+                  style={{
+                    background: stakingPeriod === i ? plan.bgColor : 'var(--bg-card)',
+                    border: `2px solid ${stakingPeriod === i ? plan.color : 'rgba(255,255,255,0.06)'}`,
+                    borderRadius: '24px',
+                    padding: '24px',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                    boxShadow: stakingPeriod === i ? `0 0 30px ${plan.borderColor}` : 'none'
+                  }}
+                >
+                  {plan.badge && (
+                    <div style={{ 
+                      position: 'absolute', top: '-12px', right: '20px', 
+                      background: 'linear-gradient(135deg, var(--premium-purple), #c471ed)', 
+                      color: 'white', padding: '4px 14px', borderRadius: '100px', 
+                      fontSize: '10px', fontWeight: '900', letterSpacing: '1px',
+                      boxShadow: '0 4px 12px rgba(157, 80, 187, 0.4)'
+                    }}>{plan.badge}</div>
+                  )}
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                        <div style={{ 
+                          width: '10px', height: '10px', borderRadius: '50%', 
+                          border: `2px solid ${stakingPeriod === i ? plan.color : 'rgba(255,255,255,0.2)'}`,
+                          background: stakingPeriod === i ? plan.color : 'transparent',
+                          transition: 'all 0.2s'
+                        }} />
+                        <span style={{ fontSize: '20px', fontWeight: '900' }}>{plan.title}</span>
+                      </div>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginLeft: '18px' }}>{plan.apy}</div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '28px', fontWeight: '900', color: plan.color, lineHeight: '1' }}>{plan.multiplier}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700' }}>Return</div>
+                    </div>
+                  </div>
+
+                  <div style={{ 
+                    background: 'rgba(255,255,255,0.03)', 
+                    borderRadius: '14px', padding: '14px',
+                    border: '1px solid rgba(255,255,255,0.04)'
+                  }}>
+                    {plan.features.map((feat, fi) => (
+                      <div key={fi} style={{ 
+                        display: 'flex', alignItems: 'center', gap: '10px', 
+                        fontSize: '13px', color: stakingPeriod === i ? 'rgba(255,255,255,0.85)' : 'var(--text-muted)',
+                        padding: '5px 0'
+                      }}>
+                        <Check size={14} color={stakingPeriod === i ? plan.color : 'rgba(255,255,255,0.2)'} />
+                        {feat}
+                      </div>
+                    ))}
+                  </div>
+
+                  {stakingPeriod === i && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }} 
+                      animate={{ opacity: 1, height: 'auto' }}
+                      style={{ 
+                        marginTop: '14px', padding: '12px 16px', 
+                        background: `linear-gradient(135deg, ${plan.borderColor}, transparent)`,
+                        borderRadius: '12px', textAlign: 'center'
+                      }}
+                    >
+                      <span style={{ fontSize: '13px', fontWeight: '800', color: 'white' }}>
+                        <Sparkles size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px' }} />
+                        Total return: <span style={{ color: plan.color }}>{plan.totalReturn}</span> over {plan.years} years
+                      </span>
+                    </motion.div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div variants={itemVariants} style={{ 
+              padding: '14px 16px', marginBottom: '24px', borderRadius: '14px',
+              background: 'rgba(255, 149, 0, 0.08)', border: '1px solid rgba(255, 149, 0, 0.2)',
+              display: 'flex', alignItems: 'center', gap: '10px'
+            }}>
+              <Lock size={16} color="var(--premium-orange)" style={{ flexShrink: 0 }} />
+              <span style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+                Your selected staking period begins after admin verification. Returns are compounded yearly.
+              </span>
+            </motion.div>
+
+            <motion.button 
+              variants={itemVariants}
+              whileTap={{ scale: 0.96 }}
+              className="btn-primary" 
+              onClick={nextStep}
+              style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
+            >
+              Proceed to Payment <ArrowRight size={20} />
+            </motion.button>
+          </motion.div>
+        );
+
+
+      case 5: // Manual Payment QR Code
+        const tierNames = ['Starter', 'Pro', 'Whale'];
+        const prices = ['₹1,000', '₹2,999', '₹6,999'];
+        const stakingLabel = stakingPeriod === 0 ? '5-Year' : '7-Year';
+        return (
+          <motion.div 
+            key="step5"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
             <motion.h1 variants={itemVariants} style={{ fontSize: '28px', fontWeight: '900', textAlign: 'center', marginBottom: '8px' }}>
               Complete <span style={{ color: 'var(--neon-green)' }}>Payment</span>
             </motion.h1>
-            <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '24px', color: 'var(--text-secondary)', fontSize: '14px' }}>
+            <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '16px', color: 'var(--text-secondary)', fontSize: '14px' }}>
               Scan to pay {prices[selectedTier]} for {tierNames[selectedTier]} Tier.
             </motion.p>
+
+            <motion.div variants={itemVariants} style={{ 
+              display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '24px' 
+            }}>
+              <div style={{ padding: '6px 14px', borderRadius: '100px', background: 'rgba(0, 255, 157, 0.1)', border: '1px solid rgba(0, 255, 157, 0.2)', fontSize: '12px', fontWeight: '800', color: 'var(--neon-green)' }}>
+                {tierNames[selectedTier]} Tier
+              </div>
+              <div style={{ padding: '6px 14px', borderRadius: '100px', background: 'rgba(157, 80, 187, 0.1)', border: '1px solid rgba(157, 80, 187, 0.2)', fontSize: '12px', fontWeight: '800', color: 'var(--premium-purple)' }}>
+                {stakingLabel} Stake
+              </div>
+            </motion.div>
 
             <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
               <div style={{ background: 'white', padding: '16px', borderRadius: '16px', width: '200px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
@@ -373,7 +550,7 @@ const Onboarding = ({ onComplete }) => {
 
       <div style={{ paddingTop: '40px', paddingBottom: '20px' }}>
         <div className="step-indicator" style={{ marginBottom: '32px' }}>
-          {[0, 1, 2, 3, 4].map(i => (
+          {[0, 1, 2, 3, 4, 5].map(i => (
             <div key={i} className={`step-dot ${i === step ? 'active' : ''}`} />
           ))}
         </div>
