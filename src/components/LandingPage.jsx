@@ -109,7 +109,7 @@ const LandingPage = ({ onNext, onRoadmap }) => {
             <motion.button 
               variants={itemVariants}
               whileTap={{ scale: 0.96 }}
-              className="btn-primary" 
+              className="btn-primary pulse-primary hover-glow" 
               onClick={handleStart}
             >
               Start Earning Now <ArrowRight size={20} />
@@ -117,9 +117,9 @@ const LandingPage = ({ onNext, onRoadmap }) => {
             <motion.button 
               variants={itemVariants}
               whileTap={{ scale: 0.96 }}
-              className="btn-secondary" 
+              className="btn-secondary hover-glow" 
               onClick={handleRoadmap}
-              style={{ padding: '18px', background: 'transparent' }}
+              style={{ padding: '18px', background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}
             >
               System Roadmap
             </motion.button>

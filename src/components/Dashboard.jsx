@@ -104,40 +104,41 @@ const Dashboard = ({ user, setUser }) => {
 
       {/* Main Balance Card */}
       <motion.div 
-        className="glass glass-card" 
-        style={{ marginBottom: '24px', textAlign: 'center' }}
+        className="glass-panel-heavy animate-stagger-1" 
+        style={{ marginBottom: '24px', textAlign: 'center', padding: '32px 20px', position: 'relative', overflow: 'hidden' }}
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
       >
-        <div style={{ marginBottom: '12px' }}>
+        <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '200px', height: '100px', background: 'var(--neon-green-glow)', filter: 'blur(50px)', zIndex: 0 }} />
+        <div style={{ position: 'relative', zIndex: 1, marginBottom: '12px' }}>
           <span style={{ fontSize: '14px', opacity: 0.6 }}>Current Balance</span>
         </div>
-        <div style={{ fontSize: '42px', fontWeight: '800', margin: '12px 0' }} className="balance-ticker">
-           {balance.toFixed(6)} <span style={{ fontSize: '20px', color: '#00d2ff' }}>$YETC</span>
+        <div style={{ position: 'relative', zIndex: 1, fontSize: '46px', fontWeight: '900', margin: '16px 0', textShadow: '0 4px 20px rgba(0, 255, 157, 0.4)' }} className="balance-ticker">
+           {balance.toFixed(6)} <span style={{ fontSize: '20px', color: 'var(--premium-blue)', fontWeight: '800' }}>$YETC</span>
         </div>
-        <div className="flex-center" style={{ gap: '8px' }}>
-          <TrendingUp size={16} color="#4cd964" />
-          <span style={{ color: '#4cd964', fontWeight: '600' }}>+{miningPower} $YETC / HR</span>
+        <div className="flex-center" style={{ position: 'relative', zIndex: 1, gap: '8px', background: 'rgba(0,255,157,0.1)', display: 'inline-flex', padding: '6px 12px', borderRadius: '100px', border: '1px solid rgba(0,255,157,0.2)' }}>
+          <TrendingUp size={16} color="var(--neon-green)" />
+          <span style={{ color: 'var(--neon-green)', fontWeight: '700', fontSize: '13px' }}>+{miningPower} YETC / HR</span>
         </div>
       </motion.div>
 
       {/* Stats Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
-        <div className="glass glass-card" style={{ padding: '16px' }}>
-          <Timer size={20} color="#ff9f43" style={{ marginBottom: '8px' }} />
-          <div style={{ fontSize: '12px', opacity: 0.6 }}>Time Active</div>
-          <div style={{ fontSize: '18px', fontWeight: '600' }}>3h 12m</div>
+        <div className="glass-panel-heavy animate-stagger-2 hover-glow" style={{ padding: '20px', borderRadius: '24px' }}>
+          <Timer size={24} color="var(--premium-orange)" style={{ marginBottom: '12px' }} />
+          <div style={{ fontSize: '12px', opacity: 0.6, marginBottom: '4px' }}>Time Active</div>
+          <div style={{ fontSize: '20px', fontWeight: '800' }}>3h 12m</div>
         </div>
-        <div className="glass glass-card" style={{ padding: '16px' }}>
-          <ShieldCheck size={20} color="#00d2ff" style={{ marginBottom: '8px' }} />
-          <div style={{ fontSize: '12px', opacity: 0.6 }}>Security Tier</div>
-          <div style={{ fontSize: '18px', fontWeight: '600' }}>{user.plan_tier || 'Starter'}</div>
+        <div className="glass-panel-heavy animate-stagger-3 hover-glow" style={{ padding: '20px', borderRadius: '24px' }}>
+          <ShieldCheck size={24} color="var(--premium-blue)" style={{ marginBottom: '12px' }} />
+          <div style={{ fontSize: '12px', opacity: 0.6, marginBottom: '4px' }}>Security Tier</div>
+          <div style={{ fontSize: '20px', fontWeight: '800', textTransform: 'capitalize' }}>{user.plan_tier || 'Starter'}</div>
         </div>
       </div>
 
       {/* Staking Progress */}
-      <div className="glass glass-card" style={{ padding: '20px' }}>
-        <div className="space-between" style={{ marginBottom: '12px' }}>
+      <div className="glass-panel-heavy animate-stagger-4" style={{ padding: '24px', borderRadius: '24px' }}>
+        <div className="space-between" style={{ marginBottom: '16px' }}>
           <div className="flex-center" style={{ gap: '8px' }}>
             <Zap size={18} color="#9d50bb" />
             <h2 style={{ fontSize: '16px' }}>Staking Period</h2>

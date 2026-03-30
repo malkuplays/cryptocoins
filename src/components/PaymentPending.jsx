@@ -55,8 +55,8 @@ const PaymentPending = ({ user, onSuccess }) => {
           Please hold tight!
         </p>
 
-        <div className="glass-panel" style={{ padding: '16px', marginBottom: '32px', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-          <ShieldCheck size={24} color="var(--neon-green)" style={{ flexShrink: 0 }} />
+        <div className="glass-panel-heavy animate-stagger-1" style={{ padding: '20px', marginBottom: '32px', display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+          <ShieldCheck size={28} color="var(--neon-green)" style={{ flexShrink: 0 }} />
           <div style={{ textAlign: 'left' }}>
             <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '4px' }}>100% Secure</div>
             <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Your transaction ID is securely logged. You will be onboarded as soon as it's approved.</div>

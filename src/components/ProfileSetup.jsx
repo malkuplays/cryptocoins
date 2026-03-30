@@ -6,7 +6,7 @@ import { triggerHaptic } from '../telegram';
 
 const ProfileSetup = ({ user, onComplete }) => {
   const [formData, setFormData] = useState({
-    name: user?.full_name || '',
+    full_name: user?.full_name || '',
     dob: '',
     email: '',
     whatsapp_number: ''
@@ -16,7 +16,7 @@ const ProfileSetup = ({ user, onComplete }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.dob || !formData.email || !formData.whatsapp_number) {
+    if (!formData.full_name || !formData.dob || !formData.email || !formData.whatsapp_number) {
       setError('All fields are required.');
       triggerHaptic('notification_error');
       return;
@@ -29,7 +29,7 @@ const ProfileSetup = ({ user, onComplete }) => {
       const { data, error: dbError } = await supabase
         .from('players')
         .update({
-          name: formData.name,
+          full_name: formData.full_name,
           dob: formData.dob,
           email: formData.email,
           whatsapp_number: formData.whatsapp_number,
@@ -51,18 +51,7 @@ const ProfileSetup = ({ user, onComplete }) => {
     }
   };
 
-  const inputStyle = {
-    width: '100%',
-    background: 'rgba(255,255,255,0.05)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: '12px',
-    padding: '16px 16px 16px 44px',
-    color: 'white',
-    fontSize: '15px',
-    outline: 'none',
-    transition: 'all 0.2s',
-    marginBottom: '16px'
-  };
+  // Removed inline inputStyle in favor of global .premium-input class
 
   const iconStyle = {
     position: 'absolute',
@@ -100,9 +89,10 @@ const ProfileSetup = ({ user, onComplete }) => {
                 type="text" 
                 placeholder="Full Name" 
                 required
-                style={inputStyle}
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                className="premium-input"
+                style={{ marginBottom: '16px' }}
+                value={formData.full_name}
+                onChange={(e) => setFormData({...formData, full_name: e.target.value})}
               />
             </div>
 
@@ -111,7 +101,8 @@ const ProfileSetup = ({ user, onComplete }) => {
               <input 
                 type="date" 
                 required
-                style={{...inputStyle, paddingLeft: '44px', color: formData.dob ? 'white' : 'var(--text-muted)'}}
+                className="premium-input"
+                style={{ marginBottom: '16px', paddingLeft: '44px', color: formData.dob ? 'white' : 'var(--text-muted)' }}
                 value={formData.dob}
                 onChange={(e) => setFormData({...formData, dob: e.target.value})}
               />
@@ -123,7 +114,8 @@ const ProfileSetup = ({ user, onComplete }) => {
                 type="email" 
                 placeholder="Email Address" 
                 required
-                style={inputStyle}
+                className="premium-input"
+                style={{ marginBottom: '16px' }}
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
               />
@@ -135,7 +127,8 @@ const ProfileSetup = ({ user, onComplete }) => {
                 type="tel" 
                 placeholder="WhatsApp Number" 
                 required
-                style={inputStyle}
+                className="premium-input"
+                style={{ marginBottom: '16px' }}
                 value={formData.whatsapp_number}
                 onChange={(e) => setFormData({...formData, whatsapp_number: e.target.value})}
               />

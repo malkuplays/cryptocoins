@@ -329,16 +329,8 @@ const Onboarding = ({ onComplete }) => {
                     value={utrCode}
                     onChange={(e) => setUtrCode(e.target.value)}
                     required
-                    style={{
-                      width: '100%',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      borderRadius: '12px',
-                      padding: '16px',
-                      color: 'white',
-                      fontSize: '15px',
-                      outline: 'none',
-                    }}
+                    className="premium-input"
+                    style={{ paddingLeft: '16px' }}
                   />
                 </div>
                 <motion.button 
