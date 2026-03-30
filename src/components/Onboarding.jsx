@@ -16,7 +16,8 @@ import { triggerHaptic } from '../telegram';
 
 const Onboarding = ({ onComplete }) => {
   const [step, setStep] = useState(0);
-  const [countdown, setCountdown] = useState({ days: 14, hours: 12, mins: 36, secs: 6 });
+  const [countdown, setCountdown] = useState({ days: 2, hours: 14, mins: 42, secs: 18 });
+  const [activity, setActivity] = useState({ user: 'cryptoknight', action: 'just upgraded to WHALE' });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -28,7 +29,20 @@ const Onboarding = ({ onComplete }) => {
         return prev;
       });
     }, 1000);
-    return () => clearInterval(timer);
+
+    const activityTimer = setInterval(() => {
+      const users = ['alpha_king', 'ton_whale', 'dex_master', 'elon_fan', 'yet_lord', 'sol_ninja'];
+      const actions = ['just claimed 5,000 $YETC', 'upgraded to FOUNDER', 'secured early slot', 'unlocked 10x multiplier'];
+      setActivity({
+        user: users[Math.floor(Math.random() * users.length)],
+        action: actions[Math.floor(Math.random() * actions.length)]
+      });
+    }, 4000);
+
+    return () => {
+      clearInterval(timer);
+      clearInterval(activityTimer);
+    };
   }, []);
 
   const nextStep = () => {
@@ -77,9 +91,9 @@ const Onboarding = ({ onComplete }) => {
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {[
-                { icon: <ShieldCheck size={20} />, label: "TOTAL VALUE LOCKED", val: "$42.5", unit: "M", sub: "Growing 12.4% weekly", color: 'var(--premium-blue)' },
-                { icon: <Users size={20} />, label: "ACTIVE TOKEN HOLDERS", val: "148", unit: "K+", sub: "+2,000 upgrades daily", color: 'var(--neon-green)' },
-                { icon: <Activity size={20} />, label: "DAILY PRE-MARKET VOL", val: "$12.8", unit: "M", sub: "Insane ecosystem velocity", color: 'var(--premium-orange)' }
+                { icon: <ShieldCheck size={20} />, label: "TOTAL PROTOCOL VALUE", val: "$142", unit: "M+", sub: "Secure Tier 1 Infrastructure", color: 'var(--premium-blue)' },
+                { icon: <Users size={20} />, label: "VERIFIED HOLDERS", val: "1.4", unit: "M", sub: "Viral adoption in 140+ countries", color: 'var(--neon-green)' },
+                { icon: <Activity size={20} />, label: "PROJECTED MARKET CAP", val: "$1.2", unit: "B", sub: "High-conviction institutional backing", color: 'var(--premium-orange)' }
               ].map((stat, i) => (
                 <motion.div key={i} variants={itemVariants} className="step-card" whileTap={{ scale: 0.98 }}>
                   <div className="step-icon-box" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)' }}>
@@ -111,22 +125,22 @@ const Onboarding = ({ onComplete }) => {
             exit="exit"
             style={{ width: '100%' }}
           >
-            <motion.div variants={itemVariants} className="badge-outline" style={{ display: 'flex', margin: '0 auto 16px', color: 'var(--neon-green)', borderColor: 'rgba(0,255,157,0.1)' }}>
-              THE PREMIUM ADVANTAGE
+            <motion.div variants={itemVariants} className="badge-outline" style={{ display: 'flex', margin: '0 auto 16px', color: 'var(--premium-orange)', borderColor: 'rgba(255,138,0,0.2)' }}>
+              THE RETIREMENT STRATEGY
             </motion.div>
             <motion.h1 variants={itemVariants} style={{ fontSize: '34px', fontWeight: '900', textAlign: 'center', marginBottom: '12px' }}>
-              Why You Must <span className="glow-text-green">Upgrade Now</span>
+              Wealth <span className="glow-text-orange">Exclusivity</span>
             </motion.h1>
-            <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '32px', padding: '0 20px', color: 'var(--text-secondary)' }}>
-              Free users get pennies. Premium members historically secure generational wealth. Unlock your stacks instantly.
+            <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '32px', padding: '0 20px', color: 'var(--text-secondary)', fontSize: '15px' }}>
+              While others play for pennies, our Whale members secure <span style={{ color: '#fff', fontWeight: '700' }}>generational wealth</span>. Stop working, start dominating.
             </motion.p>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {[
-                { icon: <Zap size={18} fill="currentColor" />, title: "100x Airdrop Multipliers", desc: "Lock in massive multipliers for the upcoming $YETC Airdrop. Avoid dilution.", color: 'var(--premium-orange)' },
-                { icon: <TrendingUp size={18} />, title: "First-Mover Advantage", desc: "Secure the lowest entry point before Tier 1 Exchange listings.", color: 'var(--neon-green)' },
-                { icon: <Clock size={18} />, title: "Instant Daily Yield", desc: "Passively accrue $YETC inside your app starting today.", color: 'var(--premium-blue)' },
-                { icon: <Users size={18} />, title: "The VIP Inner Circle", desc: "Unlock the private Alpha channel and direct core team line.", color: 'var(--premium-purple)' },
+                { icon: <Zap size={18} fill="currentColor" />, title: "Unlock Whale Tier APR", desc: "Access the highest possible mining yields. Reserved for the early 1%.", color: 'var(--premium-orange)' },
+                { icon: <TrendingUp size={18} />, title: "Avoid Token Dilution", desc: "Whale members receive priority snapshots and anti-dilution protection.", color: 'var(--neon-green)' },
+                { icon: <Clock size={18} />, title: "Instant Withdrawal Access", desc: "Get priority listed for liquidity events before the general public.", color: 'var(--premium-blue)' },
+                { icon: <Users size={18} />, title: "The Founder's Network", desc: "Direct access to Tier 1 VC allocations and private alpha channels.", color: 'var(--premium-purple)' },
               ].map((item, i) => (
                 <motion.div key={i} variants={itemVariants} className="step-card" style={{ padding: '16px', gap: '16px' }} whileTap={{ scale: 0.98 }}>
                   <div className="step-icon-box" style={{ width: '40px', height: '40px', background: item.color, color: '#000', borderRadius: '10px' }}>
@@ -160,11 +174,24 @@ const Onboarding = ({ onComplete }) => {
             </motion.div>
 
             <motion.h1 variants={itemVariants} style={{ fontSize: '38px', fontWeight: '900', marginBottom: '12px' }}>
-              The <span className="glow-text-red">Largest Airdrop</span> Ends Soon
+              Pool is <span className="glow-text-red">98.4% Full</span>
             </motion.h1>
-            <motion.p variants={itemVariants} style={{ color: 'var(--text-secondary)', marginBottom: '40px', padding: '0 20px' }}>
-              The official $YETC allocation snapshot is closing. Unclaimed tokens will be burned forever.
+            <motion.p variants={itemVariants} style={{ color: 'var(--text-secondary)', marginBottom: '24px', padding: '0 20px' }}>
+              The official $YETC allocation snapshot for the 1.4M users is concluding. Secure your slice before the burn.
             </motion.p>
+
+            <motion.div variants={itemVariants} className="scarcity-container" style={{ margin: '0 24px 32px' }}>
+              <motion.div 
+                className="scarcity-fill" 
+                initial={{ width: '60%' }}
+                animate={{ width: '98.4%' }}
+                transition={{ duration: 3, delay: 0.5 }}
+              >
+                <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '10px', fontWeight: '900', color: '#fff' }}>
+                  98.4% CLAIMED
+                </div>
+              </motion.div>
+            </motion.div>
 
             <motion.div variants={itemVariants} className="countdown-grid" style={{ marginBottom: '40px' }}>
               {[
@@ -227,14 +254,14 @@ const Onboarding = ({ onComplete }) => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
               {[
-                { name: "Starter", price: "₹1,000", active: true },
-                { name: "Pro", price: "₹2,999", badge: "BEST VALUE" },
-                { name: "Elite", price: "₹6,999" }
+                { name: "Starter", price: "₹1,000" },
+                { name: "Founder", price: "₹2,999", badge: "LIMITED SPOTS", active: true },
+                { name: "Whale", price: "₹6,999", badge: "MAX YIELD" }
               ].map((tier, i) => (
                 <motion.div 
                   key={i} 
                   variants={itemVariants} 
-                  className={`pricing-item ${tier.active ? 'active' : ''}`}
+                  className={`pricing-item ${tier.active ? 'active' : ''} ${tier.name === 'Whale' ? 'whale-glow' : ''}`}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => triggerHaptic('selection')}
                 >
@@ -292,6 +319,20 @@ const Onboarding = ({ onComplete }) => {
     <div className="app-container" style={{ padding: 'calc(env(safe-area-inset-top) + 125px) 20px env(safe-area-inset-bottom)' }}>
       <AnimatePresence mode="wait">
         {renderStep()}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        <motion.div 
+          key={activity.user}
+          initial={{ opacity: 0, y: 20, x: '-50%' }}
+          animate={{ opacity: 1, y: 0, x: '-50%' }}
+          exit={{ opacity: 0, y: -20, x: '-50%' }}
+          className="live-activity-chip"
+        >
+          <div className="live-dot" style={{ background: 'var(--neon-green)', width: '8px', height: '8px' }} />
+          <span style={{ color: 'var(--text-secondary)' }}>@{activity.user}</span>
+          <span style={{ fontWeight: '700' }}>{activity.action}</span>
+        </motion.div>
       </AnimatePresence>
 
       {/* Persistence Controls */}
