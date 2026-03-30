@@ -19,6 +19,8 @@ import PricingPage from './components/PricingPage';
 import Dashboard from './components/Dashboard';
 import Onboarding from './components/Onboarding';
 import Roadmap from './components/Roadmap';
+import PaymentPending from './components/PaymentPending';
+import ProfileSetup from './components/ProfileSetup';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -74,8 +76,12 @@ const App = () => {
       
       setUser(data);
       
-      // Determine initial view
-      if (!data.is_onboarded) {
+      // Determine initial view based on manual payment status
+      if (data.payment_status === 'pending') {
+        setView('payment_pending');
+      } else if (data.payment_status === 'approved' && !data.profile_completed) {
+        setView('profile_setup');
+      } else if (!data.is_onboarded) {
         setView('landing');
       } else if (data.plan_tier && data.plan_tier !== 'free') {
         setView('dashboard');
@@ -189,14 +195,16 @@ const App = () => {
         )}
         {view === 'onboarding' && (
           <Onboarding 
-            onComplete={async () => {
-              // Mark as onboarded and give bonus
+            user={user}
+            onComplete={async (updates = {}) => {
+              // Merge default onboarded state with passed updates (like utr_id, payment_status)
               try {
                 const { data: updatedUser, error: updateError } = await supabase
                   .from('players')
                   .update({ 
                     is_onboarded: true,
-                    mining_balance: (user?.mining_balance || 0) + 500
+                    mining_balance: (user?.mining_balance || 0) + 500,
+                    ...updates
                   })
                   .eq('id', user.id)
                   .select()
@@ -204,11 +212,34 @@ const App = () => {
                 
                 if (updateError) throw updateError;
                 setUser(updatedUser);
-                setView('dashboard');
+                
+                if (updatedUser.payment_status === 'pending') {
+                   setView('payment_pending');
+                } else {
+                   setView('dashboard');
+                }
               } catch (err) {
                 console.error("Onboarding completion error:", err);
                 setView('dashboard'); // Fallback
               }
+            }} 
+          />
+        )}
+        {view === 'payment_pending' && (
+          <PaymentPending 
+            user={user} 
+            onSuccess={(updatedUser) => {
+              setUser({ ...user, ...updatedUser });
+              setView('profile_setup');
+            }} 
+          />
+        )}
+        {view === 'profile_setup' && (
+          <ProfileSetup 
+            user={user} 
+            onComplete={(updatedUser) => {
+              setUser(updatedUser);
+              setView('dashboard');
             }} 
           />
         )}

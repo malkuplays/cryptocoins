@@ -24,6 +24,7 @@ const Onboarding = ({ onComplete }) => {
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [selectedTier, setSelectedTier] = useState(1); // 0: Starter, 1: Founder, 2: Whale
+  const [utrCode, setUtrCode] = useState('');
 
   useEffect(() => {
     // Initial progress bar animation
@@ -33,11 +34,19 @@ const Onboarding = ({ onComplete }) => {
 
   const nextStep = () => {
     triggerHaptic('impact');
-    if (step < 3) setStep(s => s + 1);
-    else {
-      triggerHaptic('notification_success');
-      onComplete();
-    }
+    if (step < 4) setStep(s => s + 1);
+  };
+
+  const handlePaymentSubmit = (e) => {
+    e.preventDefault();
+    if (!utrCode.trim()) return;
+    triggerHaptic('notification_success');
+    const tiers = ['Starter', 'Pro', 'Whale'];
+    onComplete({ 
+      payment_status: 'pending', 
+      utr_id: utrCode, 
+      plan_tier: tiers[selectedTier].toLowerCase() 
+    });
   };
 
   const containerVariants = {
@@ -267,11 +276,82 @@ const Onboarding = ({ onComplete }) => {
               variants={itemVariants}
               whileTap={{ scale: 0.96 }}
               className="btn-primary" 
-              onClick={onComplete}
+              onClick={nextStep}
               style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
             >
               Start Earning <ChevronRight size={20} />
             </motion.button>
+          </motion.div>
+        );
+
+
+      case 4: // Manual Payment QR Code
+        const tierNames = ['Starter', 'Pro', 'Whale'];
+        const prices = ['₹1,000', '₹2,999', '₹6,999'];
+        return (
+          <motion.div 
+            key="step4"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
+            <motion.h1 variants={itemVariants} style={{ fontSize: '28px', fontWeight: '900', textAlign: 'center', marginBottom: '8px' }}>
+              Complete <span style={{ color: 'var(--neon-green)' }}>Payment</span>
+            </motion.h1>
+            <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '24px', color: 'var(--text-secondary)', fontSize: '14px' }}>
+              Scan to pay {prices[selectedTier]} for {tierNames[selectedTier]} Tier.
+            </motion.p>
+
+            <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
+              <div style={{ background: 'white', padding: '16px', borderRadius: '16px', width: '200px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                <img 
+                  src="/qr-placeholder.png" 
+                  alt="QR Code" 
+                  style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+                <div style={{ position: 'absolute', color: 'black', textAlign: 'center', opacity: 0.5, fontSize: '14px', pointerEvents: 'none' }}>
+                   QR Code <br /> Goes Here
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <form onSubmit={handlePaymentSubmit}>
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: '600' }}>
+                    ENTER UTR / TRANSACTION ID
+                  </label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. 123456789012" 
+                    value={utrCode}
+                    onChange={(e) => setUtrCode(e.target.value)}
+                    required
+                    style={{
+                      width: '100%',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '12px',
+                      padding: '16px',
+                      color: 'white',
+                      fontSize: '15px',
+                      outline: 'none',
+                    }}
+                  />
+                </div>
+                <motion.button 
+                  type="submit"
+                  whileTap={{ scale: 0.96 }}
+                  className="btn-primary" 
+                  disabled={!utrCode.trim()}
+                  style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', opacity: !utrCode.trim() ? 0.5 : 1 }}
+                >
+                  Verify Payment <Check size={20} />
+                </motion.button>
+              </form>
+            </motion.div>
           </motion.div>
         );
 
@@ -289,7 +369,7 @@ const Onboarding = ({ onComplete }) => {
 
       <div style={{ paddingTop: '40px', paddingBottom: '20px' }}>
         <div className="step-indicator" style={{ marginBottom: '32px' }}>
-          {[0, 1, 2, 3].map(i => (
+          {[0, 1, 2, 3, 4].map(i => (
             <div key={i} className={`step-dot ${i === step ? 'active' : ''}`} />
           ))}
         </div>
