@@ -8,10 +8,15 @@ import {
 } from 'lucide-react';
 import { triggerHaptic } from '../telegram';
 
-const LandingPage = ({ onNext }) => {
+const LandingPage = ({ onNext, onRoadmap }) => {
   const handleStart = () => {
     triggerHaptic('impact');
     onNext();
+  };
+
+  const handleRoadmap = () => {
+    triggerHaptic('selection');
+    onRoadmap();
   };
 
   const containerVariants = {
@@ -111,7 +116,7 @@ const LandingPage = ({ onNext }) => {
               variants={itemVariants}
               whileTap={{ scale: 0.96 }}
               className="btn-secondary" 
-              onClick={() => triggerHaptic('selection')}
+              onClick={handleRoadmap}
               style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}
             >
               <Map size={20} /> View Roadmap

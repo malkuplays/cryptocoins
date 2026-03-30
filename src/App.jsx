@@ -18,6 +18,7 @@ import LandingPage from './components/LandingPage';
 import PricingPage from './components/PricingPage';
 import Dashboard from './components/Dashboard';
 import Onboarding from './components/Onboarding';
+import Roadmap from './components/Roadmap';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -128,7 +129,16 @@ const App = () => {
           </motion.div>
         )}
         {view === 'landing' && (
-          <LandingPage onNext={() => setView('onboarding')} />
+          <LandingPage 
+            onNext={() => setView('onboarding')} 
+            onRoadmap={() => setView('roadmap')}
+          />
+        )}
+        {view === 'roadmap' && (
+          <Roadmap 
+            onBack={() => setView('landing')} 
+            onJoin={() => setView('onboarding')}
+          />
         )}
         {view === 'onboarding' && (
           <Onboarding 
