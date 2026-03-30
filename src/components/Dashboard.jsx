@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   TrendingUp, 
@@ -33,6 +33,7 @@ const Dashboard = ({ user, setUser }) => {
   const [miningRate, setMiningRate] = useState(0);
   const [sessionEarned, setSessionEarned] = useState(0);
   const [initialized, setInitialized] = useState(false);
+  const balanceRef = useRef(user?.mining_balance || 0);
 
   const tier = user?.plan_tier || 'free';
   const tierConfig = TIER_MINING_RATES[tier] || TIER_MINING_RATES.free;
@@ -103,17 +104,20 @@ const Dashboard = ({ user, setUser }) => {
     calculateOfflineEarnings();
   }, [user?.id]);
 
-  // Live mining tick - add coins every minute
+  // Live mining tick - add coins every second
   useEffect(() => {
     if (!initialized) return;
     
     const rate = miningRate || generateMiningRate();
-    const coinsPerMinute = rate / 60;
+    const coinsPerSecond = rate / 3600; // rate is per HOUR, divide by 3600 for per-second
     
     const miningTimer = setInterval(() => {
-      setBalance(prev => prev + coinsPerMinute);
-      setSessionEarned(prev => prev + coinsPerMinute);
-    }, 1000); // Update display every second for smooth animation
+      setBalance(prev => {
+        balanceRef.current = prev + coinsPerSecond;
+        return balanceRef.current;
+      });
+      setSessionEarned(prev => prev + coinsPerSecond);
+    }, 1000);
 
     return () => clearInterval(miningTimer);
   }, [initialized, miningRate]);
@@ -126,28 +130,27 @@ const Dashboard = ({ user, setUser }) => {
     return () => clearInterval(hourlyTimer);
   }, [generateMiningRate]);
 
-  // Auto-sync every 5 minutes
+  // Auto-sync every 5 minutes — uses ref to get latest balance
   const syncBalance = useCallback(async () => {
     if (syncing || !user?.id) return;
+    const currentBalance = balanceRef.current;
     setSyncing(true);
     try {
-      const { data, error } = await supabase
+      await supabase
         .from('players')
         .update({ 
-          mining_balance: balance,
+          mining_balance: currentBalance,
           last_mining_update: new Date().toISOString(),
           last_sync: new Date().toISOString()
         })
-        .eq('id', user.id)
-        .select()
-        .single();
-      if (!error && data) setUser(data);
+        .eq('id', user.id);
+      // Don't call setUser here — it would overwrite the live-ticking balance
     } catch (err) {
       console.error('Sync error:', err);
     } finally {
       setSyncing(false);
     }
-  }, [balance, user?.id, syncing, setUser]);
+  }, [user?.id, syncing]);
 
   useEffect(() => {
     const syncTimer = setInterval(syncBalance, 300000); // 5 min
