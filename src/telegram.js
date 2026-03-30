@@ -9,9 +9,13 @@ export const getTelegramUser = () => {
 export const expandTelegramApp = () => {
   const tg = window.Telegram?.WebApp;
   if (tg) {
-    tg.expand();
     tg.ready();
+    tg.expand();
     tg.enableClosingConfirmation();
+    // Set theme parameters if available
+    if (tg.setHeaderColor) {
+      tg.setHeaderColor('#000000');
+    }
   }
 };
 
