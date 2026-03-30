@@ -5,11 +5,13 @@ import {
   Clock, TrendingUp, Copy, CheckCircle2, Star
 } from 'lucide-react';
 import { useState } from 'react';
+import { useSettings } from '../SettingsContext';
 
-const COIN_PRICE_USD = 10.00;
+
 
 const Profile = ({ user }) => {
   const [copied, setCopied] = useState(false);
+  const { yetcPriceUsd } = useSettings();
 
   const tier = user?.plan_tier || 'free';
   const stakingYears = user?.staking_years || 0;
@@ -92,7 +94,7 @@ const Profile = ({ user }) => {
         <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700', letterSpacing: '1px', marginBottom: '8px' }}>PORTFOLIO VALUE</div>
         <div style={{ fontSize: '32px', fontWeight: '900', marginBottom: '4px' }}>{balance.toFixed(2)} <span style={{ fontSize: '16px', color: 'var(--premium-blue)' }}>$YETC</span></div>
         <div style={{ fontSize: '14px', color: 'var(--neon-green)', fontWeight: '700' }}>
-          ≈ ${(balance * COIN_PRICE_USD).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+          ≈ ${(balance * yetcPriceUsd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
         </div>
       </motion.div>
 

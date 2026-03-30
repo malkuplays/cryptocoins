@@ -17,8 +17,9 @@ import {
   Wallet
 } from 'lucide-react';
 import { supabase } from '../supabase';
+import { useSettings } from '../SettingsContext';
 
-const COIN_PRICE_USD = 10.00; // 1 YETC = $10
+
 
 const TIER_MINING_RATES = {
   whale:   { min: 60, max: 80, label: 'Whale', color: '#FFD700', icon: '🐋' },
@@ -34,6 +35,7 @@ const Dashboard = ({ user, setUser }) => {
   const [sessionEarned, setSessionEarned] = useState(0);
   const [initialized, setInitialized] = useState(false);
   const balanceRef = useRef(user?.mining_balance || 0);
+  const { yetcPriceUsd } = useSettings();
 
   const tier = user?.plan_tier || 'free';
   const tierConfig = TIER_MINING_RATES[tier] || TIER_MINING_RATES.free;
@@ -172,7 +174,7 @@ const Dashboard = ({ user, setUser }) => {
     return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   };
 
-  const usdValue = balance * COIN_PRICE_USD;
+  const usdValue = balance * yetcPriceUsd;
   const stakingProgress = getStakingProgress();
   const daysRemaining = getDaysRemaining();
 
@@ -289,7 +291,7 @@ const Dashboard = ({ user, setUser }) => {
         }}>
           <TrendingUp size={18} color="var(--premium-blue)" style={{ marginBottom: '8px' }} />
           <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: '700' }}>PRICE</div>
-          <div style={{ fontSize: '16px', fontWeight: '900' }}>${COIN_PRICE_USD}</div>
+          <div style={{ fontSize: '16px', fontWeight: '900' }}>${yetcPriceUsd}</div>
         </div>
       </motion.div>
 
@@ -386,8 +388,8 @@ const Dashboard = ({ user, setUser }) => {
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
           <div>
-            <div style={{ fontSize: '24px', fontWeight: '900' }}>${COIN_PRICE_USD.toFixed(2)}</div>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>1 $YETC = ₹{(COIN_PRICE_USD * 84).toFixed(0)}</div>
+            <div style={{ fontSize: '24px', fontWeight: '900' }}>${yetcPriceUsd.toFixed(2)}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>1 $YETC = ₹{(yetcPriceUsd * 84).toFixed(0)}</div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Market Cap</div>
