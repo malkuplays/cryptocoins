@@ -61,7 +61,7 @@ const Onboarding = ({ onComplete }) => {
 
   const renderStep = () => {
     switch(step) {
-      case 0: // Step 1: Institutional Vision
+      case 0: // Step 1: Airdrop & FOMO
         return (
           <motion.div 
             key="step0"
@@ -73,29 +73,29 @@ const Onboarding = ({ onComplete }) => {
           >
             <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
               <div className="icon-box-v2" style={{ width: '64px', height: '64px', background: 'var(--neon-green-dim)', border: '1px solid var(--neon-green-glow)' }}>
-                <Globe size={32} />
+                <Star size={32} />
               </div>
             </motion.div>
 
             <motion.h2 variants={itemVariants} style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', lineHeight: '1.1', marginBottom: '16px' }}>
-              Protocol <br/><span style={{ color: 'var(--neon-green)' }}>Ecosystem</span>
+              Massive <br/><span style={{ color: 'var(--neon-green)' }}>AIRDROP</span>
             </motion.h2>
             
             <motion.p variants={itemVariants} style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '15px' }}>
-              Built on Tier-1 infrastructure, providing institutional-grade access to yield markets.
+              YETCOIN is launching on major exchanges soon! Claim your free tokens before the ICO ends.
             </motion.p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {[
-                { icon: <ShieldCheck size={20} />, label: "PROTOCOL TVL", val: "$142M", sub: "Fully audited smart contracts", color: 'var(--premium-blue)' },
-                { icon: <Activity size={20} />, label: "MINING UPTIME", val: "99.9%", sub: "High-performing node clusters", color: 'var(--neon-green)' },
-                { icon: <Users size={20} />, label: "GLOBAL NODES", val: "1,240", sub: "Decentralized across 40+ regions", color: 'var(--premium-orange)' }
+                { icon: <Trophy size={20} />, label: "TOTAL POOL", val: "500M YETC", sub: "Community distribution", color: 'var(--premium-orange)' },
+                { icon: <Users size={20} />, label: "REGISTERED", val: "1.4M+", sub: "Users already claiming", color: 'var(--neon-green)' },
+                { icon: <TrendingUp size={20} />, label: "LISTING PRICE", val: "$0.15", sub: "Estimated TGE value", color: 'var(--premium-blue)' }
               ].map((stat, i) => (
                 <motion.div key={i} variants={itemVariants} className="step-card-v2" whileTap={{ scale: 0.98 }}>
                   <div className="icon-box-v2" style={{ color: stat.color }}>
                     {stat.icon}
                   </div>
-                  <div style={{ flex: 1 }}>
+                  <div style={{ flex: 1, textAlign: 'left' }}>
                     <div style={{ fontSize: '10px', fontWeight: '900', color: 'var(--text-muted)', letterSpacing: '1px' }}>{stat.label}</div>
                     <div style={{ fontSize: '18px', fontWeight: '900', color: '#fff' }}>{stat.val}</div>
                     <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{stat.sub}</div>
@@ -106,7 +106,7 @@ const Onboarding = ({ onComplete }) => {
           </motion.div>
         );
 
-      case 1: // Step 2: Advanced Yield Architecture
+      case 1: // Step 2: Simple steps
         return (
           <motion.div 
             key="step1"
@@ -116,26 +116,26 @@ const Onboarding = ({ onComplete }) => {
             exit="exit"
             style={{ width: '100%' }}
           >
-            <motion.div variants={itemVariants} style={{ textAlign: 'center', marginBottom: '24px' }}>
-               <span className="badge-outline">ARCHITECTURE</span>
+            <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+               <span className="badge-outline">HOW IT WORKS</span>
             </motion.div>
 
             <motion.h2 variants={itemVariants} style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', lineHeight: '1.1', marginBottom: '16px' }}>
-              Yield <br/><span style={{ color: 'var(--neon-green)' }}>Optimization</span>
+              Simple & <br/><span style={{ color: 'var(--neon-green)' }}>Easy</span>
             </motion.h2>
 
             <motion.p variants={itemVariants} style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '15px' }}>
-              Our proprietary AI engine optimizes allocations across multiple chains for maximum efficiency.
+              Start earning in seconds. No technical knowledge required at all!
             </motion.p>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               {[
-                { icon: <Zap size={22} />, title: "Instant", desc: "Real-time rewards" },
-                { icon: <Lock size={22} />, title: "Secure", desc: "Non-custodial" },
-                { icon: <Cpu size={22} />, title: "AI-Driven", desc: "Auto-balancing" },
-                { icon: <BarChart3 size={22} />, title: "Alpha", desc: "Exclusive access" },
+                { icon: <Zap size={22} />, title: "Claim Daily", desc: "Just one tap a day" },
+                { icon: <Users size={22} />, title: "Invite", desc: "Earn from friends" },
+                { icon: <ShieldCheck size={22} />, title: "100% Safe", desc: "Risk-free airdrop" },
+                { icon: <ArrowRight size={22} />, title: "Withdraw", desc: "Direct to wallet" },
               ].map((item, i) => (
-                <motion.div key={i} variants={itemVariants} className="glass-panel" style={{ padding: '20px', textAlign: 'left' }} whileTap={{ scale: 0.98 }}>
+                <motion.div key={i} variants={itemVariants} className="glass-panel" style={{ padding: '20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }} whileTap={{ scale: 0.98 }}>
                   <div style={{ color: 'var(--neon-green)', marginBottom: '12px' }}>{item.icon}</div>
                   <div style={{ fontSize: '15px', fontWeight: '800', marginBottom: '4px' }}>{item.title}</div>
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{item.desc}</div>
@@ -145,7 +145,7 @@ const Onboarding = ({ onComplete }) => {
           </motion.div>
         );
 
-      case 2: // Step 3: Scaling & Security
+      case 2: // Step 3: Launch Countdown / FOMO
         return (
           <motion.div 
             key="step2"
@@ -157,22 +157,22 @@ const Onboarding = ({ onComplete }) => {
           >
             <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
                <div className="icon-box-v2" style={{ width: '80px', height: '80px', border: 'none', background: 'transparent' }}>
-                  <Activity size={48} className="glow-text-green" />
+                  <TrendingUp size={48} className="glow-text-green" />
                </div>
             </motion.div>
 
-            <motion.h1 variants={itemVariants} style={{ fontSize: '32px', fontWeight: '900', marginBottom: '12px' }}>
-              Network <span style={{ color: 'var(--neon-green)' }}>Scaling</span>
+            <motion.h1 variants={itemVariants} style={{ fontSize: '32px', fontWeight: '900', marginBottom: '12px', textAlign: 'center' }}>
+              Launching <span style={{ color: 'var(--neon-green)' }}>Soon!</span>
             </motion.h1>
-            <motion.p variants={itemVariants} style={{ color: 'var(--text-secondary)', marginBottom: '40px', padding: '0 20px' }}>
-              We are currently at capacity for Stage 1. Scaling infrastructure to support the next wave of users.
+            <motion.p variants={itemVariants} style={{ color: 'var(--text-secondary)', marginBottom: '40px', padding: '0 20px', textAlign: 'center' }}>
+              The token sale is filling up fast. Don't be left behind in the biggest launch of 2024.
             </motion.p>
 
-            <motion.div variants={itemVariants} className="glass-panel" style={{ padding: '24px', marginBottom: '40px' }}>
+            <motion.div variants={itemVariants} className="glass-panel" style={{ padding: '24px', marginBottom: '40px', textAlign: 'left' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '12px', fontWeight: '900', letterSpacing: '1px' }}>
-                 <span>NETWORK LOAD</span>
+                 <span>AIRDROP ALLOCATED</span>
                  <span style={{ color: 'var(--neon-green)' }}>{progress}%</span>
-              </div>
+               </div>
               <div style={{ background: 'rgba(255,255,255,0.05)', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
                 <motion.div 
                   initial={{ width: '0%' }}
@@ -183,10 +183,10 @@ const Onboarding = ({ onComplete }) => {
               </div>
               <div style={{ marginTop: '16px', fontSize: '11px', color: 'var(--text-muted)', display: 'flex', justifyContent: 'center', gap: '16px' }}>
                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--neon-green)' }} /> 18k active nodes
+                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--neon-green)' }} /> Limited Spots Left
                  </div>
                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--neon-green)' }} /> 0.4ms latency
+                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--fomo-red, #ff4c4c)' }} /> Closing Soon
                  </div>
               </div>
             </motion.div>
@@ -196,13 +196,14 @@ const Onboarding = ({ onComplete }) => {
               whileTap={{ scale: 0.96 }}
               className="btn-primary" 
               onClick={nextStep}
+              style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
             >
-              Verify Connection <ArrowRight size={20} />
+              Secure My Spot <ArrowRight size={20} />
             </motion.button>
           </motion.div>
         );
 
-      case 3: // THE SELECTION (Membership Passes)
+      case 3: // THE SELECTION (Boosters)
         return (
           <motion.div 
             key="step3"
@@ -212,17 +213,17 @@ const Onboarding = ({ onComplete }) => {
             style={{ width: '100%' }}
           >
             <motion.h1 variants={itemVariants} style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px' }}>
-              Select <span style={{ color: 'var(--neon-green)' }}>Tier</span>
+              Boost <span style={{ color: 'var(--neon-green)' }}>Earnings</span>
             </motion.h1>
             <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '32px', color: 'var(--text-secondary)' }}>
-              Choose your allocation strategy based on your wealth goals.
+              Upgrade your tier to get a massive multiplier on your daily airdrop!
             </motion.p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
               {[
-                { name: "Starter", price: "₹1,000", cap: "1.2x Multiplier", sub: "Basic yield access" },
-                { name: "Founder", price: "₹2,999", badge: "POPULAR", cap: "2.5x Multiplier", sub: "Early access perks" },
-                { name: "Whale", price: "₹6,999", badge: "MAX YIELD", cap: "5.0x Multiplier", sub: "Institutional benefits" }
+                { name: "Starter", price: "₹1,000", cap: "1.2x Multiplier", sub: "Basic earning speed" },
+                { name: "Pro", price: "₹2,999", badge: "POPULAR", cap: "2.5x Multiplier", sub: "Faster token generation" },
+                { name: "Whale", price: "₹6,999", badge: "MAX YIELD", cap: "5.0x Multiplier", sub: "Maximum daily airdrop" }
               ].map((tier, i) => (
                 <motion.div 
                   key={i} 
@@ -236,7 +237,7 @@ const Onboarding = ({ onComplete }) => {
                 >
                   {tier.badge && <div className="price-badge">{tier.badge}</div>}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div>
+                    <div style={{ textAlign: 'left' }}>
                       <div style={{ fontSize: '18px', fontWeight: '900', marginBottom: '4px' }}>{tier.name}</div>
                       <div style={{ fontSize: '12px', color: selectedTier === i ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}>{tier.sub}</div>
                     </div>
@@ -250,12 +251,12 @@ const Onboarding = ({ onComplete }) => {
             </div>
 
             <motion.div variants={itemVariants} style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '20px', marginBottom: '32px' }}>
-              <div style={{ fontSize: '13px', fontWeight: '900', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Check size={16} color="var(--neon-green)" /> INCLUDED WITH ALL TIERS
+              <div style={{ fontSize: '13px', fontWeight: '900', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <Check size={16} color="var(--neon-green)" /> ALL TIERS INCLUDE
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                {["Daily Payouts", "Audit Reports", "24/7 Support", "Network Access"].map((b, i) => (
-                  <div key={i} style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {["Daily Airdrop", "Withdrawals", "Premium Support", "ICO Presale Access"].map((b, i) => (
+                  <div key={i} style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
                     <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.3)' }} /> {b}
                   </div>
                 ))}
@@ -267,8 +268,9 @@ const Onboarding = ({ onComplete }) => {
               whileTap={{ scale: 0.96 }}
               className="btn-primary" 
               onClick={onComplete}
+              style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
             >
-              Confirm Selection <ChevronRight size={20} />
+              Start Earning <ChevronRight size={20} />
             </motion.button>
           </motion.div>
         );

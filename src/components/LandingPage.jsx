@@ -142,20 +142,6 @@ const LandingPage = ({ onNext, onRoadmap }) => {
         </motion.div>
       </motion.div>
 
-      {/* Ticker Bar */}
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '48px', background: 'rgba(11, 11, 15, 0.9)', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', overflow: 'hidden', borderTop: '1px solid var(--glass-border)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
-        <motion.div 
-          animate={{ x: [0, -500] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          style={{ display: 'flex', gap: '48px', whiteSpace: 'nowrap', padding: '0 24px', fontSize: '12px', fontWeight: '700', letterSpacing: '1px', color: 'var(--text-muted)' }}
-        >
-          <span>$YETC <span style={{ color: '#fff' }}>$46.00</span> <span style={{ color: 'var(--neon-green)' }}>+12.4%</span></span>
-          <span>BTC <span style={{ color: '#fff' }}>$68,432</span> <span style={{ color: 'var(--neon-green)' }}>+2.1%</span></span>
-          <span>ETH <span style={{ color: '#fff' }}>$3,542</span> <span style={{ color: 'var(--fomo-red)' }}>-0.8%</span></span>
-          <span>SOL <span style={{ color: '#fff' }}>$142.50</span> <span style={{ color: 'var(--neon-green)' }}>+5.4%</span></span>
-          <span>TON <span style={{ color: '#fff' }}>$5.12</span> <span style={{ color: 'var(--neon-green)' }}>+1.2%</span></span>
-        </motion.div>
-      </div>
     </div>
   );
 };
