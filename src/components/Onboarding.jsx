@@ -289,7 +289,7 @@ const Onboarding = ({ onComplete }) => {
   };
 
   return (
-    <div className="app-container" style={{ padding: 'calc(env(safe-area-inset-top) + 80px) 20px env(safe-area-inset-bottom)' }}>
+    <div className="app-container" style={{ padding: 'calc(env(safe-area-inset-top) + 110px) 20px env(safe-area-inset-bottom)' }}>
       <AnimatePresence mode="wait">
         {renderStep()}
       </AnimatePresence>
