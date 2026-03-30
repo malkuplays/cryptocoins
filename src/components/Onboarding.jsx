@@ -13,13 +13,17 @@ import {
   Globe,
   Lock,
   Cpu,
-  BarChart3
+  BarChart3,
+  Trophy,
+  Crown,
+  Star
 } from 'lucide-react';
 import { triggerHaptic } from '../telegram';
 
 const Onboarding = ({ onComplete }) => {
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [selectedTier, setSelectedTier] = useState(1); // 0: Starter, 1: Founder, 2: Whale
 
   useEffect(() => {
     // Initial progress bar animation
@@ -198,7 +202,7 @@ const Onboarding = ({ onComplete }) => {
           </motion.div>
         );
 
-      case 3: // Step 4: Tier Selection
+      case 3: // THE SELECTION (Membership Passes)
         return (
           <motion.div 
             key="step3"
@@ -217,21 +221,24 @@ const Onboarding = ({ onComplete }) => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
               {[
                 { name: "Starter", price: "₹1,000", cap: "1.2x Multiplier", sub: "Basic yield access" },
-                { name: "Founder", price: "₹2,999", badge: "POPULAR", active: true, cap: "2.5x Multiplier", sub: "Early access perks" },
+                { name: "Founder", price: "₹2,999", badge: "POPULAR", cap: "2.5x Multiplier", sub: "Early access perks" },
                 { name: "Whale", price: "₹6,999", badge: "MAX YIELD", cap: "5.0x Multiplier", sub: "Institutional benefits" }
               ].map((tier, i) => (
                 <motion.div 
                   key={i} 
                   variants={itemVariants} 
-                  className={`price-card ${tier.active ? 'active' : ''}`}
+                  className={`price-card ${selectedTier === i ? 'active' : ''}`}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => triggerHaptic('selection')}
+                  onClick={() => {
+                    setSelectedTier(i);
+                    triggerHaptic('selection');
+                  }}
                 >
                   {tier.badge && <div className="price-badge">{tier.badge}</div>}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
                       <div style={{ fontSize: '18px', fontWeight: '900', marginBottom: '4px' }}>{tier.name}</div>
-                      <div style={{ fontSize: '12px', color: tier.active ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}>{tier.sub}</div>
+                      <div style={{ fontSize: '12px', color: selectedTier === i ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}>{tier.sub}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
                       <div style={{ fontSize: '20px', fontWeight: '900' }}>{tier.price}</div>
@@ -291,6 +298,7 @@ const Onboarding = ({ onComplete }) => {
             animate={{ opacity: 1 }}
             className="btn-primary" 
             onClick={nextStep}
+            style={{ width: '100%' }}
           >
             Continue
           </motion.button>
@@ -301,4 +309,3 @@ const Onboarding = ({ onComplete }) => {
 };
 
 export default Onboarding;
-

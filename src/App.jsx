@@ -128,7 +128,7 @@ const App = () => {
   );
 
   return (
-    <div className="app-container">
+    <div className="app_container">
       <AuraBackground />
       
       <AnimatePresence>
