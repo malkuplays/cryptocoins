@@ -314,7 +314,7 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   font-weight: 900;
   line-height: 1.05;
   text-align: center;
-  margin-top: 32px;
+  margin-top: 8px;
   letter-spacing: -1.5px;
   background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
   -webkit-background-clip: text;
@@ -505,7 +505,7 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   width: 140px;
   height: 140px;
   filter: drop-shadow(0 0 30px var(--neon-green-glow));
-  margin: 48px auto 24px;
+  margin: 12px auto 8px;
   display: block;
 }
 

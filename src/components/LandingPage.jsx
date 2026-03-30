@@ -68,7 +68,7 @@ const LandingPage = ({ onNext }) => {
       >
         <div className="flex-center" style={{ flexDirection: 'column', textAlign: 'center' }}>
           
-          <motion.div variants={itemVariants} className="badge-outline" style={{ marginBottom: '32px' }}>
+          <motion.div variants={itemVariants} className="badge-outline" style={{ marginBottom: '12px' }}>
             <div className="live-dot" style={{ background: 'var(--neon-green)', boxShadow: '0 0 10px var(--neon-green-glow)' }} />
             PRE-LAUNCH EVENT
           </motion.div>
