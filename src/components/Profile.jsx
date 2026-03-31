@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   User, Mail, Phone, Calendar, Gem, Lock, ShieldCheck, 
-  Clock, TrendingUp, Copy, CheckCircle2, Star, AlertCircle, X
+  Clock, TrendingUp, Copy, CheckCircle2, Star, Bell
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabase';
