@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { 
   User, Mail, Phone, Calendar, Gem, Lock, ShieldCheck, 
   Clock, TrendingUp, Copy, CheckCircle2, Star, Bell,
-  IndianRupee, Wallet
+  IndianRupee, Wallet, ChevronRight
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabase';
@@ -233,31 +233,46 @@ const Profile = ({ user, onOpenNotifications, onOpenWithdrawal, onOpenWithdrawal
             <div style={{ fontSize: '18px', fontWeight: '900', color: 'white' }}>₹{(user?.total_referral_bonus || 0).toLocaleString('en-IN')}</div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <motion.button 
-            whileTap={{ scale: 0.95 }}
-            onClick={onOpenWithdrawalHistory}
-            style={{ 
-              background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(255,255,255,0.1)',
-              padding: '10px 14px', borderRadius: '100px', fontSize: '13px', fontWeight: '800',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
-            }}
-          >
-            <Clock size={16} />
-          </motion.button>
-          <motion.button 
-            whileTap={{ scale: 0.95 }}
-            onClick={onOpenWithdrawal}
-            style={{ 
-              background: 'var(--neon-green)', color: 'black', border: 'none',
-              padding: '10px 20px', borderRadius: '100px', fontSize: '13px', fontWeight: '800',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
-              boxShadow: '0 4px 15px rgba(0, 255, 157, 0.3)'
-            }}
-          >
-            <Wallet size={16} /> Withdraw
-          </motion.button>
+        <motion.button 
+          whileTap={{ scale: 0.95 }}
+          onClick={onOpenWithdrawal}
+          style={{ 
+            background: 'var(--neon-green)', color: 'black', border: 'none',
+            padding: '10px 20px', borderRadius: '100px', fontSize: '13px', fontWeight: '800',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
+            boxShadow: '0 4px 15px rgba(0, 255, 157, 0.3)'
+          }}
+        >
+          <Wallet size={16} /> Withdraw
+        </motion.button>
+      </motion.div>
+
+      {/* Transaction History Card */}
+      <motion.div 
+        variants={itemVariants}
+        whileTap={{ scale: 0.98 }}
+        onClick={onOpenWithdrawalHistory}
+        style={{ 
+          padding: '20px', borderRadius: '24px', marginBottom: '24px',
+          background: 'rgba(255, 255, 255, 0.03)',
+          border: '1px solid rgba(255, 255, 255, 0.05)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          cursor: 'pointer'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ 
+            width: '40px', height: '40px', borderRadius: '12px', 
+            background: 'rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <Clock size={20} color="var(--text-muted)" />
+          </div>
+          <div>
+            <div style={{ fontSize: '15px', fontWeight: '800', color: 'white' }}>Transaction History</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>View your payout logs & status</div>
+          </div>
         </div>
+        <ChevronRight size={18} opacity={0.3} />
       </motion.div>
 
       {/* Account Details */}

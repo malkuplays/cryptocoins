@@ -96,52 +96,93 @@ const WithdrawalHistory = ({ user, onBack }) => {
           <p style={{ fontSize: '14px', maxWidth: '240px' }}>Your referral bonus withdrawals will appear here once you make a request.</p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '40px' }}>
-          {withdrawals.map((w, idx) => {
-            const config = getStatusConfig(w.status);
-            return (
-              <motion.div
-                key={w.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.05 }}
-                className="glass-card"
-                style={{
-                  padding: '20px', borderRadius: '24px', background: 'var(--bg-card)', 
-                  border: '1px solid var(--glass-border)', position: 'relative', overflow: 'hidden'
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px', borderRadius: '100px', background: config.bg, color: config.color }}>
-                    {config.icon}
-                    <span style={{ fontSize: '10px', fontWeight: '900', letterSpacing: '0.5px' }}>{config.label}</span>
-                  </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Calendar size={12} /> {new Date(w.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
-                  </div>
-                </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '40px' }}>
+          {/* Summary Stats */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div className="glass-card" style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px' }}>
+              <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: '800', marginBottom: '4px', letterSpacing: '0.5px' }}>TOTAL WITHDRAWN</div>
+              <div style={{ fontSize: '18px', fontWeight: '900', color: 'var(--neon-green)' }}>
+                ₹{withdrawals.filter(w => w.status === 'approved').reduce((acc, w) => acc + Number(w.amount_net), 0).toLocaleString('en-IN')}
+              </div>
+            </div>
+            <div className="glass-card" style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px' }}>
+              <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: '800', marginBottom: '4px', letterSpacing: '0.5px' }}>PENDING REQ.</div>
+              <div style={{ fontSize: '18px', fontWeight: '900', color: 'var(--premium-blue)' }}>
+                ₹{withdrawals.filter(w => w.status === 'pending').reduce((acc, w) => acc + Number(w.amount_net), 0).toLocaleString('en-IN')}
+              </div>
+            </div>
+          </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                  <div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: '800', letterSpacing: '1px', marginBottom: '2px' }}>NET PAYABLE</div>
-                    <div style={{ fontSize: '20px', fontWeight: '900', color: 'white' }}>₹{w.amount_net.toLocaleString('en-IN')}</div>
+          {/* Transaction List */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {withdrawals.map((w, idx) => {
+              const config = getStatusConfig(w.status);
+              return (
+                <motion.div
+                  key={w.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  className="glass-card"
+                  style={{
+                    padding: '24px', borderRadius: '32px', background: 'var(--bg-card)', 
+                    border: '1px solid var(--glass-border)', position: 'relative', overflow: 'hidden'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px', borderRadius: '100px', background: config.bg, color: config.color }}>
+                      {config.icon}
+                      <span style={{ fontSize: '10px', fontWeight: '900', letterSpacing: '0.5px' }}>{config.label}</span>
+                    </div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '600' }}>
+                      <Calendar size={12} /> {new Date(w.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: '800', letterSpacing: '1px', marginBottom: '2px' }}>METHOD</div>
-                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--premium-blue)' }}>{w.method}</div>
-                  </div>
-                </div>
 
-                {/* Optional Detail Expansion could go here if needed */}
-                <style>{`
-                  .spinning { animation: spin 2s linear infinite; }
-                  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-                `}</style>
-              </motion.div>
-            );
-          })}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '20px' }}>
+                    <div>
+                      <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: '800', letterSpacing: '1px', marginBottom: '4px' }}>NET AMOUNT PAID</div>
+                      <div style={{ fontSize: '28px', fontWeight: '900', color: 'white', display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                        <span style={{ fontSize: '18px', opacity: 0.5 }}>₹</span>{w.amount_net.toLocaleString('en-IN')}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: '800', letterSpacing: '1px', marginBottom: '4px' }}>METHOD</div>
+                      <div style={{ fontSize: '14px', fontWeight: '800', color: 'var(--premium-blue)' }}>{w.method}</div>
+                    </div>
+                  </div>
+
+                  {/* Detailing Section */}
+                  <div style={{ 
+                    marginTop: '20px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)',
+                    display: 'flex', flexDirection: 'column', gap: '10px'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Gross Amount</span>
+                      <span style={{ color: 'white', fontWeight: '600' }}>₹{Number(w.amount_gross).toLocaleString('en-IN')}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>GST Deducted ({w.gst_rate}%)</span>
+                      <span style={{ color: 'var(--fomo-red)', fontWeight: '600' }}>-₹{(Number(w.amount_gross) - Number(w.amount_net)).toLocaleString('en-IN')}</span>
+                    </div>
+                    {w.details && Object.entries(w.details).map(([key, value]) => (
+                      <div key={key} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
+                        <span style={{ color: 'var(--text-muted)', textTransform: 'capitalize' }}>{key.replace('_', ' ')}</span>
+                        <span style={{ color: 'white', fontWeight: '600', maxWidth: '160px', textAlign: 'right', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       )}
+
+      <style>{`
+        .spinning { animation: spin 2s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      `}</style>
     </div>
   );
 };
