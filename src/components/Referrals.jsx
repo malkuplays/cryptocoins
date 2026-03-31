@@ -59,7 +59,7 @@ const Referrals = ({ user }) => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 20px)', paddingBottom: '100px', paddingLeft: '20px', paddingRight: '20px' }}
+      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 80px)', paddingBottom: '100px', paddingLeft: '20px', paddingRight: '20px' }}
     >
       <motion.div variants={itemVariants} style={{ textAlign: 'center', marginBottom: '32px' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '20px', background: 'rgba(0, 255, 157, 0.1)', border: '1px solid rgba(0, 255, 157, 0.2)', marginBottom: '16px' }}>

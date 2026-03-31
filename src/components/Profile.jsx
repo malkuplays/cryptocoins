@@ -48,7 +48,7 @@ const Profile = ({ user }) => {
   return (
     <motion.div 
       className="container" 
-      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 50px)', paddingBottom: '100px' }}
+      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 80px)', paddingBottom: '100px' }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"

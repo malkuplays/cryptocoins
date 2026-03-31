@@ -211,7 +211,7 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
   return (
     <motion.div 
       className="container" 
-      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 50px)', paddingBottom: '100px' }}
+      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 80px)', paddingBottom: '100px' }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -220,7 +220,7 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
       <motion.header variants={itemVariants} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', padding: '0 4px' }}>
         <div>
           <div style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '600', marginBottom: '2px' }}>Welcome back</div>
-          <h1 style={{ fontSize: '22px', fontWeight: '900' }}>@{user?.username || 'user'}</h1>
+          <h1 style={{ fontSize: '22px', fontWeight: '900' }}>{user?.full_name || `@${user?.username || 'user'}`}</h1>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ 
