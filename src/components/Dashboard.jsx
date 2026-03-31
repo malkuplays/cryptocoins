@@ -46,77 +46,47 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
   const tierConfig = { ...tierDisplay, ...tierRates };
   const stakingYears = user?.staking_years || 0;
 
-  // Generate random mining rate for current hour
-  const generateMiningRate = useCallback(() => {
-    const { min, max } = tierRates;
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }, [tierRates.min, tierRates.max]);
-
-  // Calculate offline earnings and sync on mount
-  useEffect(() => {
-    const calculateOfflineEarnings = async () => {
-      if (!user?.id || initialized) return;
+  // NEW: Secure Server-Side Sync
+  // This calculates the drift since the last database update and returns the TRUE balance.
+  const syncWithServer = useCallback(async (isInitial = false) => {
+    if (syncing || !user?.id) return;
+    setSyncing(true);
+    try {
+      const { data, error } = await supabase.rpc('sync_mining_progress');
+      if (error) throw error;
       
-      const lastUpdate = user.last_mining_update ? new Date(user.last_mining_update) : new Date();
-      const now = new Date();
-      const elapsedMs = now.getTime() - lastUpdate.getTime();
-      const elapsedHours = elapsedMs / (1000 * 60 * 60);
-      
-      if (elapsedHours > 0.01) { // At least ~36 seconds
-        let offlineEarnings = 0;
-        const fullHours = Math.floor(elapsedHours);
-        const partialHour = elapsedHours - fullHours;
+      if (data) {
+        setBalance(data.mining_balance);
+        balanceRef.current = data.mining_balance;
+        setUser(data);
+        setLastSynced(new Date());
         
-        // Generate random coins for each full hour
-        for (let i = 0; i < Math.min(fullHours, 168); i++) { // Cap at 7 days (168 hours)
-          const { min, max } = tierRates;
-          offlineEarnings += Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-        
-        // Partial hour
-        if (partialHour > 0) {
-          const { min, max } = tierRates;
-          const hourlyRate = Math.floor(Math.random() * (max - min + 1)) + min;
-          offlineEarnings += Math.floor(hourlyRate * partialHour);
-        }
-
-        if (offlineEarnings > 0) {
-          const newBalance = (user.mining_balance || 0) + offlineEarnings;
-          setBalance(newBalance);
-          
-          // Sync to Supabase
-          try {
-            const { data } = await supabase
-              .from('players')
-              .update({ 
-                mining_balance: newBalance,
-                last_mining_update: now.toISOString(),
-                last_sync: now.toISOString()
-              })
-              .eq('id', user.id)
-              .select()
-              .single();
-            
-            if (data) setUser(data);
-          } catch (err) {
-            console.error('Offline sync error:', err);
-          }
-        }
+        // Use average of tier rates for the visual live tick
+        const avgRate = (tierRates.min + tierRates.max) / 2;
+        setMiningRate(avgRate);
       }
-      
-      setMiningRate(generateMiningRate());
+    } catch (err) {
+      console.error('Mining sync error:', err);
+    } finally {
+      setSyncing(false);
       setInitialized(true);
-    };
+    }
+  }, [user?.id, syncing, tierRates]);
 
-    calculateOfflineEarnings();
+  // Initial Sync on mount
+  useEffect(() => {
+    if (!initialized) {
+      syncWithServer(true);
+    }
   }, [user?.id]);
 
-  // Live mining tick - add coins every second
+  // Live visual-only mining tick
+  // Increments the local state for UX, but syncs with DB periodically for truth.
   useEffect(() => {
     if (!initialized) return;
     
-    const rate = miningRate || generateMiningRate();
-    const coinsPerSecond = rate / 3600; // rate is per HOUR, divide by 3600 for per-second
+    const rate = miningRate || (tierRates.min + tierRates.max) / 2;
+    const coinsPerSecond = rate / 3600; 
     
     const miningTimer = setInterval(() => {
       setBalance(prev => {
@@ -129,53 +99,22 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
     return () => clearInterval(miningTimer);
   }, [initialized, miningRate]);
 
-  // Regenerate mining rate every hour
+  // Auto-sync with server every 10 minutes or on visibility change
   useEffect(() => {
-    const hourlyTimer = setInterval(() => {
-      setMiningRate(generateMiningRate());
-    }, 60 * 60 * 1000);
-    return () => clearInterval(hourlyTimer);
-  }, [generateMiningRate]);
-
-  // Auto-sync every 5 minutes — uses ref to get latest balance
-  const syncBalance = useCallback(async () => {
-    if (syncing || !user?.id) return;
-    const currentBalance = balanceRef.current;
-    setSyncing(true);
-    try {
-      await supabase
-        .from('players')
-        .update({ 
-          mining_balance: currentBalance,
-          last_mining_update: new Date().toISOString(),
-          last_sync: new Date().toISOString()
-        })
-        .eq('id', user.id);
-      setLastSynced(new Date());
-      // Don't call setUser here — it would overwrite the live-ticking balance
-    } catch (err) {
-      console.error('Sync error:', err);
-    } finally {
-      setSyncing(false);
-    }
-  }, [user?.id, syncing]);
-
-  // Sync on visibility change (minimize/tab switch)
-  useEffect(() => {
+    const syncTimer = setInterval(() => syncWithServer(), 600000); // 10 min
+    
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        syncBalance();
+      if (document.visibilityState === 'visible') {
+        syncWithServer(); // Re-sync when user returns to app
       }
     };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [syncBalance]);
-
-
-  useEffect(() => {
-    const syncTimer = setInterval(syncBalance, 300000); // 5 min
-    return () => clearInterval(syncTimer);
-  }, [syncBalance]);
+    return () => {
+      clearInterval(syncTimer);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [syncWithServer]);
 
   // Staking calculations
   const getStakingProgress = () => {
@@ -234,7 +173,7 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
           </div>
           <div style={{ textAlign: 'right' }}>
             <button 
-              onClick={syncBalance} 
+              onClick={() => syncWithServer()} 
               disabled={syncing}
               style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-end' }}
             >
