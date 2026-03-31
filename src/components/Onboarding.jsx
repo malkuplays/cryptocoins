@@ -33,6 +33,7 @@ const Onboarding = ({ onComplete }) => {
   const [stakingPeriod, setStakingPeriod] = useState(1); // 0: 5 years, 1: 7 years
   const [utrCode, setUtrCode] = useState('');
   const { plans, paymentQrUrl, paymentUpiId } = useSettings();
+  const [qrLoaded, setQrLoaded] = useState(false);
 
   useEffect(() => {
     // Initial progress bar animation
@@ -499,12 +500,30 @@ const Onboarding = ({ onComplete }) => {
             </motion.div>
 
             <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
-              <div style={{ background: 'white', padding: '16px', borderRadius: '16px', width: '200px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+              <div style={{ background: 'white', padding: '16px', borderRadius: '16px', width: '200px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                
+                {!qrLoaded && paymentQrUrl && (
+                  <motion.div 
+                    initial={{ opacity: 0.5 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ repeat: Infinity, duration: 0.8, direction: 'alternate' }}
+                    style={{ 
+                      position: 'absolute', inset: 0, 
+                      background: '#f5f5f5', 
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: '#a0a0a0', fontSize: '12px', fontWeight: '800', zIndex: 1
+                    }}
+                  >
+                    Loading QR...
+                  </motion.div>
+                )}
+
                 <img 
                   src={paymentQrUrl || "/qr-placeholder.png"} 
                   alt="QR Code" 
-                  style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
-                  onError={(e) => { e.target.style.display = 'none'; }}
+                  onLoad={() => setQrLoaded(true)}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: qrLoaded ? 1 : 0, transition: 'opacity 0.3s' }} 
+                  onError={(e) => { e.target.style.display = 'none'; setQrLoaded(true); }}
                 />
                 {!paymentQrUrl && (
                   <div style={{ position: 'absolute', color: 'black', textAlign: 'center', opacity: 0.5, fontSize: '14px', pointerEvents: 'none' }}>

@@ -58,7 +58,12 @@ export const SettingsProvider = ({ children }) => {
     rows.forEach(r => { map[r.key] = r.value; });
 
     if (map.yetc_price_usd) setYetcPriceUsd(parseFloat(map.yetc_price_usd));
-    if (map.payment_qr_url) setPaymentQrUrl(map.payment_qr_url);
+    if (map.payment_qr_url) {
+      setPaymentQrUrl(map.payment_qr_url);
+      // Preload QR Code so it loads instantly in the payment step
+      const img = new Image();
+      img.src = map.payment_qr_url;
+    }
     if (map.payment_upi_id) setPaymentUpiId(map.payment_upi_id);
 
     // Update mining rates using consolidated keys
