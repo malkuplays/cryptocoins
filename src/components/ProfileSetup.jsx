@@ -26,19 +26,12 @@ const ProfileSetup = ({ user, onComplete }) => {
     triggerHaptic('impact');
 
     try {
-      const { data, error: dbError } = await supabase
-        .from('players')
-        .update({
-          full_name: formData.full_name,
-          dob: formData.dob,
-          email: formData.email,
-          whatsapp_number: formData.whatsapp_number,
-          profile_completed: true,
-          is_onboarded: true
-        })
-        .eq('id', user.id)
-        .select()
-        .single();
+      const { data, error: dbError } = await supabase.rpc('complete_profile_setup', {
+        arg_full_name: formData.full_name,
+        arg_dob: formData.dob,
+        arg_email: formData.email,
+        arg_whatsapp: formData.whatsapp_number
+      });
 
       if (dbError) throw dbError;
       
