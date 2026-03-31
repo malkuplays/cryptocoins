@@ -470,8 +470,7 @@ const Onboarding = ({ onComplete }) => {
 
 
       case 5: // Manual Payment QR Code
-        const tierNames = ['Starter', 'Pro', 'Whale'];
-        const prices = ['₹1,000', '₹2,999', '₹6,999'];
+        const selectedPlan = plans[selectedTier];
         const stakingLabel = stakingPeriod === 0 ? '5-Year' : '7-Year';
         return (
           <motion.div 
@@ -485,14 +484,14 @@ const Onboarding = ({ onComplete }) => {
               Complete <span style={{ color: 'var(--neon-green)' }}>Payment</span>
             </motion.h1>
             <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '16px', color: 'var(--text-secondary)', fontSize: '14px' }}>
-              Scan to pay {prices[selectedTier]} for {tierNames[selectedTier]} Tier.
+              Scan to pay ₹{selectedPlan.price.toLocaleString('en-IN')} for {selectedPlan.name} Tier.
             </motion.p>
 
             <motion.div variants={itemVariants} style={{ 
               display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '24px' 
             }}>
               <div style={{ padding: '6px 14px', borderRadius: '100px', background: 'rgba(0, 255, 157, 0.1)', border: '1px solid rgba(0, 255, 157, 0.2)', fontSize: '12px', fontWeight: '800', color: 'var(--neon-green)' }}>
-                {tierNames[selectedTier]} Tier
+                {selectedPlan.name} Tier
               </div>
               <div style={{ padding: '6px 14px', borderRadius: '100px', background: 'rgba(157, 80, 187, 0.1)', border: '1px solid rgba(157, 80, 187, 0.2)', fontSize: '12px', fontWeight: '800', color: 'var(--premium-purple)' }}>
                 {stakingLabel} Stake

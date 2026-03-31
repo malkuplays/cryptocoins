@@ -56,7 +56,7 @@ const PricingPage = ({ user, onSuccess, onBack }) => {
       const { data, error } = await supabase
         .from('players')
         .update({
-          plan_tier: plan.name,
+          plan_tier: plan.id,
           mining_power: plan.power,
           staking_start: now.toISOString(),
           staking_end: end.toISOString(),
