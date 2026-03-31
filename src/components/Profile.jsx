@@ -35,7 +35,7 @@ const Profile = ({ user }) => {
 
       if (data) setLatestAlert(data);
     } catch (e) {
-      // No alert found or error, ignore
+      console.error("Alerts fetching failure:", e);
     }
   };
 
