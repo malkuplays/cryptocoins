@@ -35,7 +35,9 @@ const SettingsContext = createContext({
     pro:     { min: 40, max: 60 },
     starter: { min: 30, max: 50 },
   },
-  plans: DEFAULT_PLANS
+  plans: DEFAULT_PLANS,
+  paymentQrUrl: '/qr-placeholder.png',
+  paymentUpiId: ''
 });
 
 export const useSettings = () => useContext(SettingsContext);
@@ -48,12 +50,16 @@ export const SettingsProvider = ({ children }) => {
     starter: { min: 30, max: 50 },
   });
   const [plans, setPlans] = useState(DEFAULT_PLANS);
+  const [paymentQrUrl, setPaymentQrUrl] = useState('/qr-placeholder.png');
+  const [paymentUpiId, setPaymentUpiId] = useState('');
 
   const applySettings = (rows) => {
     const map = {};
     rows.forEach(r => { map[r.key] = r.value; });
 
     if (map.yetc_price_usd) setYetcPriceUsd(parseFloat(map.yetc_price_usd));
+    if (map.payment_qr_url) setPaymentQrUrl(map.payment_qr_url);
+    if (map.payment_upi_id) setPaymentUpiId(map.payment_upi_id);
 
     // Update mining rates using consolidated keys
     setMiningRates(prev => ({
@@ -109,7 +115,7 @@ export const SettingsProvider = ({ children }) => {
   }, []);
 
   return (
-    <SettingsContext.Provider value={{ yetcPriceUsd, miningRates, plans }}>
+    <SettingsContext.Provider value={{ yetcPriceUsd, miningRates, plans, paymentQrUrl, paymentUpiId }}>
       {children}
     </SettingsContext.Provider>
   );

@@ -51,7 +51,7 @@ const PricingPage = ({ user, onSuccess, onBack }) => {
       
       if (plan.id === 'starter') end.setDate(now.getDate() + 30);
       else if (plan.id === 'pro') end.setDate(now.getDate() + 90);
-      else if (plan.id === 'legendary') end.setFullYear(now.getFullYear() + 1);
+      else if (plan.id === 'whale') end.setFullYear(now.getFullYear() + 1);
 
       const { data, error } = await supabase
         .from('players')

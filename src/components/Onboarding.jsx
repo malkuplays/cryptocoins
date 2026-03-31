@@ -32,7 +32,7 @@ const Onboarding = ({ onComplete }) => {
   const [selectedTier, setSelectedTier] = useState(1); // Index in plans array
   const [stakingPeriod, setStakingPeriod] = useState(1); // 0: 5 years, 1: 7 years
   const [utrCode, setUtrCode] = useState('');
-  const { plans } = useSettings();
+  const { plans, paymentQrUrl, paymentUpiId } = useSettings();
 
   useEffect(() => {
     // Initial progress bar animation
@@ -502,16 +502,42 @@ const Onboarding = ({ onComplete }) => {
             <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
               <div style={{ background: 'white', padding: '16px', borderRadius: '16px', width: '200px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                 <img 
-                  src="/qr-placeholder.png" 
+                  src={paymentQrUrl || "/qr-placeholder.png"} 
                   alt="QR Code" 
                   style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
                   onError={(e) => { e.target.style.display = 'none'; }}
                 />
-                <div style={{ position: 'absolute', color: 'black', textAlign: 'center', opacity: 0.5, fontSize: '14px', pointerEvents: 'none' }}>
-                   QR Code <br /> Goes Here
-                </div>
+                {!paymentQrUrl && (
+                  <div style={{ position: 'absolute', color: 'black', textAlign: 'center', opacity: 0.5, fontSize: '14px', pointerEvents: 'none' }}>
+                     QR Code <br /> Goes Here
+                  </div>
+                )}
               </div>
             </motion.div>
+
+            {paymentUpiId && (
+              <motion.div variants={itemVariants} style={{ textAlign: 'center', marginBottom: '24px' }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>UPI ID</span>
+                <div 
+                  onClick={() => {
+                    navigator.clipboard.writeText(paymentUpiId);
+                    alert('UPI ID copied to clipboard!');
+                  }}
+                  style={{ 
+                    display: 'inline-block',
+                    padding: '8px 16px', 
+                    background: 'rgba(255,255,255,0.05)', 
+                    borderRadius: '8px', 
+                    fontSize: '14px', 
+                    fontFamily: 'monospace',
+                    cursor: 'pointer',
+                    border: '1px dashed rgba(255,255,255,0.2)'
+                  }}
+                >
+                  {paymentUpiId}
+                </div>
+              </motion.div>
+            )}
 
             <motion.div variants={itemVariants}>
               <form onSubmit={handlePaymentSubmit}>
