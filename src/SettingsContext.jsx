@@ -19,8 +19,8 @@ const DEFAULT_PLANS = [
     features: ['2.0 $YETC / Hour', 'Advanced Analytics', 'Priority Support', 'Early Listing Access']
   },
   { 
-    id: 'legendary',
-    name: 'Legendary Staker', 
+    id: 'whale',
+    name: 'Whale Staker', 
     price: 6999, 
     power: 6.0, 
     period: '365 Days',
@@ -55,19 +55,19 @@ export const SettingsProvider = ({ children }) => {
 
     if (map.yetc_price_usd) setYetcPriceUsd(parseFloat(map.yetc_price_usd));
 
-    // Update mining rates
+    // Update mining rates using consolidated keys
     setMiningRates(prev => ({
       whale: {
-        min: map.whale_min_per_hour ? parseInt(map.whale_min_per_hour) : prev.whale.min,
-        max: map.whale_max_per_hour ? parseInt(map.whale_max_per_hour) : prev.whale.max,
+        min: map.whale_min ? parseInt(map.whale_min) : prev.whale.min,
+        max: map.whale_max ? parseInt(map.whale_max) : prev.whale.max,
       },
       pro: {
-        min: map.pro_min_per_hour ? parseInt(map.pro_min_per_hour) : prev.pro.min,
-        max: map.pro_max_per_hour ? parseInt(map.pro_max_per_hour) : prev.pro.max,
+        min: map.pro_min ? parseInt(map.pro_min) : prev.pro.min,
+        max: map.pro_max ? parseInt(map.pro_max) : prev.pro.max,
       },
       starter: {
-        min: map.starter_min_per_hour ? parseInt(map.starter_min_per_hour) : prev.starter.min,
-        max: map.starter_max_per_hour ? parseInt(map.starter_max_per_hour) : prev.starter.max,
+        min: map.starter_min ? parseInt(map.starter_min) : prev.starter.min,
+        max: map.starter_max ? parseInt(map.starter_max) : prev.starter.max,
       },
     }));
 
