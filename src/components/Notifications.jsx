@@ -103,7 +103,7 @@ const Notifications = ({ user, onBack }) => {
           <ArrowLeft size={20} />
         </button>
         <div>
-          <h1 style={{ fontSize: '24px', fontWeight: '900', margin: 0 }}>Portal News</h1>
+          <h1 style={{ fontSize: '24px', fontWeight: '900', margin: 0 }}>Notifications</h1>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: '600' }}>STAY UPDATED</div>
         </div>
       </div>
