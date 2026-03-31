@@ -114,14 +114,14 @@ const Onboarding = ({ onComplete }) => {
             </motion.h2>
             
             <motion.p variants={itemVariants} style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '15px' }}>
-              YETCOIN is launching on major exchanges soon! Claim your free tokens before the ICO ends.
+              YETCOIN ICO is live! Participate in our exclusive airdrop to claim tokens before our Tier-1 exchange listing.
             </motion.p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {[
-                { icon: <Trophy size={20} />, label: "TOTAL POOL", val: "500M YETC", sub: "Community distribution", color: 'var(--premium-orange)' },
-                { icon: <Users size={20} />, label: "REGISTERED", val: "1.4M+", sub: "Users already claiming", color: 'var(--neon-green)' },
-                { icon: <TrendingUp size={20} />, label: "LISTING PRICE", val: "$10.00", sub: "Estimated TGE value", color: 'var(--premium-blue)' }
+                { icon: <Trophy size={20} />, label: "AIRDROP POOL", val: "50M YETC", sub: "Community distribution", color: 'var(--premium-orange)' },
+                { icon: <Users size={20} />, label: "EARLY ADOPTERS", val: "1.4M+", sub: "Users heavily mining", color: 'var(--neon-green)' },
+                { icon: <TrendingUp size={20} />, label: "TARGET LISTING", val: "$10.00", sub: "Estimated TGE value", color: 'var(--premium-blue)' }
               ].map((stat, i) => (
                 <motion.div key={i} variants={itemVariants} className="step-card-v2" whileTap={{ scale: 0.98 }}>
                   <div className="icon-box-v2" style={{ color: stat.color }}>
@@ -153,19 +153,19 @@ const Onboarding = ({ onComplete }) => {
             </motion.div>
 
             <motion.h2 variants={itemVariants} style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', lineHeight: '1.1', marginBottom: '16px' }}>
-              Simple & <br/><span style={{ color: 'var(--neon-green)' }}>Easy</span>
+              Start <br/><span style={{ color: 'var(--neon-green)' }}>Mining</span>
             </motion.h2>
 
             <motion.p variants={itemVariants} style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '15px' }}>
-              Start earning in seconds. No technical knowledge required at all!
+              Join the YETCOIN revolution in seconds. No crypto experience needed—just tap and earn.
             </motion.p>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               {[
-                { icon: <Zap size={22} />, title: "Claim Daily", desc: "Just one tap a day" },
-                { icon: <Users size={22} />, title: "Invite", desc: "Earn from friends" },
-                { icon: <ShieldCheck size={22} />, title: "100% Safe", desc: "Risk-free airdrop" },
-                { icon: <ArrowRight size={22} />, title: "Withdraw", desc: "Direct to wallet" },
+                { icon: <Zap size={22} />, title: "Mine Daily", desc: "Auto-generate tokens" },
+                { icon: <Users size={22} />, title: "Referrals", desc: "Huge invite bonuses" },
+                { icon: <ShieldCheck size={22} />, title: "100% Safe", desc: "Verified ICO Contract" },
+                { icon: <ArrowRight size={22} />, title: "Yield", desc: "Direct to your wallet" },
               ].map((item, i) => (
                 <motion.div key={i} variants={itemVariants} className="glass-panel" style={{ padding: '20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }} whileTap={{ scale: 0.98 }}>
                   <div style={{ color: 'var(--neon-green)', marginBottom: '12px' }}>{item.icon}</div>
@@ -194,10 +194,10 @@ const Onboarding = ({ onComplete }) => {
             </motion.div>
 
             <motion.h1 variants={itemVariants} style={{ fontSize: '32px', fontWeight: '900', marginBottom: '12px', textAlign: 'center' }}>
-              Launching <span style={{ color: 'var(--neon-green)' }}>Soon!</span>
+              ICO <span style={{ color: 'var(--neon-green)' }}>Closing!</span>
             </motion.h1>
             <motion.p variants={itemVariants} style={{ color: 'var(--text-secondary)', marginBottom: '40px', padding: '0 20px', textAlign: 'center' }}>
-              The token sale is filling up fast. Don't be left behind in the biggest launch of 2024.
+              The Phase 1 Airdrop is nearly full. Secure your allocation before we list on major exchanges.
             </motion.p>
 
             <motion.div variants={itemVariants} className="glass-panel" style={{ padding: '24px', marginBottom: '40px', textAlign: 'left' }}>
@@ -245,10 +245,10 @@ const Onboarding = ({ onComplete }) => {
             style={{ width: '100%' }}
           >
             <motion.h1 variants={itemVariants} style={{ fontSize: '32px', fontWeight: '900', textAlign: 'center', marginBottom: '12px' }}>
-              Boost <span style={{ color: 'var(--neon-green)' }}>Earnings</span>
+              Supercharge <span style={{ color: 'var(--neon-green)' }}>Airdrop</span>
             </motion.h1>
             <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '32px', color: 'var(--text-secondary)' }}>
-              Upgrade your tier to get a massive multiplier on your daily airdrop!
+              Upgrade your mining tier to multiply your daily YETCOIN airdrop allocation!
             </motion.p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
@@ -328,10 +328,10 @@ const Onboarding = ({ onComplete }) => {
             </motion.div>
 
             <motion.h1 variants={itemVariants} style={{ fontSize: '30px', fontWeight: '900', textAlign: 'center', marginBottom: '8px', lineHeight: '1.1' }}>
-              Lock & <span style={{ color: 'var(--premium-purple)' }}>Earn More</span>
+              Stake for <span style={{ color: 'var(--premium-purple)' }}>TGE</span>
             </motion.h1>
             <motion.p variants={itemVariants} style={{ textAlign: 'center', marginBottom: '24px', color: 'var(--text-secondary)', fontSize: '14px' }}>
-              Stake longer, earn significantly more. Your tokens work harder the longer you commit.
+              Maximize your rewards by staking ahead of the Token Generation Event (TGE).
             </motion.p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
