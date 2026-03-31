@@ -1,4 +1,5 @@
 import { create } from "https://deno.land/x/djwt@v3.0.1/mod.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -6,6 +7,7 @@ const corsHeaders = {
 };
 
 async function verifyTelegramWebAppData(initData: string, botToken: string): Promise<any | null> {
+  // ... (rest of the function remains same)
   try {
     const urlParams = new URLSearchParams(initData);
     const hash = urlParams.get('hash');
@@ -59,8 +61,10 @@ Deno.serve(async (req) => {
 
     const botToken = Deno.env.get('BOT_TOKEN');
     const jwtSecret = Deno.env.get('APP_JWT_SECRET');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-    if (!botToken || !jwtSecret) {
+    if (!botToken || !jwtSecret || !supabaseUrl || !supabaseServiceKey) {
       return new Response(JSON.stringify({ error: 'Server configuration missing secrets' }), { 
         status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
       });
@@ -72,6 +76,23 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Invalid Telegram initialization data' }), { 
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
       });
+    }
+
+    // SECURITY: Mark user as verified in the database server-side
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+    const { error: verifyError } = await supabaseAdmin
+      .from('players')
+      .upsert({ 
+        id: tgUser.id.toString(), 
+        is_verified: true,
+        username: tgUser.username,
+        full_name: `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim()
+      }, { onConflict: 'id' });
+
+    if (verifyError) {
+      console.error("Verification system failure:", verifyError);
+      // We continue since setting verified shouldn't block the user login, 
+      // but referral bonuses will correctly fail to trigger if this fails.
     }
 
     // Generate Supabase Custom JWT
