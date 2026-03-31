@@ -53,20 +53,11 @@ const PricingPage = ({ user, onSuccess, onBack }) => {
       else if (plan.id === 'pro') end.setDate(now.getDate() + 90);
       else if (plan.id === 'whale') end.setFullYear(now.getFullYear() + 1);
 
-      const { data, error } = await supabase
-        .from('players')
-        .update({
-          plan_tier: plan.id,
-          mining_power: plan.power,
-          staking_start: now.toISOString(),
-          staking_end: end.toISOString(),
-          last_sync: now.toISOString(),
-          is_onboarded: true,
-          payment_status: 'approved'
-        })
-        .eq('id', user.id)
-        .select()
-        .single();
+      // NEW: Use secure server-side RPC instead of direct client update
+      const { data, error } = await supabase.rpc('finalize_premium_purchase', {
+        arg_plan_id: plan.id,
+        arg_payment_id: paymentId
+      });
 
       if (error) throw error;
       onSuccess(data);
