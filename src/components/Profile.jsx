@@ -11,46 +11,10 @@ import { AnimatePresence } from 'framer-motion';
 
 
 
-const Profile = ({ user }) => {
+const Profile = ({ user, onOpenNotifications }) => {
   const [copied, setCopied] = useState(false);
-  const [latestAlert, setLatestAlert] = useState(null);
-  const [showAlert, setShowAlert] = useState(false);
   const { yetcPriceUsd } = useSettings();
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchLatestAlert();
-    }
-  }, [user?.id]);
-
-  const fetchLatestAlert = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('alerts')
-        .select('id, message, created_at')
-        .eq('player_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
-
-      if (data) {
-        const dismissedId = localStorage.getItem(`dismissed_alert_${user.id}`);
-        if (dismissedId !== data.id) {
-          setLatestAlert(data);
-        }
-      }
-    } catch (e) {
-      console.error("Alerts fetching failure:", e);
-    }
-  };
-
-  const handleDismiss = (e) => {
-    e.stopPropagation(); // Don't trigger the toggle
-    if (latestAlert) {
-      localStorage.setItem(`dismissed_alert_${user.id}`, latestAlert.id);
-      setLatestAlert(null);
-    }
-  };
 
   const tier = user?.plan_tier || 'free';
   const stakingYears = user?.staking_years || 0;
@@ -103,71 +67,20 @@ const Profile = ({ user }) => {
       initial="hidden"
       animate="visible"
     >
-      {/* Alert Header Section */}
-      <AnimatePresence>
-        {latestAlert && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            style={{ marginBottom: '20px', overflow: 'hidden' }}
-          >
-            <div 
-              onClick={() => setShowAlert(!showAlert)}
-              style={{ 
-                background: 'linear-gradient(90deg, rgba(255, 107, 107, 0.15), rgba(255, 185, 0, 0.15))',
-                border: '1px solid rgba(255, 107, 107, 0.3)',
-                borderRadius: '16px',
-                padding: '12px 16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                cursor: 'pointer',
-                position: 'relative'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ position: 'relative' }}>
-                  <AlertCircle size={20} className="glow-text-orange" style={{ color: '#FF6B6B' }} />
-                  <motion.div 
-                    animate={{ scale: [1, 1.5, 1] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                    style={{ 
-                      position: 'absolute', top: '-2px', right: '-2px', 
-                      width: '6px', height: '6px', borderRadius: '50%', background: '#FF6B6B' 
-                    }}
-                  />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#FF6B6B', letterSpacing: '0.5px' }}>NEW NOTIFICATION</div>
-                  <div style={{ fontSize: '13px', fontWeight: '600', color: 'white', lineBreak: 'anywhere' }}>
-                    {showAlert ? latestAlert.message : (latestAlert.message.substring(0, 40) + (latestAlert.message.length > 40 ? '...' : ''))}
-                  </div>
-                </div>
-              </div>
-              {showAlert ? (
-                <div 
-                  onClick={handleDismiss}
-                  style={{ 
-                    padding: '8px', 
-                    margin: '-8px', // Offsets padding to keep layout centered
-                    borderRadius: '50%',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <X size={20} style={{ color: '#FF6B6B' }} />
-                </div>
-              ) : (
-                <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-muted)' }}>VIEW</div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Profile Header Block */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-20px', position: 'relative', zIndex: 10 }}>
+        <motion.button 
+          whileTap={{ scale: 0.9 }}
+          onClick={onOpenNotifications}
+          style={{ 
+            background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: '12px', padding: '10px', color: 'white', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: '8px'
+          }}
+        >
+          <Bell size={20} className="glow-text-blue" />
+        </motion.button>
+      </div>
 
       {/* Profile Header */}
       <motion.div 

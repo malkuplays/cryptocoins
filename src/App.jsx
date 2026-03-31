@@ -25,6 +25,7 @@ import PaymentPending from './components/PaymentPending';
 import ProfileSetup from './components/ProfileSetup';
 import Profile from './components/Profile';
 import Referrals from './components/Referrals';
+import Notifications from './components/Notifications';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -253,8 +254,9 @@ const App = () => {
         {view === 'dashboard' && (
           <>
             {activeTab === 'dashboard' && <Dashboard user={user} setUser={setUser} setActiveTab={setActiveTab} />}
-            {activeTab === 'profile' && <Profile user={user} />}
+            {activeTab === 'profile' && <Profile user={user} onOpenNotifications={() => setActiveTab('notifications')} />}
             {activeTab === 'friends' && <Referrals user={user} />}
+            {activeTab === 'notifications' && <Notifications user={user} onBack={() => setActiveTab('profile')} />}
 
             {/* Bottom Navigation */}
             <div className="bottom-nav">
