@@ -121,9 +121,9 @@ const Profile = ({ user, onOpenNotifications }) => {
         }}
       >
         <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700', letterSpacing: '1px', marginBottom: '8px' }}>PORTFOLIO VALUE</div>
-        <div style={{ fontSize: '32px', fontWeight: '900', marginBottom: '4px' }}>{balance.toFixed(2)} <span style={{ fontSize: '16px', color: 'var(--premium-blue)' }}>$YETC</span></div>
+        <div style={{ fontSize: '32px', fontWeight: '900', marginBottom: '4px' }}>{balance.toFixed(4)} <span style={{ fontSize: '16px', color: 'var(--premium-blue)' }}>$YETC</span></div>
         <div style={{ fontSize: '14px', color: 'var(--neon-green)', fontWeight: '700' }}>
-          ≈ ${(balance * yetcPriceUsd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+          ≈ ${(balance * yetcPriceUsd).toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })} USD
         </div>
       </motion.div>
 

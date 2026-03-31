@@ -211,7 +211,7 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
           </div>
 
           <div style={{ fontSize: '42px', fontWeight: '900', lineHeight: '1', marginBottom: '6px', letterSpacing: '-1px' }}>
-            {balance.toFixed(2)}
+            {balance.toFixed(4)}
           </div>
           <div style={{ fontSize: '16px', color: 'var(--premium-blue)', fontWeight: '800', marginBottom: '16px' }}>
             $YETC
@@ -224,7 +224,7 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
           }}>
             <Wallet size={14} color="var(--neon-green)" />
             <span style={{ fontSize: '14px', fontWeight: '800', color: 'var(--neon-green)' }}>
-              ≈ ${usdValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              ≈ ${usdValue.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })}
             </span>
           </div>
         </div>
@@ -290,7 +290,7 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
         }}>
           <TrendingUp size={18} color="var(--premium-blue)" style={{ marginBottom: '8px' }} />
           <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: '700' }}>PRICE</div>
-          <div style={{ fontSize: '16px', fontWeight: '900' }}>${yetcPriceUsd}</div>
+          <div style={{ fontSize: '16px', fontWeight: '900' }}>${yetcPriceUsd.toFixed(4)}</div>
         </div>
       </motion.div>
 
@@ -387,7 +387,7 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
           <div>
-            <div style={{ fontSize: '24px', fontWeight: '900' }}>${yetcPriceUsd.toFixed(2)}</div>
+            <div style={{ fontSize: '24px', fontWeight: '900' }}>${yetcPriceUsd.toFixed(4)}</div>
             <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>1 $YETC = ₹{(yetcPriceUsd * 84).toFixed(0)}</div>
           </div>
           <div style={{ textAlign: 'right' }}>
