@@ -210,7 +210,7 @@ const Dashboard = ({ user, setUser }) => {
   return (
     <motion.div 
       className="container" 
-      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 20px)', paddingBottom: '100px' }}
+      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 50px)', paddingBottom: '100px' }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"

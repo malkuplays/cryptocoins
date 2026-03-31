@@ -548,7 +548,7 @@ const Onboarding = ({ onComplete }) => {
   };
 
   return (
-    <div className="container" style={{ padding: 'calc(env(safe-area-inset-top) + 20px) 24px env(safe-area-inset-bottom)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="container" style={{ padding: 'calc(env(safe-area-inset-top) + 50px) 24px env(safe-area-inset-bottom)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
         <AnimatePresence mode="wait">
           {renderStep()}

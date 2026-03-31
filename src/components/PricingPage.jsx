@@ -76,10 +76,10 @@ const PricingPage = ({ user, onSuccess, onBack }) => {
   };
 
   return (
-    <div className="container" style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+    <div className="container" style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden', paddingTop: 'calc(env(safe-area-inset-top) + 30px)' }}>
       <div className="circuit-bg" />
       
-      <header className="space-between" style={{ padding: '20px', marginBottom: '12px' }}>
+      <header className="space-between" style={{ padding: '0 20px', marginBottom: '12px' }}>
         <button onClick={onBack} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)' }}>
           <ArrowLeft size={24} />
         </button>
