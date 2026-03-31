@@ -7,36 +7,11 @@ import {
   CreditCard 
 } from 'lucide-react';
 import { supabase } from '../supabase';
-
-const plans = [
-  { 
-    id: 'starter',
-    name: 'Starter Mover', 
-    price: 1000, 
-    power: 0.5, 
-    period: '30 Days',
-    features: ['0.5 $YETC / Hour', 'Basic Dashboard', 'Email Support']
-  },
-  { 
-    id: 'pro',
-    name: 'Pro Miner', 
-    price: 2999, 
-    power: 2.0, 
-    period: '90 Days',
-    features: ['2.0 $YETC / Hour', 'Advanced Analytics', 'Priority Support', 'Early Listing Access']
-  },
-  { 
-    id: 'legendary',
-    name: 'Legendary Staker', 
-    price: 6999, 
-    power: 6.0, 
-    period: '365 Days',
-    features: ['6.0 $YETC / Hour', 'VIP Community', '24/7 Personal Support', 'Max Staking Period']
-  }
-];
+import { useSettings } from '../SettingsContext';
 
 const PricingPage = ({ user, onSuccess, onBack }) => {
   const [loading, setLoading] = useState(false);
+  const { plans } = useSettings();
 
   const handlePayment = async (plan) => {
     setLoading(true);
@@ -173,3 +148,4 @@ const PricingPage = ({ user, onSuccess, onBack }) => {
 };
 
 export default PricingPage;
+

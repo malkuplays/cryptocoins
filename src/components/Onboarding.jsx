@@ -24,13 +24,15 @@ import {
   BadgePercent
 } from 'lucide-react';
 import { triggerHaptic } from '../telegram';
+import { useSettings } from '../SettingsContext';
 
 const Onboarding = ({ onComplete }) => {
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [selectedTier, setSelectedTier] = useState(1); // 0: Starter, 1: Founder, 2: Whale
+  const [selectedTier, setSelectedTier] = useState(1); // Index in plans array
   const [stakingPeriod, setStakingPeriod] = useState(1); // 0: 5 years, 1: 7 years
   const [utrCode, setUtrCode] = useState('');
+  const { plans } = useSettings();
 
   useEffect(() => {
     // Initial progress bar animation
@@ -59,15 +61,16 @@ const Onboarding = ({ onComplete }) => {
     }
 
     triggerHaptic('notification_success');
-    const tiers = ['Starter', 'Pro', 'Whale'];
+    const selectedPlan = plans[selectedTier] || plans[0];
     const stakingYears = stakingPeriod === 0 ? 5 : 7;
     onComplete({ 
       payment_status: 'pending', 
       utr_id: trimmedUtr, 
-      plan_tier: tiers[selectedTier].toLowerCase(),
+      plan_tier: selectedPlan.name.toLowerCase().split(' ')[0], // Extracts 'starter', 'pro', or 'whale'
       staking_years: stakingYears
     });
   };
+
 
   const containerVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -249,35 +252,39 @@ const Onboarding = ({ onComplete }) => {
             </motion.p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
-              {[
-                { name: "Starter", price: "₹1,000", cap: "1.2x Multiplier", sub: "Basic earning speed" },
-                { name: "Pro", price: "₹2,999", badge: "POPULAR", cap: "2.5x Multiplier", sub: "Faster token generation" },
-                { name: "Whale", price: "₹6,999", badge: "MAX YIELD", cap: "5.0x Multiplier", sub: "Maximum daily airdrop" }
-              ].map((tier, i) => (
-                <motion.div 
-                  key={i} 
-                  variants={itemVariants} 
-                  className={`price-card ${selectedTier === i ? 'active' : ''}`}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    setSelectedTier(i);
-                    triggerHaptic('selection');
-                  }}
-                >
-                  {tier.badge && <div className="price-badge">{tier.badge}</div>}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ textAlign: 'left' }}>
-                      <div style={{ fontSize: '18px', fontWeight: '900', marginBottom: '4px' }}>{tier.name}</div>
-                      <div style={{ fontSize: '12px', color: selectedTier === i ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}>{tier.sub}</div>
+              {plans.map((plan, i) => {
+                const badge = plan.id === 'pro' ? 'POPULAR' : plan.id === 'legendary' ? 'MAX YIELD' : null;
+                const multiplier = (plan.power + 1).toFixed(1);
+                
+                return (
+                  <motion.div 
+                    key={i} 
+                    variants={itemVariants} 
+                    className={`price-card ${selectedTier === i ? 'active' : ''}`}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setSelectedTier(i);
+                      triggerHaptic('selection');
+                    }}
+                  >
+                    {badge && <div className="price-badge">{badge}</div>}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div style={{ textAlign: 'left' }}>
+                        <div style={{ fontSize: '18px', fontWeight: '900', marginBottom: '4px' }}>{plan.name}</div>
+                        <div style={{ fontSize: '12px', color: selectedTier === i ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}>
+                           {plan.id === 'legendary' ? 'Maximum daily airdrop' : plan.id === 'pro' ? 'Faster token generation' : 'Basic earning speed'}
+                        </div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: '20px', fontWeight: '900' }}>₹{plan.price.toLocaleString('en-IN')}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--neon-green)', fontWeight: '800' }}>{multiplier}x Multiplier</div>
+                      </div>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '20px', fontWeight: '900' }}>{tier.price}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--neon-green)', fontWeight: '800' }}>{tier.cap}</div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
+
 
             <motion.div variants={itemVariants} style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '20px', marginBottom: '32px' }}>
               <div style={{ fontSize: '13px', fontWeight: '900', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>

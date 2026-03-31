@@ -34,6 +34,8 @@ const Dashboard = ({ user, setUser }) => {
   const [miningRate, setMiningRate] = useState(0);
   const [sessionEarned, setSessionEarned] = useState(0);
   const [initialized, setInitialized] = useState(false);
+  const [lastSynced, setLastSynced] = useState(new Date());
+
   const balanceRef = useRef(user?.mining_balance || 0);
   const { yetcPriceUsd, miningRates } = useSettings();
 
@@ -148,6 +150,7 @@ const Dashboard = ({ user, setUser }) => {
           last_sync: new Date().toISOString()
         })
         .eq('id', user.id);
+      setLastSynced(new Date());
       // Don't call setUser here — it would overwrite the live-ticking balance
     } catch (err) {
       console.error('Sync error:', err);
@@ -155,6 +158,18 @@ const Dashboard = ({ user, setUser }) => {
       setSyncing(false);
     }
   }, [user?.id, syncing]);
+
+  // Sync on visibility change (minimize/tab switch)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        syncBalance();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [syncBalance]);
+
 
   useEffect(() => {
     const syncTimer = setInterval(syncBalance, 300000); // 5 min
@@ -216,17 +231,23 @@ const Dashboard = ({ user, setUser }) => {
           }}>
             <span>{tierConfig.icon}</span> {tierConfig.label}
           </div>
-          <button 
-            onClick={syncBalance} 
-            disabled={syncing}
-            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '4px' }}
-          >
-            <motion.div animate={{ rotate: syncing ? 360 : 0 }} transition={{ repeat: syncing ? Infinity : 0, duration: 1, ease: 'linear' }}>
-              <RefreshCw size={18} opacity={0.5} />
-            </motion.div>
-          </button>
+          <div style={{ textAlign: 'right' }}>
+            <button 
+              onClick={syncBalance} 
+              disabled={syncing}
+              style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-end' }}
+            >
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: '600' }}>
+                {syncing ? 'Syncing...' : `Synced ${Math.floor((Date.now() - lastSynced.getTime()) / 60000)}m ago`}
+              </span>
+              <motion.div animate={{ rotate: syncing ? 360 : 0 }} transition={{ repeat: syncing ? Infinity : 0, duration: 1, ease: 'linear' }}>
+                <RefreshCw size={16} opacity={0.5} />
+              </motion.div>
+            </button>
+          </div>
         </div>
       </motion.header>
+
 
       {/* Main Balance Card */}
       <motion.div 
