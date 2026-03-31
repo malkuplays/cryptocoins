@@ -13,7 +13,50 @@ import { AnimatePresence } from 'framer-motion';
 
 const Profile = ({ user, onOpenNotifications }) => {
   const [copied, setCopied] = useState(false);
+  const [hasUnread, setHasUnread] = useState(false);
   const { yetcPriceUsd } = useSettings();
+
+  useEffect(() => {
+    if (user?.id) {
+      checkNewNotifications();
+    }
+  }, [user?.id]);
+
+  const checkNewNotifications = async () => {
+    try {
+      const lastSeen = localStorage.getItem('yetc_last_notif_seen');
+      
+      // 1. Check latest Personal Alert
+      const { data: latestAlert } = await supabase
+        .from('alerts')
+        .select('created_at')
+        .eq('player_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      // 2. Check latest Global Notification
+      const { data: latestGlobal } = await supabase
+        .from('global_notifications')
+        .select('created_at')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+      
+      const latestTime = Math.max(
+        latestAlert ? new Date(latestAlert.created_at).getTime() : 0,
+        latestGlobal ? new Date(latestGlobal.created_at).getTime() : 0
+      );
+
+      if (latestTime > 0) {
+        if (!lastSeen || latestTime > new Date(lastSeen).getTime()) {
+          setHasUnread(true);
+        }
+      }
+    } catch (err) {
+      console.error("Error checking notifications:", err);
+    }
+  };
 
 
   const tier = user?.plan_tier || 'free';
@@ -75,10 +118,50 @@ const Profile = ({ user, onOpenNotifications }) => {
           style={{ 
             background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: '12px', padding: '10px', color: 'white', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', gap: '8px'
+            display: 'flex', alignItems: 'center', gap: '8px',
+            position: 'relative' // For absolute badge placement
           }}
         >
-          <Bell size={20} className="glow-text-blue" />
+          <motion.div
+            animate={hasUnread ? { 
+              rotate: [0, -10, 10, -10, 10, 0] 
+            } : {}}
+            transition={{ 
+              repeat: hasUnread ? Infinity : 0, 
+              duration: 2, 
+              repeatDelay: 3 
+            }}
+          >
+            <Bell size={20} className={hasUnread ? "glow-text-blue" : ""} />
+          </motion.div>
+
+          {/* Red Dot Badge */}
+          {hasUnread && (
+            <motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              style={{
+                position: 'absolute',
+                top: '8px',
+                right: '8px',
+                width: '8px',
+                height: '8px',
+                background: '#FF3B30',
+                borderRadius: '50%',
+                border: '2px solid rgba(0,0,0,0.6)',
+                zIndex: 1
+              }}
+            >
+              <motion.div 
+                animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+                style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                  background: '#FF3B30', borderRadius: '50%'
+                }}
+              />
+            </motion.div>
+          )}
         </motion.button>
       </div>
 

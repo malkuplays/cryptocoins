@@ -13,6 +13,8 @@ const Notifications = ({ user, onBack }) => {
   useEffect(() => {
     if (user?.id) {
       fetchAllNotifications();
+      // Mark as seen locally
+      localStorage.setItem('yetc_last_notif_seen', new Date().toISOString());
     }
   }, [user?.id]);
 
