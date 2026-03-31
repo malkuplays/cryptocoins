@@ -146,7 +146,21 @@ const Profile = ({ user }) => {
                 </div>
               </div>
               {showAlert ? (
-                <X size={16} onClick={handleDismiss} style={{ color: 'var(--text-muted)' }} />
+                <div 
+                  onClick={handleDismiss}
+                  style={{ 
+                    padding: '8px', 
+                    margin: '-8px', // Offsets padding to keep layout centered
+                    borderRadius: '50%',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <X size={20} style={{ color: '#FF6B6B' }} />
+                </div>
               ) : (
                 <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-muted)' }}>VIEW</div>
               )}
