@@ -8,6 +8,7 @@ const Referrals = ({ user }) => {
   const [referrals, setReferrals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [totalWithdrawn, setTotalWithdrawn] = useState(0);
 
   // You can customize the bot username here
   const BOT_USERNAME = 'yetcoinsbot';
@@ -30,8 +31,27 @@ const Referrals = ({ user }) => {
         setLoading(false);
       }
     };
+
+    const fetchWithdrawn = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('withdrawals')
+          .select('amount_gross')
+          .eq('player_id', user.id)
+          .neq('status', 'rejected');
+        
+        if (error) throw error;
+        const total = data.reduce((acc, curr) => acc + Number(curr.amount_gross), 0);
+        setTotalWithdrawn(total);
+      } catch (err) {
+        console.error('Failed to fetch withdrawn amount:', err);
+      }
+    };
     
-    if (user?.id) fetchReferrals();
+    if (user?.id) {
+      fetchReferrals();
+      fetchWithdrawn();
+    }
   }, [user?.id]);
 
   const handleCopy = () => {
@@ -138,15 +158,33 @@ const Referrals = ({ user }) => {
         </div>
       </motion.div>
 
-      {/* Stats Summary */}
-      <motion.div variants={itemVariants} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
-        <div style={{ background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '16px' }}>
-          <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700', marginBottom: '8px' }}>TOTAL INVITES</div>
-          <div style={{ fontSize: '24px', fontWeight: '900' }}>{referrals.length}</div>
+      {/* Stats Summary Grid */}
+      <motion.div variants={itemVariants} style={{ 
+        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '32px' 
+      }}>
+        <div style={{ 
+          background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.05)', 
+          borderRadius: '16px', padding: '12px', textAlign: 'center',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)', fontWeight: '800', marginBottom: '6px' }}>ALL-TIME</div>
+          <div style={{ fontSize: '15px', fontWeight: '900', color: 'var(--neon-green)' }}>₹{((user?.total_referral_bonus || 0) + totalWithdrawn).toLocaleString('en-IN')}</div>
         </div>
-        <div style={{ background: 'var(--bg-card)', border: '1px solid rgba(0, 255, 157, 0.2)', borderRadius: '20px', padding: '16px' }}>
-          <div style={{ fontSize: '11px', color: 'var(--neon-green)', fontWeight: '700', marginBottom: '8px' }}>TOTAL EARNED</div>
-          <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--neon-green)' }}>₹{(user?.total_referral_bonus || 0).toLocaleString('en-IN')}</div>
+        
+        <div style={{ 
+          background: 'rgba(0, 209, 255, 0.05)', border: '1px solid rgba(0, 209, 255, 0.1)', 
+          borderRadius: '16px', padding: '12px', textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '9px', color: 'var(--premium-blue)', fontWeight: '800', marginBottom: '6px' }}>AVAILABLE</div>
+          <div style={{ fontSize: '15px', fontWeight: '900', color: 'white' }}>₹{(user?.total_referral_bonus || 0).toLocaleString('en-IN')}</div>
+        </div>
+
+        <div style={{ 
+          background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.05)', 
+          borderRadius: '16px', padding: '12px', textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '9px', color: 'var(--text-muted)', fontWeight: '800', marginBottom: '6px' }}>TOTAL LIST</div>
+          <div style={{ fontSize: '15px', fontWeight: '900', color: 'white' }}>{referrals.length}</div>
         </div>
       </motion.div>
 
