@@ -10,7 +10,8 @@ import {
   Timer, 
   LayoutDashboard,
   CreditCard,
-  User
+  User,
+  Users
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -23,6 +24,7 @@ import Roadmap from './components/Roadmap';
 import PaymentPending from './components/PaymentPending';
 import ProfileSetup from './components/ProfileSetup';
 import Profile from './components/Profile';
+import Referrals from './components/Referrals';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -51,14 +53,20 @@ const App = () => {
         throw new Error('Supabase keys missing or invalid in Vercel');
       }
 
+      const upsertData = { 
+        id: tgUser.id.toString(), 
+        username: tgUser.username,
+        full_name: `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim()
+      };
+
+      if (tgUser.start_param) {
+        upsertData.referred_by = tgUser.start_param;
+      }
+
       // Upsert user into Supabase
       const { data, error: dbError } = await supabase
         .from('players')
-        .upsert({ 
-          id: tgUser.id.toString(), 
-          username: tgUser.username,
-          full_name: `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim()
-        }, { onConflict: 'id' })
+        .upsert(upsertData, { onConflict: 'id' })
         .select()
         .single();
 
@@ -224,8 +232,9 @@ const App = () => {
         )}
         {view === 'dashboard' && (
           <>
-            {activeTab === 'dashboard' && <Dashboard user={user} setUser={setUser} />}
+            {activeTab === 'dashboard' && <Dashboard user={user} setUser={setUser} setActiveTab={setActiveTab} />}
             {activeTab === 'profile' && <Profile user={user} />}
+            {activeTab === 'friends' && <Referrals user={user} />}
 
             {/* Bottom Navigation */}
             <div className="bottom-nav">
@@ -235,6 +244,13 @@ const App = () => {
               >
                 <LayoutDashboard size={22} />
                 <span>Dashboard</span>
+              </button>
+              <button 
+                className={`bottom-nav-item ${activeTab === 'friends' ? 'active' : ''}`}
+                onClick={() => setActiveTab('friends')}
+              >
+                <Users size={22} />
+                <span>Friends</span>
               </button>
               <button 
                 className={`bottom-nav-item ${activeTab === 'profile' ? 'active' : ''}`}

@@ -14,7 +14,8 @@ import {
   Sparkles,
   Clock,
   Activity,
-  Wallet
+  Wallet,
+  Gift
 } from 'lucide-react';
 import { supabase } from '../supabase';
 import { useSettings } from '../SettingsContext';
@@ -28,7 +29,7 @@ const TIER_DISPLAY = {
   free:    { label: 'Free',  color: '#626C7A', icon: '🏁' },
 };
 
-const Dashboard = ({ user, setUser }) => {
+const Dashboard = ({ user, setUser, setActiveTab }) => {
   const [balance, setBalance] = useState(user?.mining_balance || 0);
   const [syncing, setSyncing] = useState(false);
   const [miningRate, setMiningRate] = useState(0);
@@ -289,6 +290,42 @@ const Dashboard = ({ user, setUser }) => {
           </div>
         </div>
       </motion.div>
+
+      {/* Referral Bonus Card */}
+      {(user?.total_referral_bonus > 0 || true) && (
+        <motion.div variants={itemVariants} style={{
+          marginBottom: '20px', 
+          background: 'linear-gradient(145deg, rgba(0, 255, 157, 0.1), rgba(0, 209, 255, 0.05))',
+          border: '1px solid rgba(0, 255, 157, 0.2)',
+          borderRadius: '20px', padding: '16px 20px',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ 
+              width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(0, 255, 157, 0.15)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              <Gift size={20} color="var(--neon-green)" />
+            </div>
+            <div>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700' }}>REFERRAL BONUS</div>
+              <div style={{ fontSize: '18px', fontWeight: '900', color: 'var(--neon-green)' }}>
+                ₹{(user?.total_referral_bonus || 0).toLocaleString('en-IN')}
+              </div>
+            </div>
+          </div>
+          <button 
+            onClick={() => setActiveTab && setActiveTab('friends')}
+            style={{ 
+              background: 'rgba(0,255,157,0.1)', border: '1px solid rgba(0,255,157,0.2)',
+              color: 'var(--neon-green)', padding: '6px 14px', borderRadius: '100px',
+              fontSize: '11px', fontWeight: '800'
+            }}
+          >
+            Invite Friends
+          </button>
+        </motion.div>
+      )}
 
       {/* Mining Stats Strip */}
       <motion.div variants={itemVariants} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '20px' }}>

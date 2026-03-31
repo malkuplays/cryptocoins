@@ -61,7 +61,8 @@ const PricingPage = ({ user, onSuccess, onBack }) => {
           staking_start: now.toISOString(),
           staking_end: end.toISOString(),
           last_sync: now.toISOString(),
-          is_onboarded: true
+          is_onboarded: true,
+          payment_status: 'approved'
         })
         .eq('id', user.id)
         .select()

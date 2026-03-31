@@ -3,7 +3,14 @@ export const getTelegramUser = () => {
   const tg = window.Telegram?.WebApp;
   if (!tg) return { id: 'mock_user_123', username: 'guest_user' }; // For testing in browser
   
-  return tg.initDataUnsafe?.user || { id: 'mock_user_123', username: 'guest_user' };
+  const user = tg.initDataUnsafe?.user || { id: 'mock_user_123', username: 'guest_user' };
+  
+  // Extract start_param (referral code) if present
+  if (tg.initDataUnsafe?.start_param) {
+    user.start_param = tg.initDataUnsafe.start_param;
+  }
+  
+  return user;
 };
 
 export const expandTelegramApp = () => {
