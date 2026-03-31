@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from './supabase';
+import { supabase, setAuthToken } from './supabase';
 import { getTelegramUser, expandTelegramApp } from './telegram';
 import { 
   Zap, 
@@ -53,6 +53,24 @@ const App = () => {
         throw new Error('Supabase keys missing or invalid in Vercel');
       }
 
+      // Bypass for local testing (mock user)
+      if (window._isMock) {
+         // Proceed with anon access for local dev
+      } else {
+         const initData = window.Telegram?.WebApp?.initData;
+         if (!initData) throw new Error('Not running inside Telegram');
+
+         const { data: authData, error: authError } = await supabase.functions.invoke('telegram-auth', {
+           body: { initData }
+         });
+
+         if (authError || !authData?.access_token) {
+           throw new Error(authError?.message || 'Authentication failed');
+         }
+
+         setAuthToken(authData.access_token);
+      }
+
       const upsertData = { 
         id: tgUser.id.toString(), 
         username: tgUser.username,
@@ -63,7 +81,7 @@ const App = () => {
         upsertData.referred_by = tgUser.start_param;
       }
 
-      // Upsert user into Supabase
+      // Upsert user into Supabase — now authenticated with our Custom JWT
       const { data, error: dbError } = await supabase
         .from('players')
         .upsert(upsertData, { onConflict: 'id' })
