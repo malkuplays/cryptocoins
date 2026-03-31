@@ -27,6 +27,7 @@ import Profile from './components/Profile';
 import Referrals from './components/Referrals';
 import Notifications from './components/Notifications';
 import WithdrawalPortal from './components/WithdrawalPortal';
+import WithdrawalHistory from './components/WithdrawalHistory';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -260,6 +261,7 @@ const App = () => {
                 user={user} 
                 onOpenNotifications={() => setActiveTab('notifications')} 
                 onOpenWithdrawal={() => setActiveTab('withdrawal')}
+                onOpenWithdrawalHistory={() => setActiveTab('withdrawal_history')}
               />
             )}
             {activeTab === 'friends' && <Referrals user={user} />}
@@ -269,6 +271,13 @@ const App = () => {
                 user={user} 
                 onBack={() => setActiveTab('profile')} 
                 onSuccess={(updatedUser) => setUser(updatedUser)} 
+                onOpenHistory={() => setActiveTab('withdrawal_history')}
+              />
+            )}
+            {activeTab === 'withdrawal_history' && (
+              <WithdrawalHistory 
+                user={user} 
+                onBack={() => setActiveTab('profile')} 
               />
             )}
 

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../supabase';
 
-const WithdrawalPortal = ({ user, onBack, onSuccess }) => {
+const WithdrawalPortal = ({ user, onBack, onSuccess, onOpenHistory }) => {
   const [step, setStep] = useState(1); // 1: Method, 2: Details, 3: Review, 4: Success
   const [method, setMethod] = useState(null);
   const [details, setDetails] = useState({});
@@ -320,7 +320,10 @@ const WithdrawalPortal = ({ user, onBack, onSuccess }) => {
       <p style={{ color: 'var(--text-muted)', fontSize: '16px', lineHeight: '1.6', marginBottom: '40px', maxWidth: '300px', margin: '0 auto 40px' }}>
         Your withdrawal of <span style={{ color: 'white', fontWeight: '700' }}>₹{netAmount.toLocaleString('en-IN')}</span> has been queued for manual verification.
       </p>
-      <button className="btn-primary" onClick={onBack} style={{ width: '100%' }}>Return to Profile</button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <button className="btn-primary" onClick={onOpenHistory} style={{ width: '100%' }}>View Status</button>
+        <button className="btn-secondary" onClick={onBack} style={{ width: '100%', border: 'none' }}>Return to Profile</button>
+      </div>
     </div>
   );
 

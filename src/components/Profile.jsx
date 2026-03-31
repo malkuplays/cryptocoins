@@ -12,7 +12,7 @@ import { AnimatePresence } from 'framer-motion';
 
 
 
-const Profile = ({ user, onOpenNotifications, onOpenWithdrawal }) => {
+const Profile = ({ user, onOpenNotifications, onOpenWithdrawal, onOpenWithdrawalHistory }) => {
   const [copied, setCopied] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
   const { yetcPriceUsd } = useSettings();
@@ -233,18 +233,31 @@ const Profile = ({ user, onOpenNotifications, onOpenWithdrawal }) => {
             <div style={{ fontSize: '18px', fontWeight: '900', color: 'white' }}>₹{(user?.total_referral_bonus || 0).toLocaleString('en-IN')}</div>
           </div>
         </div>
-        <motion.button 
-          whileTap={{ scale: 0.95 }}
-          onClick={onOpenWithdrawal}
-          style={{ 
-            background: 'var(--neon-green)', color: 'black', border: 'none',
-            padding: '10px 20px', borderRadius: '100px', fontSize: '13px', fontWeight: '800',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
-            boxShadow: '0 4px 15px rgba(0, 255, 157, 0.3)'
-          }}
-        >
-          <Wallet size={16} /> Withdraw
-        </motion.button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <motion.button 
+            whileTap={{ scale: 0.95 }}
+            onClick={onOpenWithdrawalHistory}
+            style={{ 
+              background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(255,255,255,0.1)',
+              padding: '10px 14px', borderRadius: '100px', fontSize: '13px', fontWeight: '800',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}
+          >
+            <Clock size={16} />
+          </motion.button>
+          <motion.button 
+            whileTap={{ scale: 0.95 }}
+            onClick={onOpenWithdrawal}
+            style={{ 
+              background: 'var(--neon-green)', color: 'black', border: 'none',
+              padding: '10px 20px', borderRadius: '100px', fontSize: '13px', fontWeight: '800',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
+              boxShadow: '0 4px 15px rgba(0, 255, 157, 0.3)'
+            }}
+          >
+            <Wallet size={16} /> Withdraw
+          </motion.button>
+        </div>
       </motion.div>
 
       {/* Account Details */}
