@@ -65,9 +65,8 @@ const Onboarding = ({ onComplete }) => {
     const selectedPlan = plans[selectedTier] || plans[0];
     const stakingYears = stakingPeriod === 0 ? 5 : 7;
     onComplete({ 
-      payment_status: 'pending', 
       utr_id: trimmedUtr, 
-      plan_tier: selectedPlan.name.toLowerCase().split(' ')[0], // Extracts 'starter', 'pro', or 'whale'
+      plan_tier: selectedPlan.name.toLowerCase().split(' ')[0], 
       staking_years: stakingYears
     });
   };

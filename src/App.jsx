@@ -198,15 +198,15 @@ const App = () => {
           <Onboarding 
             user={user}
             onComplete={async (updates = {}) => {
-              // SECURITY: Only store payment_status, utr_id, and plan_tier.
-              // Do NOT set is_onboarded=true here. That only happens after admin approval + profile setup.
+              // SECURITY: Use the secure RPC instead of a direct .update()
+              // This bypasses the trigger restriction on payment_status for this specific operation.
               try {
                 const { data: updatedUser, error: updateError } = await supabase
-                  .from('players')
-                  .update(updates)
-                  .eq('id', user.id)
-                  .select()
-                  .single();
+                  .rpc('submit_payment_utr', {
+                    arg_utr_id: updates.utr_id,
+                    arg_plan_tier: updates.plan_tier,
+                    arg_staking_years: updates.staking_years
+                  });
                 
                 if (updateError) throw updateError;
                 setUser(updatedUser);
