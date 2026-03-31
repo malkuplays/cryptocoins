@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   User, Mail, Phone, Calendar, Gem, Lock, ShieldCheck, 
-  Clock, TrendingUp, Copy, CheckCircle2, Star, Bell
+  Clock, TrendingUp, Copy, CheckCircle2, Star, Bell,
+  IndianRupee, Wallet
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabase';
@@ -11,7 +12,7 @@ import { AnimatePresence } from 'framer-motion';
 
 
 
-const Profile = ({ user, onOpenNotifications }) => {
+const Profile = ({ user, onOpenNotifications, onOpenWithdrawal }) => {
   const [copied, setCopied] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
   const { yetcPriceUsd } = useSettings();
@@ -208,6 +209,42 @@ const Profile = ({ user, onOpenNotifications }) => {
         <div style={{ fontSize: '14px', color: 'var(--neon-green)', fontWeight: '700' }}>
           ≈ ${(balance * yetcPriceUsd).toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })} USD
         </div>
+      </motion.div>
+
+      {/* Withdrawal Card */}
+      <motion.div 
+        variants={itemVariants}
+        style={{ 
+          padding: '20px', borderRadius: '24px', marginBottom: '16px',
+          background: 'linear-gradient(135deg, rgba(0, 255, 157, 0.1), rgba(0, 209, 255, 0.05))',
+          border: '1px solid rgba(0, 255, 157, 0.2)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ 
+            width: '44px', height: '44px', borderRadius: '14px', 
+            background: 'rgba(0, 255, 157, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <IndianRupee size={22} color="var(--neon-green)" />
+          </div>
+          <div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700' }}>REFERRAL BONUS</div>
+            <div style={{ fontSize: '18px', fontWeight: '900', color: 'white' }}>₹{(user?.total_referral_bonus || 0).toLocaleString('en-IN')}</div>
+          </div>
+        </div>
+        <motion.button 
+          whileTap={{ scale: 0.95 }}
+          onClick={onOpenWithdrawal}
+          style={{ 
+            background: 'var(--neon-green)', color: 'black', border: 'none',
+            padding: '10px 20px', borderRadius: '100px', fontSize: '13px', fontWeight: '800',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
+            boxShadow: '0 4px 15px rgba(0, 255, 157, 0.3)'
+          }}
+        >
+          <Wallet size={16} /> Withdraw
+        </motion.button>
       </motion.div>
 
       {/* Account Details */}

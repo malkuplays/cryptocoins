@@ -26,6 +26,7 @@ import ProfileSetup from './components/ProfileSetup';
 import Profile from './components/Profile';
 import Referrals from './components/Referrals';
 import Notifications from './components/Notifications';
+import WithdrawalPortal from './components/WithdrawalPortal';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -254,9 +255,22 @@ const App = () => {
         {view === 'dashboard' && (
           <>
             {activeTab === 'dashboard' && <Dashboard user={user} setUser={setUser} setActiveTab={setActiveTab} />}
-            {activeTab === 'profile' && <Profile user={user} onOpenNotifications={() => setActiveTab('notifications')} />}
+            {activeTab === 'profile' && (
+              <Profile 
+                user={user} 
+                onOpenNotifications={() => setActiveTab('notifications')} 
+                onOpenWithdrawal={() => setActiveTab('withdrawal')}
+              />
+            )}
             {activeTab === 'friends' && <Referrals user={user} />}
             {activeTab === 'notifications' && <Notifications user={user} onBack={() => setActiveTab('profile')} />}
+            {activeTab === 'withdrawal' && (
+              <WithdrawalPortal 
+                user={user} 
+                onBack={() => setActiveTab('profile')} 
+                onSuccess={(updatedUser) => setUser(updatedUser)} 
+              />
+            )}
 
             {/* Bottom Navigation */}
             <div className="bottom-nav">
