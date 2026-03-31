@@ -152,8 +152,10 @@ const App = () => {
               border: '1px solid #ff3b30'
             }}
           >
-            <h3 style={{ color: '#ff3b30', fontSize: '14px', marginBottom: '4px' }}>Debug Error</h3>
-            <p style={{ fontSize: '12px', color: 'white', opacity: 1 }}>{error}</p>
+            <h3 style={{ color: '#ff3b30', fontSize: '14px', marginBottom: '4px' }}>Something went wrong</h3>
+            <p style={{ fontSize: '12px', color: 'white', opacity: 1 }}>
+              {import.meta.env.DEV ? error : 'Please restart the app or try again later.'}
+            </p>
             <button 
               onClick={() => setError(null)}
               style={{ background: 'none', border: 'none', color: 'white', fontSize: '10px', marginTop: '8px', textDecoration: 'underline' }}

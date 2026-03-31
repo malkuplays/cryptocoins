@@ -26,7 +26,18 @@ const Profile = ({ user }) => {
   const tc = tierColors[tier] || tierColors.free;
 
   const copyId = () => {
-    navigator.clipboard?.writeText(user?.id || '');
+    try {
+      navigator.clipboard.writeText(user?.id || '');
+    } catch (e) {
+      const t = document.createElement('textarea');
+      t.value = user?.id || '';
+      t.style.position = 'fixed';
+      t.style.opacity = '0';
+      document.body.appendChild(t);
+      t.select();
+      document.execCommand('copy');
+      document.body.removeChild(t);
+    }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

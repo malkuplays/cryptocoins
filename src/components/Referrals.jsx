@@ -35,10 +35,25 @@ const Referrals = ({ user }) => {
   }, [user?.id]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(inviteLink);
-    setCopied(true);
-    triggerHaptic('notification_success');
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      navigator.clipboard.writeText(inviteLink);
+      setCopied(true);
+      triggerHaptic('notification_success');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      // Fallback for environments where clipboard API is unavailable
+      const textArea = document.createElement('textarea');
+      textArea.value = inviteLink;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      triggerHaptic('notification_success');
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   const containerVariants = {

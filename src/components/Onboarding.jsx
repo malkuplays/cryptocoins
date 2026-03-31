@@ -519,7 +519,18 @@ const Onboarding = ({ onComplete }) => {
                 <span style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>UPI ID</span>
                 <div 
                   onClick={() => {
-                    navigator.clipboard.writeText(paymentUpiId);
+                    try {
+                      navigator.clipboard.writeText(paymentUpiId);
+                    } catch (e) {
+                      const t = document.createElement('textarea');
+                      t.value = paymentUpiId;
+                      t.style.position = 'fixed';
+                      t.style.opacity = '0';
+                      document.body.appendChild(t);
+                      t.select();
+                      document.execCommand('copy');
+                      document.body.removeChild(t);
+                    }
                     alert('UPI ID copied to clipboard!');
                   }}
                   style={{ 

@@ -1,9 +1,16 @@
 // Helper to interface with the Telegram WebApp SDK
 export const getTelegramUser = () => {
   const tg = window.Telegram?.WebApp;
-  if (!tg) return { id: 'mock_user_123', username: 'guest_user' }; // For testing in browser
+  if (!tg) {
+    console.warn('[Yetcoins] Telegram WebApp SDK not detected. Running in mock/dev mode.');
+    return { id: 'mock_user_123', username: 'guest_user', _isMock: true };
+  }
   
-  const user = tg.initDataUnsafe?.user || { id: 'mock_user_123', username: 'guest_user' };
+  const user = tg.initDataUnsafe?.user;
+  if (!user) {
+    console.warn('[Yetcoins] No Telegram user data found in initDataUnsafe.');
+    return { id: 'mock_user_123', username: 'guest_user', _isMock: true };
+  }
   
   // Extract start_param (referral code) if present
   if (tg.initDataUnsafe?.start_param) {
