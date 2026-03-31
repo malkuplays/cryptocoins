@@ -27,15 +27,28 @@ const Profile = ({ user }) => {
     try {
       const { data, error } = await supabase
         .from('alerts')
-        .select('message, created_at')
+        .select('id, message, created_at')
         .eq('player_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
         .single();
 
-      if (data) setLatestAlert(data);
+      if (data) {
+        const dismissedId = localStorage.getItem(`dismissed_alert_${user.id}`);
+        if (dismissedId !== data.id) {
+          setLatestAlert(data);
+        }
+      }
     } catch (e) {
       console.error("Alerts fetching failure:", e);
+    }
+  };
+
+  const handleDismiss = (e) => {
+    e.stopPropagation(); // Don't trigger the toggle
+    if (latestAlert) {
+      localStorage.setItem(`dismissed_alert_${user.id}`, latestAlert.id);
+      setLatestAlert(null);
     }
   };
 
@@ -132,7 +145,11 @@ const Profile = ({ user }) => {
                   </div>
                 </div>
               </div>
-              {showAlert ? <X size={16} /> : <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-muted)' }}>VIEW</div>}
+              {showAlert ? (
+                <X size={16} onClick={handleDismiss} style={{ color: 'var(--text-muted)' }} />
+              ) : (
+                <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--text-muted)' }}>VIEW</div>
+              )}
             </div>
           </motion.div>
         )}
