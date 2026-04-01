@@ -14,7 +14,8 @@ import {
   ChevronRight,
   Star,
   Lock,
-  ArrowUpRight
+  ArrowUpRight,
+  Map
 } from 'lucide-react';
 import { triggerHaptic } from '../telegram';
 
@@ -69,7 +70,7 @@ const LandingPage = ({ onNext, onRoadmap }) => {
   ];
 
   return (
-    <div className="app_container" style={{ overflowX: 'hidden' }}>
+    <div className="app-container" style={{ overflowX: 'hidden' }}>
       {/* Top Professional Ticker */}
       <div style={{ 
         height: '40px', background: 'rgba(0,0,0,0.5)', borderBottom: '1px solid var(--glass-border)',
