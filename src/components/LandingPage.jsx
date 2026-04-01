@@ -80,9 +80,9 @@ const LandingPage = ({ onNext, onRoadmap }) => {
       
       {/* 1. Ultra-Premium Header */}
       <header className="app-header" style={{ 
-        top: 0, height: 'calc(64px + env(safe-area-inset-top, 0px))', background: 'rgba(3, 3, 5, 0.9)', 
+        top: 0, height: 'calc(64px + 100px)', background: 'rgba(3, 3, 5, 0.9)', 
         borderBottom: '1px solid rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)',
-        display: 'flex', alignItems: 'center', padding: 'env(safe-area-inset-top, 0px) 24px 0' 
+        display: 'flex', alignItems: 'center', padding: '100px 24px 0' 
       }}>
         <div className="header-logo-group">
           <div className="icon-box-v2" style={{ width: '36px', height: '36px', background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.05)' }}>
@@ -105,7 +105,7 @@ const LandingPage = ({ onNext, onRoadmap }) => {
       {/* 2. Market Ticker - Positioned Just Below Header */}
       <div style={{ 
         height: '32px', background: 'rgba(5, 5, 8, 1)', borderBottom: '1px solid rgba(255,255,255,0.02)',
-        display: 'flex', alignItems: 'center', overflow: 'hidden', position: 'fixed', top: 'calc(64px + env(safe-area-inset-top, 0px))', width: '100%', zIndex: 1001,
+        display: 'flex', alignItems: 'center', overflow: 'hidden', position: 'fixed', top: 'calc(64px + 100px)', width: '100%', zIndex: 1001,
         backdropFilter: 'blur(10px)'
       }}>
         <motion.div 
@@ -123,7 +123,7 @@ const LandingPage = ({ onNext, onRoadmap }) => {
         </motion.div>
       </div>
 
-      <div className="container" style={{ paddingTop: 'calc(160px + env(safe-area-inset-top, 0px))', paddingBottom: '100px' }}>
+      <div className="container" style={{ paddingTop: 'calc(160px + 100px)', paddingBottom: '100px' }}>
         
         {/* 3. High-Impact Hero Section */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
