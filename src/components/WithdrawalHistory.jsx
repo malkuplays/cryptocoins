@@ -64,7 +64,7 @@ const WithdrawalHistory = ({ user, onBack }) => {
   };
 
   return (
-    <div className="container" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 20px)', minHeight: '100vh' }}>
+    <div className="container" style={{ paddingTop: '80px', minHeight: '100vh' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
         <button 

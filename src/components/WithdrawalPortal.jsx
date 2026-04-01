@@ -328,7 +328,7 @@ const WithdrawalPortal = ({ user, onBack, onSuccess, onOpenHistory }) => {
   );
 
   return (
-    <div className="container" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 20px)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="container" style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {step < 4 && (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
           <button 
