@@ -445,7 +445,94 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 .glow-text-red { color: #FF4D4D; text-shadow: 0 0 15px rgba(255, 77, 77, 0.4); }
 .glow-text-green { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green-glow); }
 
-/* Additional Polish */
+/* AI Features Section Specifics - Refined */
+.ai-features-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.feature-cards-stack {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feature-card-glass {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.feature-card-glass:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.5);
+}
+
+.feature-card-glass.active {
+  background: radial-gradient(circle at top left, rgba(0, 209, 255, 0.08), rgba(157, 80, 187, 0.05));
+  border-color: rgba(0, 209, 255, 0.25);
+}
+
+.feature-card-glass.active::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 209, 255, 0.3), transparent);
+}
+
+.feature-icon-wrapper {
+  width: 54px;
+  height: 54px;
+  background: rgba(0, 209, 255, 0.03);
+  border: 1px solid rgba(0, 209, 255, 0.1);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--premium-blue);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.feature-card-glass:hover .feature-icon-wrapper {
+  transform: scale(1.1) rotate(5deg);
+  background: rgba(0, 209, 255, 0.08);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(0, 209, 255, 0.2);
+}
+
+.feature-content-box h4 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+  letter-spacing: -0.2px;
+}
+
+.feature-content-box p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.bento-large.ai-section {
+  padding: 40px 24px;
+  background: radial-gradient(circle at 70% 30%, rgba(0, 209, 255, 0.05), transparent 70%);
+}
 .badge-outline {
   display: inline-flex;
   align-items: center;

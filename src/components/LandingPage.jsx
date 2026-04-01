@@ -344,6 +344,63 @@ const LandingPage = ({ onNext, onRoadmap }) => {
              </div>
           </div>
 
+          {/* NEW: AI-Driven Features Section (Refined without image) */}
+          <div className="bento-item bento-large ai-section" style={{ 
+            background: 'linear-gradient(145deg, rgba(82, 102, 122, 0.03), rgba(0, 0, 0, 0.8))',
+            borderColor: 'rgba(255, 255, 255, 0.05)',
+            position: 'relative',
+            textAlign: 'center'
+          }}>
+             <div style={{ marginBottom: '36px' }}>
+                <h2 style={{ fontSize: '28px', fontWeight: '900', color: '#fff', letterSpacing: '-1.5px', marginBottom: '12px' }}>
+                  Smart <span style={{ color: 'var(--premium-blue)' }}>AI-Powered</span> Portfolio
+                </h2>
+                <p style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: '600', maxWidth: '300px', margin: '0 auto' }}>
+                  High-performance neural models managing your assets with institutional precision.
+                </p>
+             </div>
+
+             <div className="ai-features-container">
+                <div className="feature-cards-stack" style={{ textAlign: 'left' }}>
+                   {[
+                      { 
+                        id: 'ai',
+                        icon: <Cpu size={24} />, 
+                        title: 'Neural Profit Engine', 
+                        desc: 'Proprietary models analyzing 4,000+ data points per second for high-probability entries.' 
+                      },
+                      { 
+                        id: 'secure',
+                        icon: <ShieldCheck size={24} />, 
+                        title: 'Bank-Grade Custody', 
+                        desc: 'Multi-sig cold storage protected by a $100M SAFU insurance fund for total security.' 
+                      },
+                      { 
+                        id: 'fees',
+                        icon: <TrendingUp size={24} />, 
+                        title: 'Institutional-Grade Access', 
+                        desc: 'Enjoy 0% maker and taker fees on all YETCOIN pairs, maximizing your net returns.' 
+                      }
+                   ].map((f, i) => (
+                     <motion.div 
+                        key={f.id}
+                        className={`feature-card-glass ${i === 0 ? 'active' : ''}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 * i }}
+                        whileHover={{ y: -4 }}
+                     >
+                        <div className="feature-icon-wrapper">{f.icon}</div>
+                        <div className="feature-content-box">
+                           <h4>{f.title}</h4>
+                           <p>{f.desc}</p>
+                        </div>
+                     </motion.div>
+                   ))}
+                </div>
+             </div>
+          </div>
+
           {/* Embedded Live Activity Feed (High Tech Terminal look) */}
           <div className="bento-item bento-large" style={{ background: 'rgba(0,10,5,0.5)', borderColor: 'rgba(0,255,157,0.1)', padding: '20px' }}>
              <div style={{ fontSize: '10px', fontWeight: '900', color: 'var(--neon-green)', letterSpacing: '1px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
