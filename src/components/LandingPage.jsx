@@ -20,7 +20,14 @@ import { triggerHaptic } from '../telegram';
 
 const LandingPage = ({ onNext, onRoadmap }) => {
   const [activeActivity, setActiveActivity] = useState(0);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [timeLeft, setTimeLeft] = useState({ h: 4, m: 22, s: 15 });
+
+  const testimonials = [
+    { user: "@whale_watcher", text: "The most transparent protocol I've used this year.", platform: "X" },
+    { user: "@sol_alpha", text: "YETC is the only gem I'm holding through 2024.", platform: "X" },
+    { user: "@node_runner", text: "Aggressive yields, institutional-grade security. Top tier.", platform: "Discord" }
+  ];
 
   const activities = [
     { text: "Whale joined from Dubai (10K+ YETC)", icon: <Zap size={14} color="var(--neon-green)" /> },
@@ -35,6 +42,10 @@ const LandingPage = ({ onNext, onRoadmap }) => {
       setActiveActivity(prev => (prev + 1) % activities.length);
     }, 3500);
 
+    const testimonialInterval = setInterval(() => {
+      setActiveTestimonial(prev => (prev + 1) % testimonials.length);
+    }, 5000);
+
     const timerInterval = setInterval(() => {
       setTimeLeft(prev => {
         let { h, m, s } = prev;
@@ -47,6 +58,7 @@ const LandingPage = ({ onNext, onRoadmap }) => {
 
     return () => {
       clearInterval(activityInterval);
+      clearInterval(testimonialInterval);
       clearInterval(timerInterval);
     };
   }, []);
@@ -213,11 +225,67 @@ const LandingPage = ({ onNext, onRoadmap }) => {
              </div>
           </div>
 
+          {/* NEW: Live Growth Chart Card (Large) */}
+          <div className="bento-item bento-large" style={{ background: 'rgba(0,255,157,0.02)', padding: '24px', position: 'relative' }}>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                <div>
+                   <div style={{ fontSize: '10px', fontWeight: '900', color: 'var(--neon-green)', letterSpacing: '1.5px', marginBottom: '4px' }}>
+                      YETC / USD MOMENTUM
+                   </div>
+                   <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff' }}>$10.00 <span style={{ color: 'var(--neon-green)', fontSize: '14px' }}>+1,240%</span></div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                   <Activity size={20} color="var(--neon-green)" />
+                </div>
+             </div>
+             <div style={{ height: '80px', width: '100%', position: 'relative' }}>
+                <svg width="100%" height="100%" viewBox="0 0 300 100" preserveAspectRatio="none">
+                   <defs>
+                      <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                         <stop offset="0%" stopColor="var(--neon-green)" stopOpacity="0.2" />
+                         <stop offset="100%" stopColor="var(--neon-green)" stopOpacity="0" />
+                      </linearGradient>
+                   </defs>
+                   <motion.path
+                       d="M0,80 Q50,70 80,90 T140,40 T220,60 T300,10"
+                       fill="none"
+                       stroke="var(--neon-green)"
+                       strokeWidth="3"
+                       initial={{ pathLength: 0 }}
+                       animate={{ pathLength: 1 }}
+                       transition={{ duration: 2.5, ease: "easeInOut" }}
+                   />
+                   <path d="M0,80 Q50,70 80,90 T140,40 T220,60 T300,10 V100 H0 Z" fill="url(#chartGradient)" />
+                </svg>
+             </div>
+          </div>
+
           {/* Stat Box 1 */}
           <div className="bento-item" style={{ background: 'rgba(255,255,255,0.02)', padding: '20px' }}>
              <Users size={18} color="var(--premium-blue)" style={{ marginBottom: '12px' }} />
              <div style={{ fontSize: '22px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>1.4M+</div>
              <div style={{ fontSize: '10px', fontWeight: '800', color: 'var(--text-muted)', letterSpacing: '0.5px', marginTop: '4px' }}>ACTIVE MINERS</div>
+          </div>
+
+          {/* NEW: Testimonial Card (Small) */}
+          <div className="bento-item" style={{ background: 'rgba(157,80,187,0.03)', padding: '20px' }}>
+             <div style={{ fontSize: '8px', fontWeight: '900', color: 'var(--premium-purple)', letterSpacing: '1px', marginBottom: '8px' }}>USER VERDICT</div>
+             <div style={{ height: '44px', overflow: 'hidden' }}>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeTestimonial}
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    style={{ fontSize: '11px', fontWeight: '600', color: '#fff', fontStyle: 'italic', lineHeight: '1.4' }}
+                   >
+                     "{testimonials[activeTestimonial].text}"
+                  </motion.div>
+                </AnimatePresence>
+             </div>
+             <div style={{ fontSize: '9px', fontWeight: '800', color: 'var(--text-muted)', marginTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Globe size={8} /> {testimonials[activeTestimonial].user}
+             </div>
           </div>
 
           {/* Stat Box 2 */}
