@@ -325,13 +325,36 @@ const LandingPage = ({ onNext, onRoadmap }) => {
         </motion.div>
 
         {/* Footer */}
-        <div style={{ textAlign: 'center', opacity: 0.5, fontSize: '11px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                 <Lock size={12} /> ENTERPRISE SECURITY
+        <div style={{ textAlign: 'center', marginTop: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '32px' }}>
+           
+           {/* Stylized Big Branding */}
+           <motion.div 
+             initial={{ opacity: 0 }}
+             whileInView={{ opacity: 1 }}
+             transition={{ duration: 1.5 }}
+             style={{ 
+               fontSize: 'min(18vw, 80px)', 
+               fontWeight: '950', 
+               letterSpacing: '-0.05em', 
+               color: 'transparent',
+               WebkitTextStroke: '1px rgba(255,255,255,0.05)',
+               background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%)',
+               WebkitBackgroundClip: 'text',
+               userSelect: 'none',
+               lineHeight: '1'
+             }}
+           >
+             YETCOIN
+           </motion.div>
+
+           <div style={{ opacity: 0.5, fontSize: '11px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Lock size={12} /> ENTERPRISE SECURITY
+                 </div>
               </div>
+              <p style={{ fontWeight: '500' }}>© 2024 YETCOIN CORE TECHNOLOGIES. ALL RIGHTS RESERVED.</p>
            </div>
-           <p style={{ fontWeight: '500' }}>© 2024 YETCOIN CORE TECHNOLOGIES. ALL RIGHTS RESERVED.</p>
         </div>
 
       </div>
