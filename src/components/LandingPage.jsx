@@ -78,19 +78,43 @@ const LandingPage = ({ onNext, onRoadmap }) => {
   return (
     <div className="app_container" style={{ overflowX: 'hidden', background: '#030305' }}>
       
-      {/* 1. Ultra-Clean Top Ticker */}
+      {/* 1. Ultra-Premium Header */}
+      <header className="app-header" style={{ 
+        top: 0, height: '64px', background: 'rgba(3, 3, 5, 0.9)', 
+        borderBottom: '1px solid rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)',
+        display: 'flex', alignItems: 'center', padding: '0 24px' 
+      }}>
+        <div className="header-logo-group">
+          <div className="icon-box-v2" style={{ width: '36px', height: '36px', background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.05)' }}>
+            <img src="/logo.svg" alt="Y" style={{ width: '20px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <span style={{ fontWeight: '900', fontSize: '13px', letterSpacing: '1px', color: '#fff' }}>YETCOIN</span>
+            <div style={{ fontSize: '8px', fontWeight: '800', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px', letterSpacing: '1px' }}>
+               CORE v1.0
+            </div>
+          </div>
+        </div>
+        <div style={{ marginLeft: 'auto' }}>
+           <div className="live-badge" style={{ background: 'rgba(0, 209, 255, 0.1)', color: 'var(--premium-blue)', border: '1px solid rgba(0, 209, 255, 0.2)', fontSize: '9px', padding: '4px 8px' }}>
+             <Globe size={8} /> NETWORK LIVE
+           </div>
+        </div>
+      </header>
+
+      {/* 2. Market Ticker - Positioned Just Below Header */}
       <div style={{ 
-        height: '40px', background: 'rgba(5, 5, 8, 0.95)', borderBottom: '1px solid rgba(255,255,255,0.03)',
-        display: 'flex', alignItems: 'center', overflow: 'hidden', position: 'fixed', top: 0, width: '100%', zIndex: 1001,
-        backdropFilter: 'blur(20px)'
+        height: '32px', background: 'rgba(5, 5, 8, 1)', borderBottom: '1px solid rgba(255,255,255,0.02)',
+        display: 'flex', alignItems: 'center', overflow: 'hidden', position: 'fixed', top: '64px', width: '100%', zIndex: 1001,
+        backdropFilter: 'blur(10px)'
       }}>
         <motion.div 
           animate={{ x: [0, -600] }}
           transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-          style={{ display: 'flex', gap: '48px', whiteSpace: 'nowrap', padding: '0 20px' }}
+          style={{ display: 'flex', gap: '44px', whiteSpace: 'nowrap', padding: '0 20px' }}
         >
           {[...trendingCoins, ...trendingCoins, ...trendingCoins].map((coin, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: '800', fontFamily: 'monospace' }}>
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '10px', fontWeight: '800', fontFamily: 'monospace' }}>
               <span style={{ color: coin.color, opacity: 0.8 }}>{coin.name}</span>
               <span style={{ color: '#fff' }}>{coin.price}</span>
               <span style={{ color: coin.change.startsWith('+') ? 'var(--neon-green)' : 'var(--fomo-red)', opacity: 0.9, letterSpacing: '0.5px' }}>{coin.change}</span>
@@ -99,25 +123,7 @@ const LandingPage = ({ onNext, onRoadmap }) => {
         </motion.div>
       </div>
 
-      {/* 2. Seamless Header Integration */}
-      <header className="app-header" style={{ top: '40px', background: 'transparent', borderBottom: 'none' }}>
-        <div className="header-logo-group">
-          <div className="icon-box-v2" style={{ width: '38px', height: '38px', background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.05)' }}>
-            <img src="/logo.svg" alt="Y" style={{ width: '22px' }} />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontWeight: '900', fontSize: '14px', letterSpacing: '1.5px', color: '#fff' }}>YETCOIN</span>
-            <div style={{ fontSize: '9px', fontWeight: '800', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px', letterSpacing: '1px' }}>
-               CORE v1.0
-            </div>
-          </div>
-        </div>
-        <div className="live-badge" style={{ background: 'rgba(0, 209, 255, 0.1)', color: 'var(--premium-blue)', border: '1px solid rgba(0, 209, 255, 0.2)' }}>
-          <Globe size={10} /> NETWORK LIVE
-        </div>
-      </header>
-
-      <div className="container" style={{ paddingTop: '150px', paddingBottom: '100px' }}>
+      <div className="container" style={{ paddingTop: '160px', paddingBottom: '100px' }}>
         
         {/* 3. High-Impact Hero Section */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
