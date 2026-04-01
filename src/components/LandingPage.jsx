@@ -327,21 +327,35 @@ const LandingPage = ({ onNext, onRoadmap }) => {
         {/* Footer */}
         <div style={{ textAlign: 'center', marginTop: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '32px' }}>
            
-           {/* Stylized Big Branding */}
+           {/* Stylized Big Branding with Neon Glow */}
            <motion.div 
-             initial={{ opacity: 0 }}
-             whileInView={{ opacity: 1 }}
-             transition={{ duration: 1.5 }}
+             initial={{ opacity: 0, scale: 0.95 }}
+             whileInView={{ opacity: 1, scale: 1 }}
+             animate={{ 
+               textShadow: [
+                 '0 0 20px rgba(0, 255, 157, 0.1)',
+                 '0 0 40px rgba(0, 255, 157, 0.4)',
+                 '0 0 20px rgba(0, 255, 157, 0.1)'
+               ],
+               opacity: [0.3, 0.6, 0.3]
+             }}
+             transition={{ 
+               duration: 4, 
+               repeat: Infinity, 
+               ease: "easeInOut",
+               whileInView: { duration: 1.5 } 
+             }}
              style={{ 
                fontSize: 'min(18vw, 80px)', 
                fontWeight: '950', 
-               letterSpacing: '-0.05em', 
+               letterSpacing: '-0.02em', 
                color: 'transparent',
-               WebkitTextStroke: '1px rgba(255,255,255,0.05)',
-               background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%)',
+               WebkitTextStroke: '1px rgba(0, 255, 157, 0.15)',
+               background: 'linear-gradient(180deg, var(--neon-green) 0%, rgba(0, 255, 157, 0) 100%)',
                WebkitBackgroundClip: 'text',
                userSelect: 'none',
-               lineHeight: '1'
+               lineHeight: '1',
+               filter: 'drop-shadow(0 0 15px rgba(0, 255, 157, 0.2))'
              }}
            >
              YETCOIN
