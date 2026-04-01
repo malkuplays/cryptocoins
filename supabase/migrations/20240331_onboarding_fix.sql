@@ -39,7 +39,7 @@ BEGIN
     UPDATE public.players
     SET 
         full_name = arg_full_name,
-        dob = arg_dob,
+        dob = arg_dob::date, -- FIX: Explicit type cast from text to date
         email = arg_email,
         whatsapp_number = arg_whatsapp,
         profile_completed = true,

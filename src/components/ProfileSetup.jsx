@@ -22,6 +22,14 @@ const ProfileSetup = ({ user, onComplete }) => {
       return;
     }
 
+    // Basic date validation
+    const dobDate = new Date(formData.dob);
+    if (isNaN(dobDate.getTime())) {
+      setError('Please enter a valid date of birth.');
+      triggerHaptic('notification_error');
+      return;
+    }
+
     setLoading(true);
     triggerHaptic('impact');
 
