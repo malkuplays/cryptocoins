@@ -92,7 +92,7 @@ const Notifications = ({ user, onBack }) => {
   };
 
   return (
-    <div className="container" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 20px)', paddingBottom: '100px' }}>
+    <div className="container" style={{ paddingTop: '80px', paddingBottom: '100px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
         <button 
