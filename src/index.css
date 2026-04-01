@@ -529,9 +529,72 @@ p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   font-weight: 500;
 }
 
-.bento-large.ai-section {
-  padding: 40px 24px;
-  background: radial-gradient(circle at 70% 30%, rgba(0, 209, 255, 0.05), transparent 70%);
+/* Value Cards Section (Why YETCOIN is Worth Buying) */
+.icon-grad-orange { background: linear-gradient(135deg, #FF8A00, #FF4D4D); }
+.icon-grad-purple { background: linear-gradient(135deg, #9D50BB, #6E48AA); }
+.icon-grad-green { background: linear-gradient(135deg, #00FF9D, #00E48B); }
+
+.value-card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.value-card {
+  background: #0E0E14; /* Same as bg-card but slightly more solid as in reference */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: all 0.3s ease;
+}
+
+.value-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+  background: #16161F;
+}
+
+.value-icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.value-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.value-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.value-text {
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  margin-top: 2px;
+}
+
+.section-title-large {
+  font-size: 32px;
+  font-weight: 950;
+  color: #fff;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  margin-bottom: 32px;
 }
 .badge-outline {
   display: inline-flex;

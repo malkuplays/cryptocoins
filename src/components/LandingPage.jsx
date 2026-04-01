@@ -14,7 +14,8 @@ import {
   Cpu,
   BarChart2,
   Zap,
-  TrendingUp
+  TrendingUp,
+  Gift
 } from 'lucide-react';
 import { triggerHaptic } from '../telegram';
 
@@ -398,6 +399,53 @@ const LandingPage = ({ onNext, onRoadmap }) => {
                      </motion.div>
                    ))}
                 </div>
+             </div>
+          </div>
+
+          {/* NEW: Why YETCOIN is Worth Buying Section (Investment Value) */}
+          <div className="bento-item bento-large" style={{ background: 'transparent', border: 'none', padding: '10px 0', marginTop: '20px' }}>
+             <h2 className="section-title-large">
+               Why YETCOIN is Worth<br/>Buying Today?
+             </h2>
+             
+             <div className="value-card-container">
+                {[
+                  { 
+                    label: 'Expected Investment Value', 
+                    value: '180,000 $ ROI = 360% ', 
+                    icon: <TrendingUp size={20} />, 
+                    grad: 'icon-grad-orange' 
+                  },
+                  { 
+                    label: 'Expected Monthly Yield', 
+                    value: '3600 YETC = $1,296', 
+                    icon: <BarChart2 size={20} />, 
+                    grad: 'icon-grad-purple' 
+                  },
+                  { 
+                    label: 'Masternode bonus', 
+                    value: '$500 / Month', 
+                    icon: <Gift size={20} />, 
+                    grad: 'icon-grad-green' 
+                  }
+                ].map((item, i) => (
+                  <motion.div 
+                    key={i}
+                    className="value-card"
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 * i, duration: 0.5 }}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <div className={`value-icon-circle ${item.grad}`}>
+                      {item.icon}
+                    </div>
+                    <div className="value-content">
+                      <span className="value-label">{item.label}</span>
+                      <span className="value-text">{item.value}</span>
+                    </div>
+                  </motion.div>
+                ))}
              </div>
           </div>
 
