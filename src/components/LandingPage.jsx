@@ -259,7 +259,54 @@ const LandingPage = ({ onNext, onRoadmap }) => {
                 </svg>
              </div>
           </div>
+          {/* NEW: Why YETCOIN is the Next Bitcoin (Large) */}
+          <div className="bento-item bento-large" style={{ 
+            background: 'rgba(0,255,157,0.03)', 
+            borderColor: 'rgba(0,255,157,0.1)', 
+            padding: '24px',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+             <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '150px', height: '150px', background: 'var(--neon-green)', filter: 'blur(100px)', opacity: 0.1, pointerEvents: 'none' }} />
+             
+             <div style={{ position: 'relative', zIndex: 2 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                   <div style={{ background: 'var(--neon-green-dim)', padding: '6px', borderRadius: '8px' }}>
+                      <Zap size={14} color="var(--neon-green)" />
+                   </div>
+                   <span style={{ fontSize: '10px', fontWeight: '900', color: 'var(--neon-green)', letterSpacing: '2px', textTransform: 'uppercase' }}>Value Thesis</span>
+                </div>
+                
+                <h2 style={{ fontSize: '24px', fontWeight: '900', color: '#fff', marginBottom: '8px', letterSpacing: '-1px' }}>
+                   Why YETCOIN is the <span style={{ color: 'var(--neon-green)' }}>Next Bitcoin</span>
+                </h2>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '24px', lineHeight: '1.5', fontWeight: '600' }}>
+                   Bitcoin was the first. YETCOIN is the evolution. Designed for the Telegram era.
+                </p>
 
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                   {[
+                      { icon: <Cpu size={16} />, title: 'Zero Hardware Mining', desc: 'Unlike Bitcoin, anyone can mine YETCOIN on mobile. No whales, zero energy waste.' },
+                      { icon: <Activity size={16} />, title: 'Protocol-Native Yields', desc: 'Standardized 14,240% APY allocation for early adopters.' },
+                      { icon: <ShieldCheck size={16} />, title: 'Limited Store of Value', desc: 'Secure your Tier-1 allocation before the global supply lock.' }
+                   ].map((feature, i) => (
+                     <motion.div 
+                       key={feature.title}
+                       initial={{ opacity: 0, x: -20 }}
+                       whileInView={{ opacity: 1, x: 0 }}
+                       transition={{ delay: 0.8 + (i * 0.2) }}
+                       style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}
+                     >
+                        <div style={{ color: 'var(--neon-green)', marginTop: '2px' }}>{feature.icon}</div>
+                        <div>
+                           <div style={{ fontSize: '13px', fontWeight: '800', color: '#fff', marginBottom: '2px' }}>{feature.title}</div>
+                           <div style={{ fontSize: '10px', color: 'var(--text-muted)', lineHeight: '1.4', fontWeight: '500' }}>{feature.desc}</div>
+                        </div>
+                     </motion.div>
+                   ))}
+                </div>
+             </div>
+          </div>
           {/* Stat Box 1 */}
           <div className="bento-item" style={{ background: 'rgba(255,255,255,0.02)', padding: '20px' }}>
              <Users size={18} color="var(--premium-blue)" style={{ marginBottom: '12px' }} />
