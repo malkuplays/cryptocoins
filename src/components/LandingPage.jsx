@@ -267,32 +267,34 @@ const LandingPage = ({ onNext, onRoadmap }) => {
              <div style={{ fontSize: '10px', fontWeight: '800', color: 'var(--text-muted)', letterSpacing: '0.5px', marginTop: '4px' }}>ACTIVE MINERS</div>
           </div>
 
-          {/* NEW: Testimonial Card (Small) */}
-          <div className="bento-item" style={{ background: 'rgba(157,80,187,0.03)', padding: '20px' }}>
-             <div style={{ fontSize: '8px', fontWeight: '900', color: 'var(--premium-purple)', letterSpacing: '1px', marginBottom: '8px' }}>USER VERDICT</div>
-             <div style={{ height: '44px', overflow: 'hidden' }}>
+          {/* Stat Box 2 (Moved up to be next to Miners) */}
+          <div className="bento-item" style={{ background: 'rgba(255,255,255,0.02)', padding: '20px' }}>
+             <TrendingUp size={18} color="var(--premium-purple)" style={{ marginBottom: '12px' }} />
+             <div style={{ fontSize: '22px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>14.2K%</div>
+             <div style={{ fontSize: '10px', fontWeight: '800', color: 'var(--text-muted)', letterSpacing: '0.5px', marginTop: '4px' }}>MOCK NETWORK APY</div>
+          </div>
+
+          {/* NEW: Testimonial Card (Now Large and below Stats) */}
+          <div className="bento-item bento-large" style={{ background: 'rgba(157,80,187,0.03)', padding: '24px' }}>
+             <div style={{ fontSize: '10px', fontWeight: '900', color: 'var(--premium-purple)', letterSpacing: '1.5px', marginBottom: '12px' }}>DECENTRALIZED VERDICT</div>
+             <div style={{ minHeight: '60px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeTestimonial}
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    style={{ fontSize: '11px', fontWeight: '600', color: '#fff', fontStyle: 'italic', lineHeight: '1.4' }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    style={{ fontSize: '16px', fontWeight: '600', color: '#fff', fontStyle: 'italic', lineHeight: '1.4', textAlign: 'center' }}
                    >
                      "{testimonials[activeTestimonial].text}"
                   </motion.div>
                 </AnimatePresence>
              </div>
-             <div style={{ fontSize: '9px', fontWeight: '800', color: 'var(--text-muted)', marginTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Globe size={8} /> {testimonials[activeTestimonial].user}
+             <div style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-muted)', marginTop: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <div style={{ width: '20px', height: '1px', background: 'var(--glass-border-bright)' }} />
+                <Globe size={10} /> {testimonials[activeTestimonial].user}
+                <div style={{ width: '20px', height: '1px', background: 'var(--glass-border-bright)' }} />
              </div>
-          </div>
-
-          {/* Stat Box 2 */}
-          <div className="bento-item" style={{ background: 'rgba(255,255,255,0.02)', padding: '20px' }}>
-             <TrendingUp size={18} color="var(--premium-purple)" style={{ marginBottom: '12px' }} />
-             <div style={{ fontSize: '22px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>14.2K%</div>
-             <div style={{ fontSize: '10px', fontWeight: '800', color: 'var(--text-muted)', letterSpacing: '0.5px', marginTop: '4px' }}>MOCK NETWORK APY</div>
           </div>
 
           {/* Embedded Live Activity Feed (High Tech Terminal look) */}
