@@ -212,12 +212,10 @@ const Profile = ({
         }}>
           {tc.icon}
         </div>
-        <h1 style={{ fontSize: '24px', fontWeight: '900', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: '900', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
           {user?.full_name || user?.username || 'User'}
           {user?.is_verified && (
-            <div style={{ color: 'var(--premium-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <ShieldCheck size={20} fill="currentColor" color="white" />
-            </div>
+            <ShieldCheck size={20} fill="var(--premium-blue)" color="white" style={{ flexShrink: 0, marginTop: '2px' }} />
           )}
         </h1>
         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '12px' }}>
@@ -295,15 +293,15 @@ const Profile = ({
             </div>
             <div>
               <div style={{ fontSize: '15px', fontWeight: '800', color: 'white' }}>
-                {verificationStatus === 'pending' ? 'Verification Pending' : 'Get Verified'}
+                {verificationStatus === 'pending' ? 'Verification Pending' : (verificationStatus === 'approved' ? 'Verified ✓' : 'Get Verified')}
               </div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                {verificationStatus === 'pending' ? 'Currently under review' : `Premium badge for ₹${verification_price_inr}`}
+                {verificationStatus === 'pending' ? 'Currently under review' : (verificationStatus === 'approved' ? 'Reload app to see badge' : `Premium badge for ₹${verification_price_inr}`)}
               </div>
             </div>
           </div>
           
-          {verificationStatus !== 'pending' && (
+          {verificationStatus !== 'pending' && verificationStatus !== 'approved' && (
             <motion.button 
               whileTap={{ scale: 0.95 }}
               onClick={onOpenVerification}
@@ -318,9 +316,9 @@ const Profile = ({
             </motion.button>
           )}
 
-          {verificationStatus === 'pending' && (
+          {(verificationStatus === 'pending' || verificationStatus === 'approved') && (
             <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--premium-blue)', padding: '8px 12px', background: 'rgba(0, 209, 255, 0.1)', borderRadius: '100px' }}>
-              Pending...
+              {verificationStatus === 'pending' ? 'Pending...' : 'Approved ✓'}
             </div>
           )}
         </motion.div>
