@@ -30,6 +30,7 @@ import WithdrawalPortal from './components/WithdrawalPortal';
 import WithdrawalHistory from './components/WithdrawalHistory';
 import MiningWithdrawalPortal from './components/MiningWithdrawalPortal';
 import MiningWithdrawalHistory from './components/MiningWithdrawalHistory';
+import VerificationPortal from './components/VerificationPortal';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -266,6 +267,17 @@ const App = () => {
                 onOpenWithdrawalHistory={() => setActiveTab('withdrawal_history')}
                 onOpenMiningWithdrawal={() => setActiveTab('mining_withdrawal')}
                 onOpenMiningHistory={() => setActiveTab('mining_history')}
+                onOpenVerification={() => setActiveTab('verification')}
+              />
+            )}
+            {activeTab === 'verification' && (
+              <VerificationPortal 
+                user={user} 
+                onBack={() => setActiveTab('profile')} 
+                onSuccess={() => {
+                  // User successfully applied, profile will refresh its own status check
+                  setActiveTab('profile');
+                }}
               />
             )}
             {activeTab === 'mining_withdrawal' && (

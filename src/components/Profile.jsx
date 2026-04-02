@@ -18,17 +18,42 @@ const Profile = ({
   onOpenWithdrawal, 
   onOpenWithdrawalHistory,
   onOpenMiningWithdrawal,
-  onOpenMiningHistory
+  onOpenMiningHistory,
+  onOpenVerification
 }) => {
   const [copied, setCopied] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
-  const { yetcPriceUsd } = useSettings();
+  const [verificationStatus, setVerificationStatus] = useState(null); // null, 'pending', 'verified'
+  const { yetcPriceUsd, verification_price_inr } = useSettings();
 
   useEffect(() => {
     if (user?.id) {
       checkNewNotifications();
+      checkVerificationStatus();
     }
-  }, [user?.id]);
+  }, [user?.id, user?.is_verified]);
+
+  const checkVerificationStatus = async () => {
+    if (user?.is_verified) {
+      setVerificationStatus('verified');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('verification_requests')
+        .select('status')
+        .eq('player_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (data && data.length > 0) {
+        setVerificationStatus(data[0].status);
+      }
+    } catch (err) {
+      console.error("Error checking verification status:", err);
+    }
+  };
 
   const checkNewNotifications = async () => {
     try {
@@ -187,8 +212,13 @@ const Profile = ({
         }}>
           {tc.icon}
         </div>
-        <h1 style={{ fontSize: '24px', fontWeight: '900', marginBottom: '4px' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: '900', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
           {user?.full_name || user?.username || 'User'}
+          {user?.is_verified && (
+            <div style={{ color: 'var(--premium-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ShieldCheck size={20} fill="currentColor" color="white" />
+            </div>
+          )}
         </h1>
         <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '12px' }}>
           @{user?.username || 'unknown'}
@@ -243,6 +273,58 @@ const Profile = ({
           </motion.button>
         </div>
       </motion.div>
+
+      {/* Verification Ad/Status Card */}
+      {!user?.is_verified && (
+        <motion.div 
+          variants={itemVariants}
+          style={{ 
+            padding: '20px', borderRadius: '24px', marginBottom: '16px',
+            background: 'linear-gradient(135deg, rgba(0, 209, 255, 0.1), rgba(157, 80, 187, 0.05))',
+            border: '1px solid rgba(0, 209, 255, 0.2)',
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            position: 'relative', overflow: 'hidden'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', position: 'relative', zIndex: 1 }}>
+            <div style={{ 
+              width: '44px', height: '44px', borderRadius: '14px', 
+              background: 'rgba(0, 209, 255, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              <ShieldCheck size={22} color="var(--premium-blue)" />
+            </div>
+            <div>
+              <div style={{ fontSize: '15px', fontWeight: '800', color: 'white' }}>
+                {verificationStatus === 'pending' ? 'Verification Pending' : 'Get Verified'}
+              </div>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                {verificationStatus === 'pending' ? 'Currently under review' : `Premium badge for ₹${verification_price_inr}`}
+              </div>
+            </div>
+          </div>
+          
+          {verificationStatus !== 'pending' && (
+            <motion.button 
+              whileTap={{ scale: 0.95 }}
+              onClick={onOpenVerification}
+              style={{ 
+                background: 'var(--premium-blue)', color: 'white', border: 'none',
+                padding: '10px 18px', borderRadius: '100px', fontSize: '12px', fontWeight: '800',
+                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
+                boxShadow: '0 4px 15px rgba(0, 209, 255, 0.3)', position: 'relative', zIndex: 1
+              }}
+            >
+              Apply <ChevronRight size={14} />
+            </motion.button>
+          )}
+
+          {verificationStatus === 'pending' && (
+            <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--premium-blue)', padding: '8px 12px', background: 'rgba(0, 209, 255, 0.1)', borderRadius: '100px' }}>
+              Pending...
+            </div>
+          )}
+        </motion.div>
+      )}
 
       {/* Withdrawal Card */}
       <motion.div 
