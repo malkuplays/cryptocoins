@@ -241,21 +241,37 @@ const MiningWithdrawalPortal = ({ user, onBack, onSuccess, onOpenHistory }) => {
     </div>
   );
 
-  const renderStep4 = () => (
+  const renderVerificationRequired = () => (
     <div style={{ textAlign: 'center', padding: '40px 0' }}>
       <motion.div 
         initial={{ scale: 0 }} animate={{ scale: 1 }}
-        style={{ width: '100px', height: '100px', borderRadius: '32px', background: 'rgba(0,255,157,0.1)', border: '1px solid var(--neon-green)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}
+        style={{ width: '100px', height: '100px', borderRadius: '32px', background: 'rgba(0, 209, 255, 0.1)', border: '1px solid var(--premium-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}
       >
-        <CheckCircle2 size={54} color="var(--neon-green)" />
+        <ShieldCheck size={54} color="var(--premium-blue)" />
       </motion.div>
-      <h2 style={{ fontSize: '32px', fontWeight: '900', color: 'white', marginBottom: '16px' }}>Request Sent!</h2>
-      <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginBottom: '40px' }}>
-        Your withdrawal of <span style={{ color: 'white', fontWeight: '700' }}>{amount} YETC</span> has been queued for processing.
+      <h2 style={{ fontSize: '28px', fontWeight: '900', color: 'white', marginBottom: '16px' }}>Verification Required</h2>
+      <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginBottom: '40px', lineHeight: '1.6' }}>
+        To ensure platform security and prevent abuse, mined coin withdrawals are restricted to <span style={{ color: 'var(--premium-blue)', fontWeight: '700' }}>Verified Users</span> only.
       </p>
+      
+      <div className="glass-panel" style={{ padding: '20px', borderRadius: '24px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.05)', marginBottom: '40px', textAlign: 'left' }}>
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+          <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--premium-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '900', color: 'white' }}>1</div>
+          <div style={{ fontSize: '14px', color: 'white', fontWeight: '600' }}>Get your Official Verification Badge</div>
+        </div>
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+          <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--premium-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '900', color: 'white' }}>2</div>
+          <div style={{ fontSize: '14px', color: 'white', fontWeight: '600' }}>Unlock unlimited mining withdrawals</div>
+        </div>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--premium-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '900', color: 'white' }}>3</div>
+          <div style={{ fontSize: '14px', color: 'white', fontWeight: '600' }}>Enjoy priority processing (12-24h)</div>
+        </div>
+      </div>
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <button className="btn-primary" onClick={onOpenHistory} style={{ width: '100%', background: 'var(--neon-green)', color: 'black', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '900' }}>View Mining History</button>
-        <button className="btn-secondary" onClick={onBack} style={{ width: '100%', background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '16px', borderRadius: '16px', fontWeight: '700' }}>Back to Portfolio</button>
+        <button className="btn-primary" onClick={onBack} style={{ width: '100%', background: 'var(--premium-blue)', color: 'white', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '900' }}>Get Verified Now</button>
+        <button className="btn-secondary" onClick={onBack} style={{ width: '100%', background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '16px', borderRadius: '16px', fontWeight: '700' }}>Maybe Later</button>
       </div>
     </div>
   );
@@ -275,11 +291,13 @@ const MiningWithdrawalPortal = ({ user, onBack, onSuccess, onOpenHistory }) => {
             <ArrowLeft size={20} />
           </button>
           
-          <div style={{ display: 'flex', gap: '8px' }}>
-            {[1, 2, 3].map(s => (
-              <div key={s} style={{ width: '8px', height: '8px', borderRadius: '50%', background: step === s ? 'var(--neon-green)' : 'rgba(255,255,255,0.1)' }} />
-            ))}
-          </div>
+          {user?.is_verified && (
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {[1, 2, 3].map(s => (
+                <div key={s} style={{ width: '8px', height: '8px', borderRadius: '50%', background: step === s ? 'var(--neon-green)' : 'rgba(255,255,255,0.1)' }} />
+              ))}
+            </div>
+          )}
           
           <div style={{ width: '44px' }} />
         </div>
@@ -287,17 +305,21 @@ const MiningWithdrawalPortal = ({ user, onBack, onSuccess, onOpenHistory }) => {
 
       <AnimatePresence mode="wait">
         <motion.div
-          key={step}
+          key={user?.is_verified ? step : 'unverified'}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3 }}
           style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
         >
-          {step === 1 && renderStep1()}
-          {step === 2 && renderStep2()}
-          {step === 3 && renderStep3()}
-          {step === 4 && renderStep4()}
+          {!user?.is_verified ? renderVerificationRequired() : (
+            <>
+              {step === 1 && renderStep1()}
+              {step === 2 && renderStep2()}
+              {step === 3 && renderStep3()}
+              {step === 4 && renderStep4()}
+            </>
+          )}
         </motion.div>
       </AnimatePresence>
     </div>
