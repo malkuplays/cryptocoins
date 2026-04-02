@@ -159,10 +159,12 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
       <motion.header variants={itemVariants} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', padding: '0 4px' }}>
         <div>
           <div style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '600', marginBottom: '2px' }}>Welcome back</div>
-          <h1 style={{ fontSize: '22px', fontWeight: '900', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: '900', lineHeight: '1.2' }}>
             {user?.full_name || `@${user?.username || 'user'}`}
             {user?.is_verified && (
-              <ShieldCheck size={18} fill="var(--premium-blue)" color="white" style={{ flexShrink: 0, marginTop: '1px' }} />
+              <span style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '6px', marginTop: '-2px' }}>
+                <ShieldCheck size={18} fill="var(--premium-blue)" color="white" />
+              </span>
             )}
           </h1>
         </div>
