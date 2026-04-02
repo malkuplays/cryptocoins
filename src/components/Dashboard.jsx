@@ -258,6 +258,9 @@ const Dashboard = ({ user, setUser, setActiveTab }) => {
               <div style={{ fontSize: '18px', fontWeight: '900', color: 'var(--neon-green)' }}>
                 ₹{(user?.total_referral_bonus || 0).toLocaleString('en-IN')}
               </div>
+              <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontWeight: '600', marginTop: '2px' }}>
+                All-Time: ₹{(user?.all_time_referral_bonus || 0).toLocaleString('en-IN')}
+              </div>
             </div>
           </div>
           <button 

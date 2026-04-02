@@ -8,7 +8,6 @@ const Referrals = ({ user }) => {
   const [referrals, setReferrals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
-  const [totalWithdrawn, setTotalWithdrawn] = useState(0);
 
   // You can customize the bot username here
   const BOT_USERNAME = 'yetcoinsbot';
@@ -32,25 +31,8 @@ const Referrals = ({ user }) => {
       }
     };
 
-    const fetchWithdrawn = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('withdrawals')
-          .select('amount_gross')
-          .eq('player_id', user.id)
-          .neq('status', 'rejected');
-        
-        if (error) throw error;
-        const total = data.reduce((acc, curr) => acc + Number(curr.amount_gross), 0);
-        setTotalWithdrawn(total);
-      } catch (err) {
-        console.error('Failed to fetch withdrawn amount:', err);
-      }
-    };
-    
     if (user?.id) {
       fetchReferrals();
-      fetchWithdrawn();
     }
   }, [user?.id]);
 
@@ -168,7 +150,7 @@ const Referrals = ({ user }) => {
           boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
         }}>
           <div style={{ fontSize: '9px', color: 'var(--text-muted)', fontWeight: '800', marginBottom: '6px' }}>ALL-TIME</div>
-          <div style={{ fontSize: '15px', fontWeight: '900', color: 'var(--neon-green)' }}>₹{((user?.total_referral_bonus || 0) + totalWithdrawn).toLocaleString('en-IN')}</div>
+          <div style={{ fontSize: '15px', fontWeight: '900', color: 'var(--neon-green)' }}>₹{(user?.all_time_referral_bonus || 0).toLocaleString('en-IN')}</div>
         </div>
         
         <div style={{ 

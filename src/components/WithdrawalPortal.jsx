@@ -131,6 +131,9 @@ const WithdrawalPortal = ({ user, onBack, onSuccess, onOpenHistory }) => {
           <div>
             <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: '800', letterSpacing: '1px' }}>AVAILABLE BONUS</div>
             <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--neon-green)', marginTop: '4px' }}>₹{bonusBalance.toLocaleString('en-IN')}</div>
+            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontWeight: '600', marginTop: '6px' }}>
+              All-Time Earned: ₹{(user?.all_time_referral_bonus || 0).toLocaleString('en-IN')}
+            </div>
           </div>
           <div style={{ padding: '10px', borderRadius: '12px', background: 'rgba(0, 255, 157, 0.1)' }}>
             <IndianRupee size={20} color="var(--neon-green)" />
