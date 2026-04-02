@@ -28,6 +28,8 @@ import Referrals from './components/Referrals';
 import Notifications from './components/Notifications';
 import WithdrawalPortal from './components/WithdrawalPortal';
 import WithdrawalHistory from './components/WithdrawalHistory';
+import MiningWithdrawalPortal from './components/MiningWithdrawalPortal';
+import MiningWithdrawalHistory from './components/MiningWithdrawalHistory';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -262,6 +264,22 @@ const App = () => {
                 onOpenNotifications={() => setActiveTab('notifications')} 
                 onOpenWithdrawal={() => setActiveTab('withdrawal')}
                 onOpenWithdrawalHistory={() => setActiveTab('withdrawal_history')}
+                onOpenMiningWithdrawal={() => setActiveTab('mining_withdrawal')}
+                onOpenMiningHistory={() => setActiveTab('mining_history')}
+              />
+            )}
+            {activeTab === 'mining_withdrawal' && (
+              <MiningWithdrawalPortal 
+                user={user} 
+                onBack={() => setActiveTab('profile')} 
+                onSuccess={(updatedUser) => setUser(updatedUser)} 
+                onOpenHistory={() => setActiveTab('mining_history')}
+              />
+            )}
+            {activeTab === 'mining_history' && (
+              <MiningWithdrawalHistory 
+                user={user} 
+                onBack={() => setActiveTab('profile')} 
               />
             )}
             {activeTab === 'friends' && <Referrals user={user} />}

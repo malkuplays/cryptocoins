@@ -12,7 +12,14 @@ import { AnimatePresence } from 'framer-motion';
 
 
 
-const Profile = ({ user, onOpenNotifications, onOpenWithdrawal, onOpenWithdrawalHistory }) => {
+const Profile = ({ 
+  user, 
+  onOpenNotifications, 
+  onOpenWithdrawal, 
+  onOpenWithdrawalHistory,
+  onOpenMiningWithdrawal,
+  onOpenMiningHistory
+}) => {
   const [copied, setCopied] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
   const { yetcPriceUsd } = useSettings();
@@ -206,8 +213,34 @@ const Profile = ({ user, onOpenNotifications, onOpenWithdrawal, onOpenWithdrawal
       >
         <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700', letterSpacing: '1px', marginBottom: '8px' }}>PORTFOLIO VALUE</div>
         <div style={{ fontSize: '32px', fontWeight: '900', marginBottom: '4px' }}>{balance.toFixed(4)} <span style={{ fontSize: '16px', color: 'var(--premium-blue)' }}>$YETC</span></div>
-        <div style={{ fontSize: '14px', color: 'var(--neon-green)', fontWeight: '700' }}>
+        <div style={{ fontSize: '14px', color: 'var(--neon-green)', fontWeight: '700', marginBottom: '20px' }}>
           ≈ ${(balance * yetcPriceUsd).toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })} USD
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <motion.button 
+            whileTap={{ scale: 0.95 }}
+            onClick={onOpenMiningWithdrawal}
+            style={{ 
+              background: 'var(--neon-green)', color: 'black', border: 'none',
+              padding: '12px', borderRadius: '14px', fontSize: '13px', fontWeight: '800',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+              boxShadow: '0 4px 15px rgba(0, 255, 157, 0.2)'
+            }}
+          >
+            <Wallet size={16} /> Withdraw
+          </motion.button>
+          <motion.button 
+            whileTap={{ scale: 0.95 }}
+            onClick={onOpenMiningHistory}
+            style={{ 
+              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+              color: 'white', padding: '12px', borderRadius: '14px', fontSize: '13px', fontWeight: '700',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
+            }}
+          >
+            <Clock size={16} /> History
+          </motion.button>
         </div>
       </motion.div>
 
@@ -243,7 +276,7 @@ const Profile = ({ user, onOpenNotifications, onOpenWithdrawal, onOpenWithdrawal
             boxShadow: '0 4px 15px rgba(0, 255, 157, 0.3)'
           }}
         >
-          <Wallet size={16} /> Withdraw
+          <Wallet size={16} /> Withdraw Bonus
         </motion.button>
       </motion.div>
 
