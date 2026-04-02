@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   Bell, Info, AlertTriangle, CheckCircle, ArrowLeft, Clock,
   MessageCircle, Sparkles, Megaphone
 } from 'lucide-react';
@@ -21,7 +21,7 @@ const Notifications = ({ user, onBack }) => {
   const fetchAllNotifications = async () => {
     try {
       setLoading(true);
-      
+
       // 1. Fetch Personal Alerts
       const { data: alerts, error: alertsError } = await supabase
         .from('alerts')
@@ -52,7 +52,7 @@ const Notifications = ({ user, onBack }) => {
 
       // 4. Sort by Date
       combined.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      
+
       setNotifications(combined);
     } catch (err) {
       console.error("Failed to load notifications:", err);
@@ -65,7 +65,7 @@ const Notifications = ({ user, onBack }) => {
     switch (type) {
       case 'success': return <CheckCircle size={18} color="var(--neon-green)" />;
       case 'warning': return <AlertTriangle size={18} color="#FFB900" />;
-      case 'info': 
+      case 'info':
       default: return <Megaphone size={18} color="var(--premium-blue)" />;
     }
   };
@@ -95,9 +95,9 @@ const Notifications = ({ user, onBack }) => {
     <div className="container" style={{ paddingTop: '80px', paddingBottom: '100px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
-        <button 
+        <button
           onClick={onBack}
-          style={{ 
+          style={{
             background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: '12px', padding: '10px', color: 'white', cursor: 'pointer'
           }}
@@ -112,7 +112,7 @@ const Notifications = ({ user, onBack }) => {
 
       <AnimatePresence mode="wait">
         {loading ? (
-          <motion.div 
+          <motion.div
             key="loading"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="flex-center" style={{ height: '300px' }}
@@ -120,11 +120,11 @@ const Notifications = ({ user, onBack }) => {
             <div className="loading-spinner" />
           </motion.div>
         ) : notifications.length === 0 ? (
-          <motion.div 
+          <motion.div
             key="empty"
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            style={{ 
-              textAlign: 'center', padding: '60px 20px', 
+            style={{
+              textAlign: 'center', padding: '60px 20px',
               background: 'rgba(255,255,255,0.02)', borderRadius: '24px',
               border: '1px dashed rgba(255,255,255,0.1)'
             }}
@@ -134,16 +134,16 @@ const Notifications = ({ user, onBack }) => {
             <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>No notifications to show right now. Check back later!</p>
           </motion.div>
         ) : (
-          <motion.div 
+          <motion.div
             key="list"
             variants={containerVariants} initial="hidden" animate="visible"
             style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
           >
             {notifications.map((notif) => (
-              <motion.div 
+              <motion.div
                 key={notif.id}
                 variants={itemVariants}
-                style={{ 
+                style={{
                   padding: '16px', borderRadius: '20px',
                   background: notif.type === 'personal' ? 'linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 255, 255, 0.02))' : 'var(--bg-card)',
                   border: '1px solid rgba(255,255,255,0.05)',
@@ -151,20 +151,20 @@ const Notifications = ({ user, onBack }) => {
                 }}
               >
                 {notif.type === 'personal' && (
-                  <div style={{ 
-                    position: 'absolute', top: 0, left: 0, bottom: 0, width: '4px', background: '#FF6B6B' 
+                  <div style={{
+                    position: 'absolute', top: 0, left: 0, bottom: 0, width: '4px', background: '#FF6B6B'
                   }} />
                 )}
-                
+
                 <div style={{ display: 'flex', gap: '14px' }}>
-                  <div style={{ 
+                  <div style={{
                     width: '40px', height: '40px', borderRadius: '12px',
                     background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0
                   }}>
                     {notif.icon}
                   </div>
-                  
+
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
                       <h4 style={{ fontSize: '15px', fontWeight: '800', margin: 0, color: 'white' }}>{notif.title}</h4>
@@ -173,10 +173,10 @@ const Notifications = ({ user, onBack }) => {
                         {getTimeAgo(notif.created_at)}
                       </div>
                     </div>
-                    
-                    <p style={{ 
-                      fontSize: '13px', lineHeight: '1.5', color: 'var(--text-secondary)', 
-                      margin: 0, wordBreak: 'break-word' 
+
+                    <p style={{
+                      fontSize: '13px', lineHeight: '1.5', color: 'var(--text-secondary)',
+                      margin: 0, wordBreak: 'break-word'
                     }}>
                       {notif.message}
                     </p>
